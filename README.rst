@@ -4,13 +4,10 @@ NTHU ION API Backend
 Getting Started
 ---------------
 
-- cd <directory containing this file>
+.. code-block:: bash
 
-- source $VENV/bin/activate
-
-- pip install -e .
-
-- initialize_nthuion_db development.ini
-
-- pserve development.ini
-
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install -e ".[testing]"
+    initialize_nthuion_db development.ini
+    pserve development.ini
