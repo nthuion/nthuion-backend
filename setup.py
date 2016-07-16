@@ -23,7 +23,7 @@ tests_require = [
 setup(name='nthuion',
       version='0.0',
       description='nthuion',
-      long_description=README + '\n\n' + CHANGES,
+      long_description=README,
       classifiers=[
           "Programming Language :: Python",
           "Framework :: Pyramid",
