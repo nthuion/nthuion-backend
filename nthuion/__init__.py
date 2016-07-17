@@ -1,3 +1,8 @@
+import sys
+
+assert sys.version_info >= (3,)  # noqa
+
+
 from pyramid.config import Configurator
 import pyramid.renderers
 from .request import Request
