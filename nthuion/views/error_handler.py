@@ -8,4 +8,5 @@ def notfound_view(exc, request):
     return {
         "error": exc.title,
         "code": exc.code,
+        "detail": exc.detail
     }

@@ -1,3 +1,4 @@
+import json
 import unittest
 import transaction
 
@@ -39,6 +40,7 @@ class BaseTest(unittest.TestCase):
         Base.metadata.drop_all(self.engine)
 
 
+@unittest.skip('demo removed')
 class TestMyViewSuccessCondition(BaseTest):
 
     def setUp(self):
@@ -57,9 +59,49 @@ class TestMyViewSuccessCondition(BaseTest):
         self.assertEqual(info['project'], 'nthuion')
 
 
+@unittest.skip('demo removed')
 class TestMyViewFailureCondition(BaseTest):
 
     def test_failing_view(self):
         from .views.default import my_view
         info = my_view(dummy_request(self.session))
         self.assertEqual(info.status_int, 500)
+
+
+class WebTest(unittest.TestCase):
+
+    def setUp(self):
+        from . import main
+        app = main({}, **{
+            'sqlalchemy.url': 'sqlite:///:memory:'
+        })
+        from webtest import TestApp
+        self.app = TestApp(app)
+
+
+class TestEcho(WebTest):
+
+    payload = {'nthu': 'ion', 'afg': 984}
+
+    def test_get(self):
+        res = self.app.get(
+            '/api/echo',
+            params=self.payload,
+            status=200)
+        self.assertEqual(
+            {'nthu': ['ion'], 'afg': ['984']}, res.json)
+
+    def test_post(self):
+        res = self.app.post_json(
+            '/api/echo',
+            params=self.payload,
+            status=200)
+        self.assertEqual(self.payload, res.json)
+
+    def test_put(self):
+        res = self.app.put_json(
+            '/api/echo',
+            params=self.payload,
+            status=200
+        )
+        self.assertEqual(self.payload, res.json)

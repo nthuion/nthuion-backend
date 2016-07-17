@@ -6,4 +6,5 @@ from sqlalchemy.exc import DBAPIError
 
 @view_config(route_name='home')
 def my_view(request):
+    print(request.method)
     return {'hello': 'hello', 'world': 'world'}
