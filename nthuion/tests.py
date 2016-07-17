@@ -2,11 +2,11 @@ import json
 import unittest
 import transaction
 
-from pyramid import testing
+from .request import DummyRequest
 
 
 def dummy_request(dbsession):
-    return testing.DummyRequest(dbsession=dbsession)
+    return DummyRequest(dbsession=dbsession)
 
 
 class BaseTest(unittest.TestCase):

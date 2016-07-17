@@ -9,7 +9,7 @@ class EchoView(View):
         return self.request.params.dict_of_lists()
 
     def post(self):
-        return self.json_body
+        return self.request.json_body
 
     def put(self):
-        return self.json_body
+        return self.request.json_body

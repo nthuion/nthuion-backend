@@ -7,17 +7,6 @@ class View:
     def __init__(self, request):
         self.request = request
 
-    @property
-    def json_body(self):
-        """
-        wrapper of self.request.json_body
-        raises HTTPBadRequest on invalid
-        """
-        try:
-            return self.request.json_body
-        except JSONDecodeError:
-            raise HTTPBadRequest('invalid json')
-
     def get(self):
         raise HTTPMethodNotAllowed
 
