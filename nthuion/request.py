@@ -1,4 +1,7 @@
-from json import JSONDecodeError
+try:
+    from json import JSONDecodeError
+except ImportError:
+    JSONDecodeError = ValueError
 from pyramid.httpexceptions import HTTPBadRequest
 import pyramid.request
 import pyramid.testing
