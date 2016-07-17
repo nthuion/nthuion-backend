@@ -1,6 +1,6 @@
 from docutils.parsers.rst import Directive
 from sphinx.directives.code import CodeBlock
-from sqlalchemy.dialects import postgres
+from sqlalchemy.dialects import postgresql
 from nthuion.models.meta import Base
 from sqlalchemy.schema import CreateTable
 
@@ -17,7 +17,7 @@ class SchemaDirective(Directive):
         self.kwargs = kwargs
 
     def run(self):
-        dialect = postgres.dialect()
+        dialect = postgresql.dialect()
         res = []
         for table in Base.metadata.sorted_tables:
             cb = CodeBlock(*self.args, **self.kwargs)
