@@ -1,6 +1,6 @@
-import json
 import unittest
 import transaction
+from pyramid import testing
 
 from .request import DummyRequest
 
@@ -101,12 +101,12 @@ class TestEcho(WebTest):
         self.assertEqual(self.payload, res.json)
 
     def test_invalid_request(self):
-        res = self.app.post(
+        self.app.post(
             '/api/echo',
             params=self.payload,
             status=400
         )
-        res = self.app.put(
+        self.app.put(
             '/api/echo',
             params=self.payload,
             status=400
@@ -119,3 +119,10 @@ class TestEcho(WebTest):
             status=200
         )
         self.assertEqual(self.payload, res.json)
+
+
+class IntrospectionTest(unittest.TestCase):
+
+    def test_dry_run(self):
+        import nthuion.introspect
+        list(nthuion.introspect.r1())
