@@ -9,6 +9,7 @@ with open(os.path.join(here, 'README.rst')) as f:
 requires = [
     'pyramid',
     'pyramid_tm',
+    'pyramid_debugtoolbar'
     'SQLAlchemy',
     'transaction',
     'zope.sqlalchemy',
