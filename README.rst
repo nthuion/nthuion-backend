@@ -1,5 +1,13 @@
-NTHU ION API Backend
-====================
+nthuion-backend
+===============
+
+Backend of NTHU ION
+
+Resources
+---------
+
+* `API Documentation <https://nthuion-backend.readthedocs.io/>`_
+* `Frontend Repo <https://github.com/nthuion/nthuion-frontend>`_
 
 Environment setup
 -----------------
