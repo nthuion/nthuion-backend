@@ -1,5 +1,8 @@
-from json import JSONDecodeError
-from pyramid.httpexceptions import HTTPMethodNotAllowed, HTTPBadRequest
+from pyramid.httpexceptions import HTTPMethodNotAllowed
+
+
+def not_allowed(self):
+    raise HTTPMethodNotAllowed
 
 
 class View:
@@ -7,17 +10,7 @@ class View:
     def __init__(self, request):
         self.request = request
 
-    def get(self):
-        raise HTTPMethodNotAllowed
-
-    def post(self):
-        raise HTTPMethodNotAllowed
-
-    def put(self):
-        raise HTTPMethodNotAllowed
-
-    def delete(self):
-        raise HTTPMethodNotAllowed
+    get = post = put = delete = not_allowed
 
     def __call__(self):
         method = self.request.method

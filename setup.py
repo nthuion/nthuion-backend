@@ -24,6 +24,7 @@ tests_require = [
 docs_require = [
     'sphinx',
     'sphinx_rtd_theme',
+    'sphinxcontrib-httpdomain',
 ]
 
 setup(

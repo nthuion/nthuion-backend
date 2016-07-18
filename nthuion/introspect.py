@@ -1,5 +1,5 @@
 import nthuion
-from pprint import pprint as print
+from nthuion.views.base import View
 
 
 def r1():
@@ -9,7 +9,6 @@ def r1():
         name = intr['route_name']
         if name is None:
             continue
-        yield name, router.routes_mapper.get_route(name), intr['callable']
-
-
-print(list(r1()))
+        vcallable = intr['callable']
+        if isinstance(vcallable, type) and issubclass(vcallable, View):
+            yield name, router.routes_mapper.get_route(name).path, vcallable

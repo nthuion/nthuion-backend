@@ -11,8 +11,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   api
    schema
-   api/echo
 
 
 

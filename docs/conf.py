@@ -36,7 +36,8 @@ sys.path.append(os.path.abspath(os.path.join(here, '..')))
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
-    'nthuionext'
+    'nthuionext',
+    'autoapi',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
