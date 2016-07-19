@@ -1,4 +1,5 @@
-from sqlalchemy import Column, String, Text, Integer
+from sqlalchemy import Column, String, Text, Integer, ForeignKey
+from sqlalchemy.orm import relationship
 from .meta import Base
 
 
@@ -17,3 +18,6 @@ class FacebookUser(Base):
     # see also http://isemail.info/about
 
     access_token = Column(Text)
+
+    user_id = Column(Integer, ForeignKey(User.id), unique=True, index=True)
+    user = relationship(User, uselist=False)
