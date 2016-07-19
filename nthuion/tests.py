@@ -64,7 +64,7 @@ class TestMyViewSuccessCondition(BaseTest):
 class AuthTest(BaseTest):
 
     def test_acquire_token(self):
-        from nthuion.models.auth import User, Token
+        from nthuion.auth.models import User, Token
         self.assertEqual(0, self.session.query(Token).count())
         u = User()
         self.session.add(u)

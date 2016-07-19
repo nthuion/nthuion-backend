@@ -4,7 +4,7 @@ import string
 from sqlalchemy import Column, String, Text, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
-from .meta import Base
+from nthuion.models.meta import Base
 
 
 sysrand = random.SystemRandom()
