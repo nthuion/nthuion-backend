@@ -1,11 +1,46 @@
+import random
+import string
+
 from sqlalchemy import Column, String, Text, Integer, ForeignKey
 from sqlalchemy.orm import relationship
+
 from .meta import Base
+
+
+sysrand = random.SystemRandom()
+
+alphanumeric = string.ascii_letters + string.digits
 
 
 class User(Base):
 
     id = Column(Integer, primary_key=True)
+
+    def acquire_token(self):
+        tok = Token(self)
+        self.object_session().add(tok)
+
+
+class Token(Base):
+
+    TOKEN_LENGTH = 255
+
+    value = Column(String(TOKEN_LENGTH), primary_key=True)
+    user_id = Column(
+        Integer,
+        ForeignKey(User.id),
+        index=True
+    )
+    user = relationship(User, backref='tokens')
+
+    def __init__(self, user):
+        super().__init__(
+            value=''.join(
+                sysrand.choice(alphanumeric)
+                for i in range(self.TOKEN_LENGTH)
+            ),
+            user=user
+        )
 
 
 class FacebookUser(Base):
@@ -20,4 +55,4 @@ class FacebookUser(Base):
     access_token = Column(Text)
 
     user_id = Column(Integer, ForeignKey(User.id), unique=True, index=True)
-    user = relationship(User, uselist=False)
+    user = relationship(User, backref='facebook_user')

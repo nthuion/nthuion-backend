@@ -28,6 +28,8 @@ class BaseTest(unittest.TestCase):
 
         self.session = get_tm_session(session_factory, transaction.manager)
 
+        self.init_database()
+
     def init_database(self):
         from .models.meta import Base
         Base.metadata.create_all(self.engine)
@@ -57,6 +59,17 @@ class TestMyViewSuccessCondition(BaseTest):
         info = my_view(dummy_request(self.session))
         self.assertEqual(info['one'].name, 'one')
         self.assertEqual(info['project'], 'nthuion')
+
+
+class AuthTest(BaseTest):
+
+    def test_acquire_token(self):
+        from nthuion.models import auth
+        self.assertEqual(0, self.session.query(auth.Token).count())
+        u = auth.User()
+        self.session.add(u)
+        u.acquire_token()
+        self.assertEqual(1, self.session.query(auth.Token).count())
 
 
 @unittest.skip('demo removed')

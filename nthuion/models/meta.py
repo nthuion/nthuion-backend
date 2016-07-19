@@ -1,5 +1,6 @@
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
 from sqlalchemy.schema import MetaData
+from sqlalchemy.orm import object_session
 
 # Recommended naming convention used by Alembic, as various different database
 # providers will autogenerate vastly different names making migrations more
@@ -21,3 +22,6 @@ class Base:
     @declared_attr
     def __tablename__(cls):
         return cls.__name__.lower()
+
+    def object_session(self):
+        return object_session(self)
