@@ -14,11 +14,6 @@ import datetime
 from .meta import Base
 
 
-class User(Base):
-
-    id = Column(Integer, primary_key=True)
-
-
 class Tag(Base):
 
     id = Column(Integer, primary_key=True)
