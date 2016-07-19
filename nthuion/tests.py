@@ -64,12 +64,16 @@ class TestMyViewSuccessCondition(BaseTest):
 class AuthTest(BaseTest):
 
     def test_acquire_token(self):
-        from nthuion.models import auth
-        self.assertEqual(0, self.session.query(auth.Token).count())
-        u = auth.User()
+        from nthuion.models.auth import User, Token
+        self.assertEqual(0, self.session.query(Token).count())
+        u = User()
         self.session.add(u)
-        u.acquire_token()
-        self.assertEqual(1, self.session.query(auth.Token).count())
+        tvalue = u.acquire_token()
+        self.assertEqual(1, self.session.query(Token).count())
+        self.assertEqual(
+            u,
+            self.session.query(Token).filter(Token.value == tvalue).one().user
+        )
 
 
 @unittest.skip('demo removed')

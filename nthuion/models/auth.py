@@ -19,6 +19,10 @@ class User(Base):
     def acquire_token(self):
         tok = Token(self)
         self.object_session().add(tok)
+        return tok.value
+
+    def __repr__(self):
+        return '<User id={}>'.format(self.id)
 
 
 class Token(Base):
@@ -41,6 +45,9 @@ class Token(Base):
             ),
             user=user
         )
+
+    def __repr__(self):
+        return '<Token {}... of {!r}>'.format(self.value[:10], self.user)
 
 
 class FacebookUser(Base):
