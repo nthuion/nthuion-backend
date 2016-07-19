@@ -19,7 +19,7 @@ class Tag(Base):
     id = Column(Integer, primary_key=True)
 
     # note: stackoverflow uses 25
-    name = Column(String(30))
+    name = Column(String(30), unique=True)
 
 
 class Likable(Base):
