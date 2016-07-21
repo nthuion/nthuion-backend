@@ -56,7 +56,7 @@ class Email(Base):
 
     id = Column(Integer, primary_key=True)
 
-    value = Column(String(254), nullable=False)
+    address = Column(String(254), nullable=False)
     # see also http://isemail.info/about
 
     user_id = Column(Integer, ForeignKey(User.id), index=True, nullable=False)

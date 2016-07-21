@@ -22,7 +22,7 @@ class FacebookLogin(View):
             }
         )
         if response.status_code == 400:
-            raise HTTPBadRequest('Login failed')
+            raise HTTPBadRequest('Login failed: token rejected by facebook')
         json = response.json()
         return json['id'], json['name'], json.get('email')
 
@@ -30,7 +30,7 @@ class FacebookLogin(View):
     def fb_user_objects(facebook_id, name, email):
         user = User(name=name)
         if email is not None:
-            email = Email(value=email, user=user, verified=True)
+            email = Email(address=email, user=user, verified=True)
         fbusr = FacebookUser(user=user, id=facebook_id, name=name)
         return user, email, fbusr
 

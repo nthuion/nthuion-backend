@@ -1,5 +1,6 @@
 from unittest import mock
 from .base import BaseTest, WebTest
+from nthuion.auth.models import Token, FacebookUser, Email, User
 
 
 class AuthTest(BaseTest):
@@ -51,8 +52,29 @@ class FacebookLoginTest(WebTest):
 
     def test_facebook_login(self):
         with mock.patch('requests.get', valid_user_response):
-            self.app.post_json(
+            res = self.app.post_json(
                 '/api/login/facebook',
                 {'token': 'exxe'},
                 status=200
             )
+        email = self.session.query(Email).one()
+        facebook_user = self.session.query(FacebookUser).one()
+        user = self.session.query(User).one()
+        token = self.session.query(Token).one()
+        self.assertEqual(user, email.user)
+        self.assertEqual(user, token.user)
+        self.assertEqual(user, facebook_user.user)
+        self.assertEqual('test@example.com', email.address)
+        self.assertEqual(token.value, res.json['token'])
+
+    def test_facebook_bad_login(self):
+        with mock.patch('requests.get', bad_request_response):
+            res = self.app.post_json(
+                '/api/login/facebook',
+                {'token': 'exxe'},
+                status=400
+            )
+        self.assertEqual(
+            'Login failed: token rejected by facebook',
+            res.json['detail']
+        )
