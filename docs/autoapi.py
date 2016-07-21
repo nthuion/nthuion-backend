@@ -33,7 +33,7 @@ class AutoAPIDirective(Directive):
 
             yield name.capitalize()
             yield '-' * len(name)
-            yield vcallable.__doc__
+            yield vcallable.__doc__ or ''
 
             for method in ('get', 'post', 'put', 'delete'):
 
