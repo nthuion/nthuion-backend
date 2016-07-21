@@ -1,7 +1,7 @@
 import random
 import string
 
-from sqlalchemy import Column, String, Text, Integer, ForeignKey
+from sqlalchemy import Column, String, Text, Integer, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 from nthuion.models.meta import Base
@@ -50,14 +50,24 @@ class Token(Base):
         return '<Token {}... of {!r}>'.format(self.value[:10], self.user)
 
 
+class Email(Base):
+
+    id = Column(String(40), primary_key=True)
+
+    email = Column(String(254), nullable=False)
+    # see also http://isemail.info/about
+
+    user_id = Column(Integer, ForeignKey(User.id), index=True, nullable=False)
+    user = relationship(User, backref='emails')
+
+    verified = Column(Boolean, default=False, nullable=False)
+
+
 class FacebookUser(Base):
 
     id = Column(String(40), primary_key=True)
     # facebook says an id is a "numeric string"
     # https://developers.facebook.com/docs/graph-api/reference/v2.7/user
-
-    email = Column(String(254), nullable=False)
-    # see also http://isemail.info/about
 
     access_token = Column(Text)
 
