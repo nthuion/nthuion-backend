@@ -1,7 +1,9 @@
 import unittest
 import transaction
 from pyramid import testing
+from webtest import TestApp as _TestApp
 
+from nthuion import main
 from nthuion.request import DummyRequest
 from nthuion.models import get_engine, get_session_factory, get_tm_session
 from nthuion.models.meta import Base
@@ -24,9 +26,6 @@ class BaseTest(unittest.TestCase):
 
         self.session = get_tm_session(session_factory, transaction.manager)
 
-        self.init_database()
-
-    def init_database(self):
         Base.metadata.create_all(self.engine)
 
     def tearDown(self):
@@ -38,9 +37,12 @@ class BaseTest(unittest.TestCase):
 class WebTest(unittest.TestCase):
 
     def setUp(self):
-        from nthuion import main
         app = main({}, **{
             'sqlalchemy.url': 'sqlite:///:memory:'
         })
-        from webtest import TestApp
-        self.app = TestApp(app)
+        session_factory = app.registry['dbsession_factory']
+        self.engine = session_factory.kw['bind']
+        self.session = get_tm_session(session_factory, transaction.manager)
+        Base.metadata.create_all(self.engine)
+
+        self.app = _TestApp(app)

@@ -75,8 +75,8 @@ class FacebookLogin(View):
         except IntegrityError:
             transaction.abort()
         user = self.request.db.query(User)\
-            .filter(User.id == FacebookUser.user_id)\
             .filter(FacebookUser.id == fbid)\
+            .filter(User.id == FacebookUser.user_id)\
             .one()
         return {
             'token': user.acquire_token()

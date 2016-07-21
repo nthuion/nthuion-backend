@@ -54,7 +54,7 @@ class Token(Base):
 
 class Email(Base):
 
-    id = Column(String(40), primary_key=True)
+    id = Column(Integer, primary_key=True)
 
     value = Column(String(254), nullable=False)
     # see also http://isemail.info/about

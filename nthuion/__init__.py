@@ -11,9 +11,7 @@ from .request import Request
 from .auth.policies import TokenAuthenticationPolicy
 
 
-def main(global_config, **settings):
-    """ This function returns a Pyramid WSGI application.
-    """
+def get_config(global_config, **settings):
     config = Configurator(
         request_factory=Request,
         authentication_policy=TokenAuthenticationPolicy(),
@@ -24,4 +22,10 @@ def main(global_config, **settings):
     config.include('.routes')
     config.add_renderer(None, renderers.JSON())
     config.scan()
-    return config.make_wsgi_app()
+    return config
+
+
+def main(global_config, **settings):
+    """ This function returns a Pyramid WSGI application.
+    """
+    return get_config(global_config, **settings).make_wsgi_app()
