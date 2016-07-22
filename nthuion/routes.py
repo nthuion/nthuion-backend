@@ -1,4 +1,5 @@
 from nthuion.auth.views import FacebookLogin, Logout
+from nthuion.views.questions import QuestionList
 
 
 def includeme(config):
@@ -11,3 +12,6 @@ def includeme(config):
 
     config.add_route('logout', '/api/logout')
     config.add_view(Logout, route_name='logout')
+
+    config.add_route('questions', '/api/questions')
+    config.add_view(QuestionList, route_name='questions')
