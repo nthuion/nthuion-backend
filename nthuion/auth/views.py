@@ -3,7 +3,7 @@ import transaction
 from pyramid.httpexceptions import HTTPBadRequest
 from sqlalchemy.exc import IntegrityError
 from nthuion.views.base import View
-from nthuion.auth.models import User, FacebookUser, Email
+from nthuion.auth.models import User, FacebookUser, Email, Token
 from nthuion.utils import keyerror_is_bad_request
 
 
@@ -81,3 +81,15 @@ class FacebookLogin(View):
         return {
             'token': user.acquire_token()
         }
+
+
+class Logout(View):
+    """
+    Revokes the current token
+    """
+
+    def post(self):
+        token = self.request.unauthenticated_userid
+        if token is not None:
+            self.db.query(Token).filter(Token.value == token).delete()
+        return {}

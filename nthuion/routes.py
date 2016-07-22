@@ -1,4 +1,4 @@
-from nthuion.auth.views import FacebookLogin
+from nthuion.auth.views import FacebookLogin, Logout
 
 
 def includeme(config):
@@ -8,3 +8,6 @@ def includeme(config):
 
     config.add_route('facebook-login', '/api/login/facebook')
     config.add_view(FacebookLogin, route_name='facebook-login')
+
+    config.add_route('logout', '/api/logout')
+    config.add_view(Logout, route_name='logout')

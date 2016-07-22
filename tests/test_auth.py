@@ -78,3 +78,18 @@ class FacebookLoginTest(WebTest):
             'Login failed: token rejected by facebook',
             res.json['detail']
         )
+
+
+class LogoutTest(WebTest):
+
+    def test_logout_revokes_token(self):
+        user = User(name='gg')
+        self.session.add(user)
+        self.session.add(Token(user=user, value='234564232234'))
+        self.assertEqual(1, self.session.query(Token).count())
+        self.app.post_json(
+            '/api/logout',
+            headers={'Authorization': 'Token 234564232234'},
+            status=200
+        )
+        self.assertEqual(0, self.session.query(Token).count())

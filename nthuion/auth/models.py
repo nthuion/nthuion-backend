@@ -39,13 +39,15 @@ class Token(Base):
     )
     user = relationship(User, backref='tokens')
 
-    def __init__(self, user):
-        super().__init__(
-            value=''.join(
+    def __init__(self, user, value=None):
+        if value is None:
+            value = ''.join(
                 sysrand.choice(alphanumeric)
                 for i in range(self.TOKEN_LENGTH)
-            ),
-            user=user
+            )
+        super().__init__(
+            user=user,
+            value=value
         )
 
     def __repr__(self):

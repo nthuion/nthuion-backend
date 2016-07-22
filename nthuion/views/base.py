@@ -24,3 +24,7 @@ class View:
             return self.delete()
         else:
             raise HTTPMethodNotAllowed
+
+    @property
+    def db(self):
+        return self.request.db
