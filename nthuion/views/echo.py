@@ -1,8 +1,6 @@
-from pyramid.view import view_config
 from .base import View
 
 
-@view_config(route_name='echo')
 class EchoView(View):
     """returns the content, debug use"""
 

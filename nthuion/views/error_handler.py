@@ -1,6 +1,3 @@
-from pyramid.view import view_config
-
-
 def error_view(exc, request):
     request.response.status = exc.code
     return {

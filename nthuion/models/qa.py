@@ -10,6 +10,7 @@ from sqlalchemy import (
     PrimaryKeyConstraint,
     CheckConstraint
 )
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import relationship
 
 import datetime
@@ -42,6 +43,11 @@ class Article(Entry):
 
     content = Column(Text(30000), nullable=False)
 
+    tags = relationship(
+        'Tag',
+        secondary=lambda: ArticleTag.__table__
+    )
+
     __mapper_args__ = {
         'polymorphic_identity': 'article'
     }
@@ -53,6 +59,13 @@ class Tag(Base):
 
     # note: stackoverflow uses 25
     name = Column(String(30), unique=True)
+
+    @classmethod
+    def get_or_create(cls, session, name):
+        try:
+            return session.query(cls).filter(cls.name == name).one()
+        except NoResultFound:
+            return cls(name=name)
 
 
 class ArticleTag(Base):

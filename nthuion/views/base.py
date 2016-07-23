@@ -1,4 +1,4 @@
-from pyramid.httpexceptions import HTTPMethodNotAllowed
+from pyramid.httpexceptions import HTTPMethodNotAllowed, HTTPBadRequest
 
 
 def not_allowed(self):
@@ -28,3 +28,8 @@ class View:
     @property
     def db(self):
         return self.request.db
+
+    def check_permission(self, perm):
+        has_perm = self.request.has_permission(perm)
+        if not has_perm:
+            raise HTTPBadRequest('no permission for {}'.format(perm))

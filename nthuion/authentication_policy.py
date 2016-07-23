@@ -22,7 +22,7 @@ class TokenAuthenticationPolicy:
         return request.db.query(User)\
             .filter(Token.value == value)\
             .filter(Token.user_id == User.id)\
-            .get()  # None on not found
+            .one_or_none()  # None on not found
 
     def unauthenticated_userid(self, request):
         authorization = request.headers.get('Authorization')
