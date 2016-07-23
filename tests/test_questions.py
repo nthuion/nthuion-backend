@@ -1,4 +1,26 @@
-from .base import WebTest
+from .base import WebTest, BaseTest
+from nthuion.models import Tag, Question, User
+import transaction
+
+
+class RelationTest(BaseTest):
+
+    def test(self):
+        tag1 = Tag(name='tag1')
+        tag2 = Tag(name='tag2')
+        user = User(name='user')
+        question = Question(
+            tags=[tag1, tag2],
+            poster=user,
+            title='mytitle',
+            content='lorem ipsum',
+            is_anonymous=False,
+        )
+        with transaction.manager:
+            self.session.add(tag1)
+            self.session.add(tag2)
+            self.session.add(user)
+            self.session.add(question)
 
 
 class QuestionListTest(WebTest):

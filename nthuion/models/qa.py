@@ -26,11 +26,11 @@ class Entry(Base):
     ctime = Column(DateTime, default=datetime.datetime.now, nullable=False)
 
     poster_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    poster = relationship(User)
 
     type = Column(String, nullable=False)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'entry',
         'polymorphic_on': type,
     }
 
@@ -47,10 +47,6 @@ class Article(Entry):
         'Tag',
         secondary=lambda: ArticleTag.__table__
     )
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'article'
-    }
 
 
 class Tag(Base):
@@ -99,11 +95,19 @@ class Question(Article):
     id = Column(Integer, ForeignKey(Article.id), primary_key=True)
     is_anonymous = Column(Boolean, nullable=False)
 
+    __mapper_args__ = {
+        'polymorphic_identity': 'question'
+    }
+
 
 class Solution(Article):
 
     id = Column(Integer, ForeignKey(Article.id), primary_key=True)
     question_id = Column(Integer, ForeignKey(Question.id))
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'solution'
+    }
 
 
 class Vote(Base):
