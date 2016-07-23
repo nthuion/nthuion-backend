@@ -1,12 +1,12 @@
 from unittest import mock
 from .base import BaseTest, WebTest
-from nthuion.auth.models import Token, FacebookUser, Email, User
+from nthuion.models.auth import Token, FacebookUser, Email, User
 
 
 class AuthTest(BaseTest):
 
     def test_acquire_token(self):
-        from nthuion.auth.models import User, Token
+        from nthuion.models.auth import User, Token
         self.assertEqual(0, self.session.query(Token).count())
         u = User(name='name')
         self.session.add(u)

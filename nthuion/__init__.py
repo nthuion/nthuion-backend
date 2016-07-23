@@ -8,7 +8,7 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid import renderers
 
 from .request import Request
-from .auth.policies import TokenAuthenticationPolicy
+from .authentication_policy import TokenAuthenticationPolicy
 
 
 def get_config(global_config, **settings):
@@ -21,7 +21,6 @@ def get_config(global_config, **settings):
     config.include('.models')
     config.include('.routes')
     config.add_renderer(None, renderers.JSON())
-    config.scan()
     return config
 
 

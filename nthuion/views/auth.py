@@ -3,7 +3,7 @@ import transaction
 from pyramid.httpexceptions import HTTPBadRequest
 from sqlalchemy.exc import IntegrityError
 from nthuion.views.base import View
-from nthuion.auth.models import User, FacebookUser, Email, Token
+from nthuion.models.auth import User, FacebookUser, Email, Token
 from nthuion.utils import keyerror_is_bad_request
 
 

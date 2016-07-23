@@ -1,17 +1,17 @@
-from nthuion.auth.views import FacebookLogin, Logout
-from nthuion.views.questions import QuestionList
+from pyramid.httpexceptions import HTTPError
+from nthuion.views import echo, auth, error_handler, questions
 
 
 def includeme(config):
     config.add_static_view('static', 'static', cache_max_age=3600)
-    config.add_route('home', '/')
-    config.add_route('echo', '/api/echo')
 
-    config.add_route('facebook-login', '/api/login/facebook')
-    config.add_view(FacebookLogin, route_name='facebook-login')
+    config.add_view(error_handler.error_view, context=HTTPError)
 
-    config.add_route('logout', '/api/logout')
-    config.add_view(Logout, route_name='logout')
+    def add(path, view, name):
+        config.add_route(name, path)
+        config.add_view(view, route_name=name)
 
-    config.add_route('questions', '/api/questions')
-    config.add_view(QuestionList, route_name='questions')
+    add('/api/echo', echo.EchoView, 'echo')
+    add('/api/login/facebook', auth.FacebookLogin, 'facebook-login')
+    add('/api/logout', auth.Logout, 'logout')
+    add('/api/questions', questions.QuestionList, 'questions')

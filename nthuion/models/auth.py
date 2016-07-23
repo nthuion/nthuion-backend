@@ -1,7 +1,7 @@
 import random
 import string
 
-from sqlalchemy import Column, String, Text, Integer, ForeignKey, Boolean
+from sqlalchemy import Column, String, Integer, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 from nthuion.models.meta import Base
