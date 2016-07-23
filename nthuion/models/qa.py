@@ -6,12 +6,45 @@ from sqlalchemy import (
     Text,
     Boolean,
     ForeignKey,
-    PrimaryKeyConstraint
+    SmallInteger,
+    PrimaryKeyConstraint,
+    CheckConstraint
 )
+from sqlalchemy.orm import relationship
 
 import datetime
 
 from .meta import Base
+from .auth import User
+
+
+class Entry(Base):
+
+    id = Column(Integer, primary_key=True)
+
+    ctime = Column(DateTime, default=datetime.datetime.now, nullable=False)
+
+    poster_id = Column(Integer, ForeignKey(User.id), nullable=False)
+
+    type = Column(String, nullable=False)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'entry',
+        'polymorphic_on': type,
+    }
+
+
+class Article(Entry):
+
+    id = Column(Integer, ForeignKey(Entry.id), primary_key=True)
+
+    title = Column(String(80), nullable=False)
+
+    content = Column(Text(30000), nullable=False)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'article'
+    }
 
 
 class Tag(Base):
@@ -22,22 +55,30 @@ class Tag(Base):
     name = Column(String(30), unique=True)
 
 
-class Likable(Base):
+class ArticleTag(Base):
 
-    id = Column(Integer, primary_key=True)
+    article_id = Column(Integer, ForeignKey(Article.id))
+    tag_id = Column(Integer, ForeignKey(Tag.id))
+
+    __table_args__ = (
+        PrimaryKeyConstraint(article_id, tag_id),
+    )
 
 
-class Article(Base):
+class Comment(Entry):
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, ForeignKey(Entry.id), primary_key=True)
 
-    title = Column(String(80), nullable=False)
+    parent_id = Column(Integer, ForeignKey(Entry.id), nullable=False)
+    parent = relationship(Entry, foreign_keys=parent_id)
 
-    ctime = Column(DateTime, default=datetime.datetime.now, nullable=False)
+    content = Column(Text(240), nullable=False)
 
-    poster_id = Column(Integer, nullable=False)
-
-    content = Column(Text(30000), nullable=False)
+    __mapper_args__ = {
+        'polymorphic_identity': 'comment',
+        'inherit_condition': Entry.id == id,
+        # sesalso: http://stackoverflow.com/questions/14885042
+    }
 
 
 class Question(Article):
@@ -46,37 +87,22 @@ class Question(Article):
     is_anonymous = Column(Boolean, nullable=False)
 
 
-class QuestionTag(Base):
-
-    question_id = Column(Integer, ForeignKey(Question.id))
-    tag_id = Column(Integer, ForeignKey(Tag.id))
-
-    __table_args__ = (
-        PrimaryKeyConstraint('question_id', 'tag_id'),
-    )
-
-
 class Solution(Article):
 
     id = Column(Integer, ForeignKey(Article.id), primary_key=True)
     question_id = Column(Integer, ForeignKey(Question.id))
 
 
-class SolutionTag(Base):
+class Vote(Base):
 
-    solution_id = Column(Integer, ForeignKey(Solution.id))
-    tag_id = Column(Integer, ForeignKey(Tag.id))
+    user_id = Column(Integer, ForeignKey(User.id))
+    entry_id = Column(Integer, ForeignKey(Entry.id), index=True)
 
-    __table_args__ = (
-        PrimaryKeyConstraint('solution_id', 'tag_id'),
+    value = Column(
+        SmallInteger,
+        CheckConstraint('value == 1 OR value == -1', name='vote_is_one'),
     )
 
-
-class Comment(Base):
-
-    id = Column(Integer, primary_key=True)
-
-    article_id = Column(Integer, ForeignKey(Article.id))
-    parent_id = Column(Integer, ForeignKey('comment.id'))
-
-    poster_id = Column(Integer)
+    __table_args__ = (
+        PrimaryKeyConstraint(user_id, entry_id),
+    )
