@@ -6,21 +6,34 @@ import transaction
 class RelationTest(BaseTest):
 
     def test(self):
-        tag1 = Tag(name='tag1')
-        tag2 = Tag(name='tag2')
         user = User(name='user')
         question = Question(
-            tags=[tag1, tag2],
             poster=user,
             title='mytitle',
             content='lorem ipsum',
             is_anonymous=False,
         )
         with transaction.manager:
-            self.session.add(tag1)
-            self.session.add(tag2)
             self.session.add(user)
+            question.tags = Tag.from_names(self.session, 'tag1', 'tag2')
             self.session.add(question)
+        tag1, tag2 = sorted(
+            self.session.query(Question).one().tags, key=lambda x: x.name
+        )
+        self.assertEqual('tag1', tag1.name)
+        self.assertEqual('tag2', tag2.name)
+
+        with transaction.manager:
+            self.session.add(
+                Question(
+                    poster=user,
+                    title='title2',
+                    content='content2',
+                    is_anonymous=False,
+                    tags=Tag.from_names(self.session, 'tag2', 'tag3', 'tag4')
+                )
+            )
+        self.assertEqual(4, self.session.query(Tag).count())
 
 
 class QuestionListTest(WebTest):

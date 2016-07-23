@@ -54,14 +54,23 @@ class Tag(Base):
     id = Column(Integer, primary_key=True)
 
     # note: stackoverflow uses 25
-    name = Column(String(30), unique=True)
+    name = Column(String(30), unique=True, index=True)
 
     @classmethod
     def get_or_create(cls, session, name):
         try:
             return session.query(cls).filter(cls.name == name).one()
         except NoResultFound:
-            return cls(name=name)
+            self = cls(name=name)
+            session.add(self)
+            return self
+
+    @classmethod
+    def from_names(cls, session, *names):
+        return [cls.get_or_create(session, name) for name in names]
+
+    def __repr__(self):
+        return '<Tag {!r}>'.format(self.name)
 
 
 class ArticleTag(Base):
