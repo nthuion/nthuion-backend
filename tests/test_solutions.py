@@ -1,3 +1,4 @@
+from unittest import skip
 import transaction
 from .base import WebTest
 from nthuion.models import Question, Solution, User, Tag
@@ -5,7 +6,7 @@ from nthuion.models import Question, Solution, User, Tag
 
 class SolutionTest(WebTest):
 
-    def create_solution(self):
+    def create_question(self):
         user = User(name='username')
         self.session.add(user)
         question = Question(
@@ -15,17 +16,24 @@ class SolutionTest(WebTest):
             is_anonymous=False,
             author=user,
         )
+        self.token = user.acquire_token()
+        self.token_header = {'Authorization': 'Token {}'.format(self.token)}
         self.session.add(question)
-        solution = Solution(
-            question=question,
-            title='stitle',
-            content='scontent',
-            author=user,
-        )
-        self.session.add(solution)
         self.session.flush()
         self.uid = user.id
         self.qid = question.id
+        transaction.commit()
+
+    def create_solution(self):
+        self.create_question()
+        solution = Solution(
+            question_id=self.qid,
+            title='stitle',
+            content='scontent',
+            author_id=self.uid,
+        )
+        self.session.add(solution)
+        self.session.flush()
         self.sid = solution.id
         transaction.commit()
 
@@ -45,3 +53,28 @@ class SolutionListTest(SolutionTest):
         self.assertEqual(self.uid, sol['author']['id'])
         self.assertEqual('username', sol['author']['name'])
         self.assertEqual(0, sol['votes'])
+
+    def test_post(self):
+        self.create_question()
+        self.app.post_json(
+            '/api/solutions',
+            {
+                'title': 'mytitle',
+                'content': 'mycontent',
+                'question_id': self.qid
+            },
+            headers=self.token_header
+        )
+
+    @skip('acl is not implemented')
+    def test_post_anon(self):
+        self.create_question()
+        self.app.post_json(
+            '/api/solutions',
+            {
+                'title': 'mytitle',
+                'content': 'mycontent',
+                'question_id': self.qid
+            },
+            status=401
+        )
