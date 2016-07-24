@@ -15,7 +15,7 @@ class RelationTest(BaseTest):
         )
         with transaction.manager:
             self.session.add(user)
-            question.tags = Tag.from_names(self.session, 'tag1', 'tag2')
+            question.tags = Tag.from_names(self.session, ['tag1', 'tag2'])
             self.session.add(question)
 
         q = self.session.query(Question).one()
@@ -32,7 +32,7 @@ class RelationTest(BaseTest):
                     title='title2',
                     content='content2',
                     is_anonymous=False,
-                    tags=Tag.from_names(self.session, 'tag2', 'tag3', 'tag4')
+                    tags=Tag.from_names(self.session, ['tag2', 'tag3', 'tag4'])
                 )
             )
         self.assertEqual(4, self.session.query(Tag).count())
@@ -209,7 +209,7 @@ class OneQuestionTest(WebTest):
                 author=user,
                 content='dolor sit amet',
                 tags=Tag.from_names(
-                    self.session, 'consectetur', 'adipiscing', 'elit'),
+                    self.session, ['consectetur', 'adipiscing', 'elit']),
                 is_anonymous=False
             )
             self.session.add(user)

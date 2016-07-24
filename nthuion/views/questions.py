@@ -32,7 +32,7 @@ class QuestionList(View):
                 title=title,
                 content=content,
                 author=self.user,
-                tags=Tag.from_names(self.db, *tags),
+                tags=Tag.from_names(self.db, tags),
                 is_anonymous=is_anonymous
             )
             self.db.add(question)

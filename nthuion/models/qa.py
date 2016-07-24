@@ -83,7 +83,8 @@ class Tag(Base):
             return self
 
     @classmethod
-    def from_names(cls, session, *names):
+    def from_names(cls, session, names):
+        assert isinstance(names, (list, tuple))
         return [cls.get_or_create(session, name) for name in names]
 
     def __repr__(self):
