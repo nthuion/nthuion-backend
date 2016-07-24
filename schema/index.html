@@ -1,0 +1,321 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Schema &mdash; NTHU ION API 0.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="NTHU ION API 0.0 documentation" href="../"/>
+        <link rel="prev" title="API Documentation" href="../api/"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../" class="icon icon-home"> NTHU ION API
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../api/">API Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Schema</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../">NTHU ION API</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../">Docs</a> &raquo;</li>
+      
+    <li>Schema</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/schema.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="schema">
+<h1>Schema<a class="headerlink" href="#schema" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-postgresql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">tag</span> <span class="p">(</span>
+	<span class="n">id</span> <span class="nb">SERIAL</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="k">name</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mf">30</span><span class="p">),</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">pk_tag</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+
+
+<span class="k">CREATE</span> <span class="k">UNIQUE</span> <span class="k">INDEX</span> <span class="n">ix_tag_name</span> <span class="k">ON</span> <span class="n">tag</span> <span class="p">(</span><span class="k">name</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-postgresql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="s s-Name">&quot;user&quot;</span> <span class="p">(</span>
+	<span class="n">id</span> <span class="nb">SERIAL</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="k">name</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mf">100</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">pk_user</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-postgresql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">email</span> <span class="p">(</span>
+	<span class="n">id</span> <span class="nb">SERIAL</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="n">address</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mf">254</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="n">user_id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="n">verified</span> <span class="nb">BOOLEAN</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">pk_email</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">),</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">fk_email_user_id_user</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="s s-Name">&quot;user&quot;</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+
+
+<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">ix_email_user_id</span> <span class="k">ON</span> <span class="n">email</span> <span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-postgresql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">entry</span> <span class="p">(</span>
+	<span class="n">id</span> <span class="nb">SERIAL</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="n">ctime</span> <span class="nb">TIMESTAMP</span> <span class="nb">WITHOUT TIME ZONE</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="n">author_id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="k">type</span> <span class="nb">VARCHAR</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">pk_entry</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">),</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">fk_entry_author_id_user</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">author_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="s s-Name">&quot;user&quot;</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-postgresql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">facebookuser</span> <span class="p">(</span>
+	<span class="n">id</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mf">40</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="k">name</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mf">100</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="n">user_id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">pk_facebookuser</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">),</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">fk_facebookuser_user_id_user</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="s s-Name">&quot;user&quot;</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+
+
+<span class="k">CREATE</span> <span class="k">UNIQUE</span> <span class="k">INDEX</span> <span class="n">ix_facebookuser_user_id</span> <span class="k">ON</span> <span class="n">facebookuser</span> <span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-postgresql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">token</span> <span class="p">(</span>
+	<span class="k">value</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mf">255</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="n">user_id</span> <span class="nb">INTEGER</span><span class="p">,</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">pk_token</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="k">value</span><span class="p">),</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">fk_token_user_id_user</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="s s-Name">&quot;user&quot;</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+
+
+<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">ix_token_user_id</span> <span class="k">ON</span> <span class="n">token</span> <span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-postgresql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">article</span> <span class="p">(</span>
+	<span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="n">title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mf">80</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="k">content</span> <span class="nb">TEXT</span><span class="p">(</span><span class="mf">30000</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">pk_article</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">),</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">fk_article_id_entry</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">entry</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-postgresql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">comment</span> <span class="p">(</span>
+	<span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="n">parent_id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="k">content</span> <span class="nb">TEXT</span><span class="p">(</span><span class="mf">240</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">pk_comment</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">),</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">fk_comment_id_entry</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">entry</span> <span class="p">(</span><span class="n">id</span><span class="p">),</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">fk_comment_parent_id_entry</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">parent_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">entry</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-postgresql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">vote</span> <span class="p">(</span>
+	<span class="n">user_id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="n">entry_id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="k">value</span> <span class="nb">SMALLINT</span> <span class="k">CONSTRAINT</span> <span class="n">vote_is_one</span> <span class="k">CHECK</span> <span class="p">(</span><span class="k">value</span> <span class="o">==</span> <span class="mf">1</span> <span class="k">OR</span> <span class="k">value</span> <span class="o">==</span> <span class="o">-</span><span class="mf">1</span><span class="p">),</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">pk_vote</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">entry_id</span><span class="p">),</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">fk_vote_user_id_user</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="s s-Name">&quot;user&quot;</span> <span class="p">(</span><span class="n">id</span><span class="p">),</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">fk_vote_entry_id_entry</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">entry_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">entry</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+
+
+<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">ix_vote_entry_id</span> <span class="k">ON</span> <span class="n">vote</span> <span class="p">(</span><span class="n">entry_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-postgresql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">articletag</span> <span class="p">(</span>
+	<span class="n">article_id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="n">tag_id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">pk_articletag</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">article_id</span><span class="p">,</span> <span class="n">tag_id</span><span class="p">),</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">fk_articletag_article_id_article</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">article_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">article</span> <span class="p">(</span><span class="n">id</span><span class="p">),</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">fk_articletag_tag_id_tag</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">tag_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">tag</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-postgresql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">question</span> <span class="p">(</span>
+	<span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="n">is_anonymous</span> <span class="nb">BOOLEAN</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">pk_question</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">),</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">fk_question_id_article</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">article</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-postgresql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">solution</span> <span class="p">(</span>
+	<span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="n">question_id</span> <span class="nb">INTEGER</span><span class="p">,</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">pk_solution</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">),</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">fk_solution_id_article</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">article</span> <span class="p">(</span><span class="n">id</span><span class="p">),</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">fk_solution_question_id_question</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">question_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">question</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../api/" class="btn btn-neutral" title="API Documentation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, afg984.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
