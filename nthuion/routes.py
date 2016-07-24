@@ -23,5 +23,10 @@ def includeme(config):
     add('/api/logout', auth.Logout, 'logout')
     add('/api/questions', questions.QuestionList, 'questions')
     add('/api/questions/{id}', questions.QuestionView, 'question')
+    add(
+        '/api/questions/{id}/vote',
+        questions.QuestionVoteView,
+        'question-vote'
+    )
     add('/api/users/me', users.MeView, 'me')
     add('/api/users/{id}', users.UserView, 'users')

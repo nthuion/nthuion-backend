@@ -12,6 +12,8 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func, select
+from sqlalchemy.ext import hybrid
 
 import datetime
 
@@ -47,6 +49,21 @@ class Article(Entry):
         'Tag',
         secondary=lambda: ArticleTag.__table__
     )
+
+    @hybrid.hybrid_property
+    def votes(self):
+        session = self.object_session()
+        sum_ = session.query(func.sum(Vote.value))\
+            .filter(Vote.entry_id == self.id).scalar()
+        if sum_ is None:
+            return 0
+        return sum_
+
+    @votes.expression
+    def votes(cls):
+        return select([func.sum(Vote.value)])\
+            .where(Vote.entry_id == cls.id)\
+            .label('votes')
 
 
 class Tag(Base):
@@ -120,6 +137,7 @@ class Question(Article):
                 else self.author.as_dict()
             ),
             'is_anonymous': self.is_anonymous,
+            'votes': self.votes
         }
 
 

@@ -91,6 +91,7 @@ class QuestionListTest(WebTest):
         self.assertEqual(True, qjson['is_anonymous'])
         self.assertEqual('a', qjson['content'])
         self.assertEqual('title', qjson['title'])
+        self.assertEqual(0, qjson['votes'])
 
         res = self.app.get(
             '/api/questions',
@@ -102,6 +103,7 @@ class QuestionListTest(WebTest):
         self.assertEqual(1, len(res.json['data']))
         self.assertIsNotNone(qjson['author'])
         self.assertEqual('user123', qjson['author']['name'])
+        self.assertEqual(0, qjson['votes'])
 
     def test_post_requires_login(self):
         self.app.post(
@@ -137,6 +139,7 @@ class QuestionListTest(WebTest):
             ['tag1', 'tag2', 'tag3'],
             sorted(tag.name for tag in question.tags)
         )
+        self.assertEqual(0, question.votes)
 
 
 class QuestionTest(WebTest):
@@ -175,6 +178,9 @@ class QuestionTest(WebTest):
         self.assertEqual(
             [], resp.json['tags']
         )
+        self.assertEqual(
+            0, resp.json['votes']
+        )
 
     def test_get_404(self):
         self.app.get(
@@ -190,3 +196,80 @@ class QuestionTest(WebTest):
             {},
             status=401
         )
+
+
+class QuestionVoteTest(WebTest):
+
+    def setUp(self):
+        super().setUp()
+        with transaction.manager:
+            user = User(name='lorem')
+            question = Question(
+                title='ipsum',
+                author=user,
+                content='dolor sit amet',
+                tags=Tag.from_names(
+                    self.session, 'consectetur', 'adipiscing', 'elit'),
+                is_anonymous=False
+            )
+            self.session.add(user)
+            self.token = user.acquire_token()
+            self.token_header = {
+                'Authorization': 'Token {}'.format(self.token)
+            }
+            self.session.add(question)
+        self.qid, = self.session.query(Question.id).first()
+
+    def assertVoteValue(self, value):
+        resp = self.app.get(
+            '/api/questions/{}/vote'.format(self.qid),
+            headers=self.token_header
+        )
+        self.assertEqual(
+            {
+                'value': value
+            },
+            resp.json
+        )
+
+    def voteUp(self):
+        return self.app.put_json(
+            '/api/questions/{}/vote'.format(self.qid),
+            {'value': 1},
+            headers=self.token_header
+        )
+
+    def voteDown(self):
+        return self.app.put_json(
+            '/api/questions/{}/vote'.format(self.qid),
+            {'value': -1},
+            headers=self.token_header
+        )
+
+    def unvote(self):
+        return self.app.delete(
+            '/api/questions/{}/vote'.format(self.qid),
+            headers=self.token_header
+        )
+
+    def test_vote_zero(self):
+        self.assertVoteValue(0)
+
+    def test_vote_up(self):
+        self.voteUp()
+        self.assertVoteValue(1)
+
+    def test_vote_down(self):
+        self.voteDown()
+        self.assertVoteValue(-1)
+
+    def test_vote_multiple(self):
+        self.assertVoteValue(0)
+        self.voteDown()
+        self.assertVoteValue(-1)
+        self.unvote()
+        self.assertVoteValue(0)
+        self.voteUp()
+        self.assertVoteValue(1)
+        self.voteDown()
+        self.assertVoteValue(-1)
