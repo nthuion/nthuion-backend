@@ -89,6 +89,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#questions">Questions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#question">Question</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#question-vote">Question-vote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#question-comment">Question-comment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#me">Me</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#users">Users</a></li>
 </ul>
@@ -306,8 +307,7 @@ for example:</p>
 <dl class="put">
 <dt id="put--api-questions-id-vote">
 <code class="descname">PUT </code><code class="descname">/api/questions/{id}/vote</code><a class="headerlink" href="#put--api-questions-id-vote" title="Permalink to this definition">¶</a></dt>
-<dd><p>vote for the question</p>
-<p>vote up:</p>
+<dd><p>vote up:</p>
 <div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
 </pre></div>
 </div>
@@ -322,6 +322,41 @@ for example:</p>
 <code class="descname">DELETE </code><code class="descname">/api/questions/{id}/vote</code><a class="headerlink" href="#delete--api-questions-id-vote" title="Permalink to this definition">¶</a></dt>
 <dd><p>unvote</p>
 <p>no body required</p>
+</dd></dl>
+
+</div>
+<div class="section" id="question-comment">
+<h2>Question-comment<a class="headerlink" href="#question-comment" title="Permalink to this headline">¶</a></h2>
+<dl class="get">
+<dt id="get--api-questions-id-comments">
+<code class="descname">GET </code><code class="descname">/api/questions/{id}/comments</code><a class="headerlink" href="#get--api-questions-id-comments" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the list of comments of this question</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+            <span class="nt">&quot;parent&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">100</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;comment author&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;comment content&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="post">
+<dt id="post--api-questions-id-comments">
+<code class="descname">POST </code><code class="descname">/api/questions/{id}/comments</code><a class="headerlink" href="#post--api-questions-id-comments" title="Permalink to this definition">¶</a></dt>
+<dd><p>post a comment to the question
+the only required attribute is <code class="docutils literal"><span class="pre">content</span></code></p>
+<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;lorem ipsum ...&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
