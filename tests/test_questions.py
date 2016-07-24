@@ -219,6 +219,7 @@ class OneQuestionTest(WebTest):
             }
             self.session.add(question)
         self.qid, = self.session.query(Question.id).first()
+        self.uid, = self.session.query(User.id).first()
 
 
 class QuestionVoteTest(OneQuestionTest):
@@ -279,6 +280,22 @@ class QuestionVoteTest(OneQuestionTest):
 
 
 class QuestionCommentTest(OneQuestionTest):
+
+    def test_get_comments(self):
+        def add_comment(c):
+            self.session.add(
+                Comment(parent_id=self.qid, author_id=self.uid, content=c)
+            )
+        with transaction.manager:
+            add_comment('abc')
+            add_comment('def')
+            add_comment('ghi')
+        res = self.app.get('/api/questions/{}/comments'.format(self.qid))
+        comments = [comment['content'] for comment in res.json['data']]
+        self.assertEqual(3, len(comments))
+        self.assertIn('abc', comments)
+        self.assertIn('def', comments)
+        self.assertIn('ghi', comments)
 
     def test_post_comment(self):
         self.app.post_json(
