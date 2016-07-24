@@ -117,6 +117,7 @@ class Comment(Entry):
 
     def as_dict(self):
         return {
+            'id': self.id,
             'parent': {
                 'id': self.parent_id
             },

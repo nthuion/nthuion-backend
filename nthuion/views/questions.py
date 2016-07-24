@@ -107,6 +107,24 @@ class QuestionVoteView(QuestionContextMixin, VotingMixin, View):
 class QuestionCommentView(QuestionContextMixin, View):
 
     def get(self):
+        """
+        returns the list of comments of this question
+
+        .. sourcecode:: json
+
+            {
+                "data": [
+                    {
+                        "id": 10,
+                        "parent": {
+                            "id": 100
+                        },
+                        "author": "comment author",
+                        "content": "comment content"
+                    }
+                ]
+            }
+        """
         return {
             'data': [comment.as_dict() for comment in self.context.comments]
         }

@@ -306,3 +306,7 @@ class QuestionCommentTest(OneQuestionTest):
             '10rem 1psum',
             res.json['data'][0]['content']
         )
+        self.assertIn(
+            'id',
+            res.json['data'][0]
+        )
