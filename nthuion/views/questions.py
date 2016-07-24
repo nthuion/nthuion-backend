@@ -106,6 +106,11 @@ class QuestionVoteView(QuestionContextMixin, VotingMixin, View):
 
 class QuestionCommentView(QuestionContextMixin, View):
 
+    def get(self):
+        return {
+            'data': [comment.as_dict() for comment in self.context.comments]
+        }
+
     post_schema = Schema({'content': str})
 
     def post(self):

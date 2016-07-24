@@ -105,7 +105,7 @@ class Comment(Entry):
     id = Column(Integer, ForeignKey(Entry.id), primary_key=True)
 
     parent_id = Column(Integer, ForeignKey(Entry.id), nullable=False)
-    parent = relationship(Entry, foreign_keys=parent_id)
+    parent = relationship(Entry, foreign_keys=parent_id, backref='comments')
 
     content = Column(Text(240), nullable=False)
 
@@ -114,6 +114,15 @@ class Comment(Entry):
         'inherit_condition': Entry.id == id,
         # sesalso: http://stackoverflow.com/questions/14885042
     }
+
+    def as_dict(self):
+        return {
+            'parent': {
+                'id': self.parent_id
+            },
+            'content': self.content,
+            'author': self.author.as_dict()
+        }
 
 
 class Question(Article):

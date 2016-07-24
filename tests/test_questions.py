@@ -293,3 +293,16 @@ class QuestionCommentTest(OneQuestionTest):
             '10rem 1psum',
             self.session.query(Comment).one().content
         )
+
+        res = self.app.get(
+            '/api/questions/{}/comments'.format(self.qid)
+        )
+
+        self.assertEqual(
+            1,
+            len(res.json['data'])
+        )
+        self.assertEqual(
+            '10rem 1psum',
+            res.json['data'][0]['content']
+        )
