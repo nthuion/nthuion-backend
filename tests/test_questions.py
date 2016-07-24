@@ -1,5 +1,5 @@
 from .base import WebTest, BaseTest
-from nthuion.models import Tag, Question, User
+from nthuion.models import Tag, Question, User, Comment
 import transaction
 
 
@@ -198,7 +198,7 @@ class QuestionTest(WebTest):
         )
 
 
-class QuestionVoteTest(WebTest):
+class OneQuestionTest(WebTest):
 
     def setUp(self):
         super().setUp()
@@ -219,6 +219,9 @@ class QuestionVoteTest(WebTest):
             }
             self.session.add(question)
         self.qid, = self.session.query(Question.id).first()
+
+
+class QuestionVoteTest(OneQuestionTest):
 
     def assertVoteValue(self, value):
         resp = self.app.get(
@@ -273,3 +276,20 @@ class QuestionVoteTest(WebTest):
         self.assertVoteValue(1)
         self.voteDown()
         self.assertVoteValue(-1)
+
+
+class QuestionCommentTest(OneQuestionTest):
+
+    def test_post_comment(self):
+        self.app.post_json(
+            '/api/questions/{}/comments'.format(self.qid),
+            {
+                'content': '10rem 1psum'
+            },
+            headers=self.token_header
+        )
+
+        self.assertEqual(
+            '10rem 1psum',
+            self.session.query(Comment).one().content
+        )

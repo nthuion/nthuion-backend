@@ -5,7 +5,7 @@ from contextlib import suppress
 from .base import View
 from .voting import VotingMixin
 from nthuion.utils import keyerror_is_bad_request, noresultfound_is_404
-from nthuion.models import Question, Tag
+from nthuion.models import Question, Tag, Comment
 
 
 class QuestionList(View):
@@ -105,3 +105,34 @@ class QuestionVoteView(VotingMixin, View):
         with noresultfound_is_404():
             return request.db.query(Question)\
                 .filter(Question.id == request.matchdict['id']).one()
+
+
+class QuestionCommentView(View):
+
+    @staticmethod
+    def factory(request):
+        with noresultfound_is_404():
+            return request.db.query(Question)\
+                .filter(Question.id == request.matchdict['id']).one()
+
+    post_schema = Schema({'content': str})
+
+    def post(self):
+        """post a comment to the question
+        the only required attribute is ``content``
+
+        .. sourcecode:: json
+
+            {
+                "content": "lorem ipsum ..."
+            }
+        """
+        body = self.request.json_body
+        self.post_schema(body)
+        self.db.add(
+            Comment(
+                parent=self.context,
+                content=body['content'],
+                author=self.user
+            )
+        )

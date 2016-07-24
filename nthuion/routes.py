@@ -28,5 +28,10 @@ def includeme(config):
         questions.QuestionVoteView,
         'question-vote'
     )
+    add(
+        '/api/questions/{id}/comments',
+        questions.QuestionCommentView,
+        'question-comment'
+    )
     add('/api/users/me', users.MeView, 'me')
     add('/api/users/{id}', users.UserView, 'users')
