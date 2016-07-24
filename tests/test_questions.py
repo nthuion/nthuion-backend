@@ -99,7 +99,9 @@ class QuestionTest(WebTest):
     def test_get(self):
         self.prepare_q()
         resp = self.app.get(
-            '/api/questions/1',
+            '/api/questions/{}'.format(
+                self.session.query(Question).first().id
+            ),
         )
         self.assertEqual(
             'lorem', resp.json['title']
@@ -119,14 +121,15 @@ class QuestionTest(WebTest):
 
     def test_get_404(self):
         self.app.get(
-            '/api/questions/1',
+            '/api/questions/404',
             status=404
         )
 
     def test_anony_put_401(self):
         self.prepare_q()
         self.app.put_json(
-            '/api/questions/1',
+            '/api/questions/{}'.format(
+                self.session.query(Question).first().id),
             {},
             status=401
         )
