@@ -133,6 +133,7 @@ class QuestionCommentView(QuestionContextMixin, View):
 
     def post(self):
         """post a comment to the question
+
         the only required attribute is ``content``
 
         .. sourcecode:: json
