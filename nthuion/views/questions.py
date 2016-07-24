@@ -9,6 +9,7 @@ from nthuion.models import Question, Tag, Comment
 
 
 class QuestionList(View):
+
     def get(self):
         """Returns list of questions"""
         query = self.db.query(Question)
@@ -20,6 +21,12 @@ class QuestionList(View):
     def post(self):
         """POST a new question, required fields are ``title``, ``tags``,
         ``content``, ``is_anonymous``
+
+        :<json title:
+        :<json tags: array of strings
+        :<json content:
+        :<json is_anonymous: whether the question should be
+                             posted anonymously
         """
         body = self.request.json_body
         with transaction.manager:
@@ -53,20 +60,11 @@ class QuestionView(QuestionContextMixin, View):
 
     def get(self):
         """
-        returns
-
-        .. sourcecode:: json
-
-            {
-                "title": "string",
-                "content": "string",
-                "tags": ["list", "of", "string"],
-                "author": {
-                    "id": "number",
-                    "name": "string"
-                },
-                "votes": "number"
-            }
+        :>json title: string
+        :>json content: string
+        :>json tags: array of strings
+        :>json author: object, with id and name
+        :>json votes: number
         """
         return self.context.as_dict()
 
