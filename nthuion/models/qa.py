@@ -111,6 +111,7 @@ class Question(Article):
     def as_dict(self, viewer=None):
         return {
             'id': self.id,
+            'title': self.title,
             'content': self.content,
             'tags': [tag.name for tag in self.tags],
             'author': (

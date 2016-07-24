@@ -95,6 +95,21 @@ class QuestionTest(WebTest):
                     is_anonymous=False
                 )
             )
-        self.app.get(
+        resp = self.app.get(
             '/api/question/1',
+        )
+        self.assertEqual(
+            'lorem', resp.json['title']
+        )
+        self.assertEqual(
+            'c', resp.json['content']
+        )
+        self.assertEqual(
+            'ggg', resp.json['author']['name']
+        )
+        self.assertEqual(
+            False, resp.json['is_anonymous']
+        )
+        self.assertEqual(
+            [], resp.json['tags']
         )
