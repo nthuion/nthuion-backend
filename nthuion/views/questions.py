@@ -9,6 +9,7 @@ from nthuion.models import Question, Tag, ArticleTag
 
 class QuestionList(View):
     def get(self):
+        """Returns a dummy question list"""
         return {
             'data': [
                 {
@@ -29,6 +30,7 @@ class QuestionList(View):
         }
 
     def post(self):
+        """POST a new question"""
         body = self.request.json_body
         with transaction.manager:
             with keyerror_is_bad_request():
@@ -50,6 +52,9 @@ class QuestionList(View):
 
 
 class QuestionView(View):
+
+    """Question of the id"""
+
     @staticmethod
     def factory(request):
         with noresultfound_is_404():
@@ -57,6 +62,22 @@ class QuestionView(View):
                 .filter(Question.id == request.matchdict['id']).one()
 
     def get(self):
+        """
+        returns
+
+        .. sourcecode:: json
+
+            {
+                "title": "string",
+                "content": "string",
+                "tags": ["list", "of", "string"],
+                "author": {
+                    "id": "number",
+                    "name": "string"
+                },
+                "votes": "number"
+            }
+        """
         return self.context.as_dict()
 
     put_schema = Schema({
