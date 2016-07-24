@@ -156,10 +156,26 @@ class Solution(Article):
 
     id = Column(Integer, ForeignKey(Article.id), primary_key=True)
     question_id = Column(Integer, ForeignKey(Question.id))
+    question = relationship(
+        Question,
+        foreign_keys=question_id,
+        backref='solutions')
 
     __mapper_args__ = {
         'polymorphic_identity': 'solution'
     }
+
+    def as_dict(self):
+        return {
+            'title': self.title,
+            'content': self.content,
+            'author': self.author.as_dict(),
+            'question': {
+                'id': self.question.id,
+                'title': self.question.title
+            } if self.question is not None else None,
+            'votes': self.votes
+        }
 
 
 class Vote(Base):

@@ -1,5 +1,7 @@
 from pyramid.httpexceptions import HTTPError
-from nthuion.views import echo, auth, error_handler, questions, users
+from nthuion.views import (
+    echo, auth, error_handler, questions, users, solutions
+)
 
 
 def includeme(config):
@@ -32,6 +34,11 @@ def includeme(config):
         '/api/questions/{id}/comments',
         questions.QuestionCommentView,
         'question-comment'
+    )
+    add(
+        '/api/solutions',
+        solutions.SolutionListView,
+        'solutions'
     )
     add('/api/users/me', users.MeView, 'me')
     add('/api/users/{id}', users.UserView, 'users')
