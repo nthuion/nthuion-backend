@@ -38,15 +38,18 @@ class QuestionList(View):
             self.db.add(question)
 
 
-class QuestionView(View):
-
-    """Question of the id"""
+class QuestionContextMixin:
 
     @staticmethod
     def factory(request):
         with noresultfound_is_404():
             return request.db.query(Question)\
                 .filter(Question.id == request.matchdict['id']).one()
+
+
+class QuestionView(QuestionContextMixin, View):
+
+    """Question of the id"""
 
     def get(self):
         """
@@ -97,23 +100,11 @@ class QuestionView(View):
                 return obj.as_dict()
 
 
-class QuestionVoteView(VotingMixin, View):
+class QuestionVoteView(QuestionContextMixin, VotingMixin, View):
     """Entity representing the user's vote of the question"""
 
-    @staticmethod
-    def factory(request):
-        with noresultfound_is_404():
-            return request.db.query(Question)\
-                .filter(Question.id == request.matchdict['id']).one()
 
-
-class QuestionCommentView(View):
-
-    @staticmethod
-    def factory(request):
-        with noresultfound_is_404():
-            return request.db.query(Question)\
-                .filter(Question.id == request.matchdict['id']).one()
+class QuestionCommentView(QuestionContextMixin, View):
 
     post_schema = Schema({'content': str})
 
