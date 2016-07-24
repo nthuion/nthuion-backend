@@ -1,10 +1,11 @@
 import transaction
-from voluptuous import Schema, Any
+from voluptuous import Schema
 from contextlib import suppress
 
 from .base import View
+from .voting import VotingMixin
 from nthuion.utils import keyerror_is_bad_request, noresultfound_is_404
-from nthuion.models import Question, Tag, Vote
+from nthuion.models import Question, Tag
 
 
 class QuestionList(View):
@@ -96,7 +97,7 @@ class QuestionView(View):
                 return obj.as_dict()
 
 
-class QuestionVoteView(View):
+class QuestionVoteView(VotingMixin, View):
     """Entity representing the user's vote of the question"""
 
     @staticmethod
@@ -104,63 +105,3 @@ class QuestionVoteView(View):
         with noresultfound_is_404():
             return request.db.query(Question)\
                 .filter(Question.id == request.matchdict['id']).one()
-
-    def get(self):
-        """
-        Returns the current vote
-
-        .. sourcecode:: json
-
-            {"value": value}
-
-        value may be either ``-1``, ``0`` or ``1``
-        """
-        vote = self.db.query(Vote.value)\
-            .filter(Vote.entry_id == self.context.id)\
-            .filter(Vote.user_id == self.user.id)\
-            .scalar()
-        if vote is None:
-            return {'value': 0}
-        else:
-            return {'value': vote}
-
-    post_schema = Schema({
-        'value': Any(1, -1)
-    })
-
-    def put(self):
-        """
-        vote for the question
-
-        vote up:
-
-        .. sourcecode:: json
-
-            {"value": 1}
-
-        vote down:
-
-        .. sourcecode:: json
-
-            {"value": -1}
-        """
-        self.post_schema(self.request.json_body)
-        vote = self.db.query(Vote)\
-            .filter(Vote.entry_id == self.context.id)\
-            .filter(Vote.user_id == self.user.id)\
-            .first()
-        if vote is None:
-            vote = Vote(entry_id=self.context.id, user_id=self.user.id)
-        vote.value = self.request.json_body['value']
-        self.db.add(vote)
-
-    def delete(self):
-        """
-        unvote
-
-        no body required
-        """
-        self.db.query(Vote)\
-            .filter(Vote.entry_id == self.context.id)\
-            .filter(Vote.user_id == self.user.id)\
-            .delete()
