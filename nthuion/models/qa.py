@@ -25,8 +25,8 @@ class Entry(Base):
 
     ctime = Column(DateTime, default=datetime.datetime.now, nullable=False)
 
-    poster_id = Column(Integer, ForeignKey(User.id), nullable=False)
-    poster = relationship(User)
+    author_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    author = relationship(User)
 
     type = Column(String, nullable=False)
 
@@ -107,6 +107,19 @@ class Question(Article):
     __mapper_args__ = {
         'polymorphic_identity': 'question'
     }
+
+    def as_dict(self, viewer=None):
+        return {
+            'id': self.id,
+            'content': self.content,
+            'tags': [tag.name for tag in self.tags],
+            'author': (
+                None
+                if self.is_anonymous and viewer != self.author
+                else self.author.as_dict()
+            ),
+            'is_anonymous': self.is_anonymous,
+        }
 
 
 class Solution(Article):

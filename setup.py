@@ -13,6 +13,7 @@ requires = [
     'requests',
     'SQLAlchemy',
     'transaction',
+    'voluptuous',
     'zope.sqlalchemy',
 ]
 

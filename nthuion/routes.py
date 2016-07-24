@@ -8,10 +8,18 @@ def includeme(config):
     config.add_view(error_handler.error_view, context=HTTPError)
 
     def add(path, view, name):
-        config.add_route(name, path)
-        config.add_view(view, route_name=name)
+        config.add_route(
+            name,
+            path,
+            factory=getattr(view, 'factory', None),
+        )
+        config.add_view(
+            view,
+            route_name=name,
+        )
 
     add('/api/echo', echo.EchoView, 'echo')
     add('/api/login/facebook', auth.FacebookLogin, 'facebook-login')
     add('/api/logout', auth.Logout, 'logout')
     add('/api/questions', questions.QuestionList, 'questions')
+    add('/api/question/{id}', questions.QuestionView, 'question')

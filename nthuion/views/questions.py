@@ -1,4 +1,5 @@
 import transaction
+from voluptuous import Schema, Required
 
 from .base import View
 from nthuion.utils import keyerror_is_bad_request
@@ -45,3 +46,29 @@ class QuestionList(View):
             self.db.add(question)
             for tag in tags:
                 self.db.add(ArticleTag(article=question.id, tag=tag))
+
+
+class QuestionView(View):
+    @staticmethod
+    def factory(request):
+        return request.db.query(Question)\
+            .filter(Question.id == request.matchdict['id']).one()
+
+    def get(self):
+        return self.context.as_dict()
+
+    put_schema = Schema({
+        'title': str,
+        'content': str,
+        'tags': [str]
+    })
+
+    def put(self):
+        obj = self.context
+        body = self.request.json_body
+        self.put_schema(body)
+        obj.title = body['title']
+        obj.content = body['content']
+        with transaction.manager:
+            obj.tags = Tag.from_names(self.db, obj.tags)
+            return obj.as_dict()

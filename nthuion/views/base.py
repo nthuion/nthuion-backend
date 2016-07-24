@@ -7,7 +7,8 @@ def not_allowed(self):
 
 class View:
 
-    def __init__(self, request):
+    def __init__(self, context, request):
+        self.context = context
         self.request = request
 
     get = post = put = delete = not_allowed

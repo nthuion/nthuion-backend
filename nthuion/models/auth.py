@@ -23,6 +23,12 @@ class User(Base):
         self.object_session().add(tok)
         return tok.value
 
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+        }
+
     def __repr__(self):
         return '<User {} {!r}>'.format(self.id, self.name)
 
