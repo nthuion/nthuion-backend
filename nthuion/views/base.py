@@ -30,6 +30,10 @@ class View:
     def db(self):
         return self.request.db
 
+    @property
+    def user(self):
+        return self.request.authenticated_userid
+
     def check_permission(self, perm):
         has_perm = self.request.has_permission(perm)
         if not has_perm:

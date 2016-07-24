@@ -81,6 +81,35 @@ class QuestionListTest(WebTest):
             status=400
         )
 
+    def test_post_question(self):
+        with transaction.manager:
+            user = User(name='user100')
+            self.session.add(user)
+            token = user.acquire_token()
+        self.app.post_json(
+            '/api/questions',
+            {
+                'title': 'question title',
+                'content': 'question content',
+                'tags': ['tag1', 'tag2', 'tag3'],
+                'is_anonymous': True
+            },
+            headers={
+                'Authorization': 'Token {}'.format(token)
+            }
+        )
+        query = self.session.query(Question)
+        self.assertEqual(1, query.count())
+        question = query.first()
+        self.assertEqual('question title', question.title)
+        self.assertEqual('question content', question.content)
+        self.assertEqual(True, question.is_anonymous)
+        self.assertEqual('user100', question.author.name)
+        self.assertEqual(
+            ['tag1', 'tag2', 'tag3'],
+            sorted(tag.name for tag in question.tags)
+        )
+
 
 class QuestionTest(WebTest):
 

@@ -76,7 +76,7 @@ class FacebookLoginTest(WebTest):
             )
         self.assertEqual(
             'Login failed: token rejected by facebook',
-            res.json['detail']
+            res.json['error']['message']
         )
 
 
