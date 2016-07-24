@@ -223,3 +223,7 @@ dummy:
 	$(SPHINXBUILD) -b dummy $(ALLSPHINXOPTS) $(BUILDDIR)/dummy
 	@echo
 	@echo "Build finished. Dummy builder generates no files."
+
+.PHONY: deploy
+deploy: clean dirhtml
+	cd _build/dirhtml && git commit -am "doc-rebuild: $(shell date)" && git push origin gh-pages

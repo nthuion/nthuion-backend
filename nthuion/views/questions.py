@@ -73,6 +73,9 @@ class QuestionView(View):
     })
 
     def put(self):
+        """
+        optional fields: ``title``, ``content``, ``tags``
+        """
         self.check_permission('w')
         obj = self.context
         body = self.request.json_body
