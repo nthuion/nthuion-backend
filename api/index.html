@@ -88,6 +88,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#logout">Logout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#questions">Questions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#question">Question</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#question-vote">Question-vote</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#me">Me</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#users">Users</a></li>
 </ul>
@@ -286,6 +287,41 @@ for example:</p>
 <dt id="put--api-questions-id">
 <code class="descname">PUT </code><code class="descname">/api/questions/{id}</code><a class="headerlink" href="#put--api-questions-id" title="Permalink to this definition">¶</a></dt>
 <dd><p>optional fields: <code class="docutils literal"><span class="pre">title</span></code>, <code class="docutils literal"><span class="pre">content</span></code>, <code class="docutils literal"><span class="pre">tags</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="question-vote">
+<h2>Question-vote<a class="headerlink" href="#question-vote" title="Permalink to this headline">¶</a></h2>
+<p>Entity representing the user&#8217;s vote of the question</p>
+<dl class="get">
+<dt id="get--api-questions-id-vote">
+<code class="descname">GET </code><code class="descname">/api/questions/{id}/vote</code><a class="headerlink" href="#get--api-questions-id-vote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current vote</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span>{&quot;value&quot;: value}
+</pre></div>
+</div>
+<p>value may be either <code class="docutils literal"><span class="pre">-1</span></code>, <code class="docutils literal"><span class="pre">0</span></code> or <code class="docutils literal"><span class="pre">1</span></code></p>
+</dd></dl>
+
+<dl class="put">
+<dt id="put--api-questions-id-vote">
+<code class="descname">PUT </code><code class="descname">/api/questions/{id}/vote</code><a class="headerlink" href="#put--api-questions-id-vote" title="Permalink to this definition">¶</a></dt>
+<dd><p>vote for the question</p>
+<p>vote up:</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>vote down:</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="mi">-1</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="delete">
+<dt id="delete--api-questions-id-vote">
+<code class="descname">DELETE </code><code class="descname">/api/questions/{id}/vote</code><a class="headerlink" href="#delete--api-questions-id-vote" title="Permalink to this definition">¶</a></dt>
+<dd><p>unvote</p>
+<p>no body required</p>
 </dd></dl>
 
 </div>
