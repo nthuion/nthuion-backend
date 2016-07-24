@@ -6,7 +6,7 @@ Backend of NTHU ION
 Resources
 ---------
 
-* `API Documentation <https://nthuion-backend.readthedocs.io/>`_
+* `API Documentation <https://nthuion.github.io/nthuion-backend/>`_
 * `Frontend Repo <https://github.com/nthuion/nthuion-frontend>`_
 
 Environment setup

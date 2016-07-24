@@ -36,6 +36,7 @@ sys.path.append(os.path.abspath(os.path.join(here, '..')))
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
+    'sphinx.ext.githubpages',
     'nthuionext',
     'autoapi',
 ]
