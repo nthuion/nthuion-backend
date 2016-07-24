@@ -1,8 +1,9 @@
 import transaction
-from voluptuous import Schema, Required
+from voluptuous import Schema
+from contextlib import suppress
 
 from .base import View
-from nthuion.utils import keyerror_is_bad_request
+from nthuion.utils import keyerror_is_bad_request, noresultfound_is_404
 from nthuion.models import Question, Tag, ArticleTag
 
 
@@ -51,8 +52,9 @@ class QuestionList(View):
 class QuestionView(View):
     @staticmethod
     def factory(request):
-        return request.db.query(Question)\
-            .filter(Question.id == request.matchdict['id']).one()
+        with noresultfound_is_404():
+            return request.db.query(Question)\
+                .filter(Question.id == request.matchdict['id']).one()
 
     def get(self):
         return self.context.as_dict()
@@ -64,11 +66,21 @@ class QuestionView(View):
     })
 
     def put(self):
+        self.check_permission('w')
         obj = self.context
         body = self.request.json_body
+
         self.put_schema(body)
-        obj.title = body['title']
-        obj.content = body['content']
-        with transaction.manager:
-            obj.tags = Tag.from_names(self.db, obj.tags)
-            return obj.as_dict()
+
+        with suppress(KeyError):
+            obj.title = body['title']
+        with suppress(KeyError):
+            obj.content = body['content']
+        try:
+            tags = body['tags']
+        except KeyError:
+            pass
+        else:
+            with transaction.manager:
+                obj.tags = Tag.from_names(self.db, tags)
+                return obj.as_dict()

@@ -84,7 +84,7 @@ class QuestionListTest(WebTest):
 
 class QuestionTest(WebTest):
 
-    def test_get(self):
+    def prepare_q(self):
         with transaction.manager:
             user = User(name='ggg')
             self.session.add(
@@ -95,8 +95,11 @@ class QuestionTest(WebTest):
                     is_anonymous=False
                 )
             )
+
+    def test_get(self):
+        self.prepare_q()
         resp = self.app.get(
-            '/api/question/1',
+            '/api/questions/1',
         )
         self.assertEqual(
             'lorem', resp.json['title']
@@ -112,4 +115,18 @@ class QuestionTest(WebTest):
         )
         self.assertEqual(
             [], resp.json['tags']
+        )
+
+    def test_get_404(self):
+        self.app.get(
+            '/api/questions/1',
+            status=404
+        )
+
+    def test_anony_put_401(self):
+        self.prepare_q()
+        self.app.put_json(
+            '/api/questions/1',
+            {},
+            status=401
         )

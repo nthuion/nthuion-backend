@@ -22,4 +22,4 @@ def includeme(config):
     add('/api/login/facebook', auth.FacebookLogin, 'facebook-login')
     add('/api/logout', auth.Logout, 'logout')
     add('/api/questions', questions.QuestionList, 'questions')
-    add('/api/question/{id}', questions.QuestionView, 'question')
+    add('/api/questions/{id}', questions.QuestionView, 'question')
