@@ -71,9 +71,37 @@ class RelationTest(BaseTest):
 
 class QuestionListTest(WebTest):
 
-    def test_returns_something(self):
+    def test_get(self):
+        with transaction.manager:
+            u = User(name='user123')
+            self.session.add(u)
+            token = u.acquire_token()
+            self.session.add(
+                Question(
+                    author=u,
+                    is_anonymous=True,
+                    content='a',
+                    title='title'
+                )
+            )
         res = self.app.get('/api/questions')
-        self.assertTrue(res.json['data'])
+        self.assertEqual(1, len(res.json['data']))
+        qjson = res.json['data'][0]
+        self.assertIsNone(qjson['author'])
+        self.assertEqual(True, qjson['is_anonymous'])
+        self.assertEqual('a', qjson['content'])
+        self.assertEqual('title', qjson['title'])
+
+        res = self.app.get(
+            '/api/questions',
+            headers={
+                'Authorization': 'Token {}'.format(token)
+            }
+        )
+        qjson = res.json['data'][0]
+        self.assertEqual(1, len(res.json['data']))
+        self.assertIsNotNone(qjson['author'])
+        self.assertEqual('user123', qjson['author']['name'])
 
     def test_post_requires_login(self):
         self.app.post(

@@ -4,29 +4,16 @@ from contextlib import suppress
 
 from .base import View
 from nthuion.utils import keyerror_is_bad_request, noresultfound_is_404
-from nthuion.models import Question, Tag, ArticleTag
+from nthuion.models import Question, Tag
 
 
 class QuestionList(View):
     def get(self):
-        """Returns a dummy question list"""
+        """Returns list of questions"""
+        query = self.db.query(Question)
+        user = self.user
         return {
-            'data': [
-                {
-                    'id': 1,
-                    'title': 'Lorem ipsum',
-                    'tags': ['lorem', 'ipsum'],
-                    'votes': 15,
-                    'comments': 4
-                },
-                {
-                    'id': 2,
-                    'title': 'Neque porro quisquam est qui',
-                    'tags': ['spam'],
-                    'votes': -3,
-                    'comments': 2
-                }
-            ]
+            'data': [question.as_dict(user) for question in query]
         }
 
     def post(self):
