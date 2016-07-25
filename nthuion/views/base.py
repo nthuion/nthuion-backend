@@ -62,4 +62,6 @@ class require_permission:
                 raise HTTPUnauthorized(
                     'no permission for {}'.format(permission))
             return function(self, *args, **kwargs)
+
+        wrapper.requires_permission = permission
         return wrapper

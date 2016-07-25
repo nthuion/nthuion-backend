@@ -1,5 +1,6 @@
 import abc
 
+from nthuion.views.base import require_permission
 from nthuion.validation import body_schema, Any, Required
 from nthuion.models import Vote
 
@@ -16,6 +17,7 @@ class VotingMixin(abc.ABC):
             .filter(Vote.entry_id == self.context.id)\
             .filter(Vote.user_id == self.user.id)
 
+    @require_permission('vote')
     def get(self):
         """
         Returns the current vote
@@ -32,6 +34,7 @@ class VotingMixin(abc.ABC):
         else:
             return {'value': vote.value}
 
+    @require_permission('vote')
     @body_schema({
         Required('value'): Any(1, -1)
     })
@@ -55,6 +58,7 @@ class VotingMixin(abc.ABC):
         vote.value = body['value']
         self.db.add(vote)
 
+    @require_permission('vote')
     def delete(self):
         """
         unvote

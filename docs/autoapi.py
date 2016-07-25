@@ -135,6 +135,13 @@ class AutoAPIDirective(Directive):
                     docstring += ['']
                     docstring += list(schema_to_docstring(schema))
 
+                reqp = getattr(implementation, 'requires_permission', None)
+                if reqp is not None:
+                    docstring = [
+                        'requires permission: ``{}``'.format(reqp),
+                        ''
+                    ] + docstring
+
                 for line in http_directive(method, path, docstring):
                     yield line
 
