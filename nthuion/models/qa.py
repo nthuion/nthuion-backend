@@ -148,7 +148,9 @@ class Question(Article):
                 else self.author.as_dict()
             ),
             'is_anonymous': self.is_anonymous,
-            'votes': self.votes
+            'votes': self.votes,
+            'ncomments': self.object_session().query(
+                Comment).filter(Comment.parent_id == self.id).count(),
         }
 
 

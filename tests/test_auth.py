@@ -1,4 +1,5 @@
 from unittest import mock
+import transaction
 from .base import BaseTest, WebTest
 from nthuion.models.auth import Token, FacebookUser, Email, User
 
@@ -66,6 +67,10 @@ class FacebookLoginTest(WebTest):
         self.assertEqual(user, facebook_user.user)
         self.assertEqual('test@example.com', email.address)
         self.assertEqual(token.value, res.json['token'])
+        self.assertEqual(
+            'https://graph.facebook.com/34502913498532310/picture',
+            user.as_dict()['avatar_url']
+        )
 
     def test_facebook_bad_login(self):
         with mock.patch('requests.get', bad_request_response):

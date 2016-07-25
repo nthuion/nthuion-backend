@@ -2,7 +2,7 @@ import random
 import string
 
 from sqlalchemy import Column, String, Integer, ForeignKey, Boolean
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 
 from nthuion.models.meta import Base
 
@@ -24,9 +24,15 @@ class User(Base):
         return tok.value
 
     def as_dict(self):
+        fbusr = self.facebook_user
+        if fbusr is None:
+            avatar_url = None
+        else:
+            avatar_url = 'https://graph.facebook.com/%s/picture' % fbusr.id
         return {
             'id': self.id,
             'name': self.name,
+            'avatar_url': avatar_url
         }
 
     def __repr__(self):
@@ -93,7 +99,10 @@ class FacebookUser(Base):
         index=True,
         nullable=False
     )
-    user = relationship(User, backref='facebook_user')
+    user = relationship(
+        User,
+        backref=backref('facebook_user', uselist=False)
+    )
 
     def __repr__(self):
         return '<FacebookUser {} {!r}>'.format(self.id, self.name)
