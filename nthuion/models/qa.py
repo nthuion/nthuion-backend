@@ -136,7 +136,7 @@ class Question(Article):
         'polymorphic_identity': 'question'
     }
 
-    def as_dict(self, viewer=None):
+    def as_dict(self, viewer):
         return {
             'id': self.id,
             'title': self.title,

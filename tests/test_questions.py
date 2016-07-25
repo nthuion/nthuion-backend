@@ -57,7 +57,7 @@ class RelationTest(BaseTest):
         q, u = self.prepare_question(True)
         self.assertEqual(u.as_dict(), q.as_dict(viewer=u)['author'])
         self.assertEqual(None, q.as_dict(viewer=User(name='user'))['author'])
-        self.assertEqual(None, q.as_dict()['author'])
+        self.assertEqual(None, q.as_dict(None)['author'])
 
     def test_not_anonymous(self):
         q, u = self.prepare_question(False)
@@ -66,7 +66,7 @@ class RelationTest(BaseTest):
             u.as_dict(),
             q.as_dict(viewer=User(name='user'))['author']
         )
-        self.assertEqual(u.as_dict(), q.as_dict()['author'])
+        self.assertEqual(u.as_dict(), q.as_dict(None)['author'])
 
 
 class QuestionListTest(WebTest):
@@ -200,6 +200,8 @@ class QuestionTest(WebTest):
 
 class OneQuestionTest(WebTest):
 
+    ANON = False
+
     def setUp(self):
         super().setUp()
         with transaction.manager:
@@ -210,7 +212,7 @@ class OneQuestionTest(WebTest):
                 content='dolor sit amet',
                 tags=Tag.from_names(
                     self.session, ['consectetur', 'adipiscing', 'elit']),
-                is_anonymous=False
+                is_anonymous=self.ANON
             )
             self.session.add(user)
             self.token = user.acquire_token()
@@ -220,6 +222,38 @@ class OneQuestionTest(WebTest):
             self.session.add(question)
         self.qid, = self.session.query(Question.id).first()
         self.uid, = self.session.query(User.id).first()
+
+
+class QuestionAnonTest(OneQuestionTest):
+
+    ANON = True
+
+    def test_this_test_is_correctly_configured(self):
+        self.assertTrue(self.session.query(Question).first().is_anonymous)
+
+    def test_listing(self):
+        res = self.app.get('/api/questions')
+        self.assertIsNone(res.json['data'][0]['author'])
+        res = self.app.get('/api/questions', headers=self.token_header)
+        self.assertIsNotNone(res.json['data'][0]['author'])
+
+    def test_one(self):
+        res = self.app.get('/api/questions/{}'.format(self.qid))
+        self.assertIsNone(res.json['author'])
+        res = self.app.get(
+            '/api/questions/{}'.format(self.qid),
+            headers=self.token_header
+        )
+        self.assertIsNotNone(res.json['author'])
+
+    def test_one_put(self):
+        res = self.app.put_json(
+            '/api/questions/{}'.format(self.qid),
+            {"title": "updated title"},
+            headers=self.token_header
+        )
+        self.assertEqual('updated title', res.json['title'])
+        self.assertIsNotNone(res.json['author'])
 
 
 class QuestionVoteTest(OneQuestionTest):

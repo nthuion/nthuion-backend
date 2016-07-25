@@ -66,7 +66,7 @@ class QuestionView(QuestionContextMixin, View):
         :>json author: object, with id and name
         :>json votes: number
         """
-        return self.context.as_dict()
+        return self.context.as_dict(self.user)
 
     put_schema = Schema({
         'title': str,
@@ -78,7 +78,7 @@ class QuestionView(QuestionContextMixin, View):
         """
         optional fields: ``title``, ``content``, ``tags``
         """
-        self.check_permission('w')
+        # self.check_permission('w')
         obj = self.context
         body = self.request.json_body
 
@@ -93,9 +93,8 @@ class QuestionView(QuestionContextMixin, View):
         except KeyError:
             pass
         else:
-            with transaction.manager:
-                obj.tags = Tag.from_names(self.db, tags)
-                return obj.as_dict()
+            obj.tags = Tag.from_names(self.db, tags)
+        return obj.as_dict(self.user)
 
 
 class QuestionVoteView(QuestionContextMixin, VotingMixin, View):
