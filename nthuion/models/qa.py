@@ -17,6 +17,8 @@ from sqlalchemy.ext import hybrid
 
 import datetime
 
+from nthuion import roles
+
 from .meta import Base
 from .auth import User
 
@@ -35,6 +37,12 @@ class Entry(Base):
     __mapper_args__ = {
         'polymorphic_on': type,
     }
+
+    def get_user_roles(self, user):
+        if self.author_id == user.id:
+            return [roles.Owner]
+        else:
+            return []
 
 
 class Article(Entry):
@@ -128,6 +136,14 @@ class Comment(Entry):
 
 
 class Question(Article):
+
+    __acl__ = [
+        (roles.Allow, roles.Everyone, 'read'),
+        (roles.Allow, roles.Authenticated, 'create'),
+        (roles.Allow, roles.Owner, 'update'),
+        (roles.Allow, roles.Authenticated, 'comment'),
+        (roles.Allow, roles.Authenticated, 'vote'),
+    ]
 
     id = Column(Integer, ForeignKey(Article.id), primary_key=True)
     is_anonymous = Column(Boolean, nullable=False)

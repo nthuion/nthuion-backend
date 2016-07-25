@@ -108,7 +108,7 @@ class QuestionListTest(WebTest):
     def test_post_requires_login(self):
         self.app.post(
             '/api/questions',
-            status=400
+            status=401
         )
 
     def test_post_question(self):

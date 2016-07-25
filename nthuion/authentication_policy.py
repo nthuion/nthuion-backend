@@ -1,9 +1,9 @@
 from zope.interface import implementer
 from pyramid.interfaces import IAuthenticationPolicy
-from pyramid.security import Authenticated, Everyone
 from pyramid.httpexceptions import HTTPBadRequest, HTTPUnauthorized
 from sqlalchemy.orm.exc import NoResultFound
 from .models import User, Token
+from .roles import Authenticated, Everyone
 
 
 @implementer(IAuthenticationPolicy)
@@ -51,4 +51,7 @@ class TokenAuthenticationPolicy:
         if user is None:
             return [Everyone]
         else:
-            return [user, Everyone, Authenticated]
+            ctx = request.context
+            if not isinstance(ctx, type) and hasattr(ctx, 'get_user_roles'):
+                return ctx.get_user_roles(user) + [Everyone, Authenticated]
+            return [Everyone, Authenticated]

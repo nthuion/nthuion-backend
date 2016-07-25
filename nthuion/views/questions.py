@@ -1,7 +1,7 @@
 import transaction
 from contextlib import suppress
 
-from .base import View
+from .base import View, require_permission
 from .voting import VotingMixin
 from nthuion.validation import body_schema, Required, Optional, All, Length
 from nthuion.utils import noresultfound_is_404
@@ -23,6 +23,10 @@ class CommentValidation:
 
 class QuestionList(View):
 
+    @staticmethod
+    def factory(request):
+        return Question
+
     def get(self):
         """Returns list of questions"""
         query = self.db.query(Question)
@@ -31,6 +35,7 @@ class QuestionList(View):
             'data': [question.as_dict(user) for question in query]
         }
 
+    @require_permission('create')
     @body_schema({
         Required('title'): QuestionValidation.title,
         Required('content'): QuestionValidation.content,
@@ -76,6 +81,7 @@ class QuestionView(QuestionContextMixin, View):
         """
         return self.context.as_dict(self.user)
 
+    @require_permission('update')
     @body_schema({
         Optional('title'): QuestionValidation.title,
         Optional('content'): QuestionValidation.content,
@@ -127,6 +133,7 @@ class QuestionCommentView(QuestionContextMixin, View):
             'data': [comment.as_dict() for comment in self.context.comments]
         }
 
+    @require_permission('comment')
     @body_schema({
         Required('content'): CommentValidation.content
     })
