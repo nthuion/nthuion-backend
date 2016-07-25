@@ -13,6 +13,11 @@ class View:
 
     get = post = put = delete = not_allowed
 
+    def options(self):
+        # make life easier
+        # facebook graph api sets this header too
+        self.request.response.headers['Access-Control-Allow-Origin'] = '*'
+
     def __call__(self):
         method = self.request.method
         if method == 'GET':
@@ -23,6 +28,8 @@ class View:
             return self.put()
         elif method == 'DELETE':
             return self.delete()
+        elif method == 'OPTIONS':
+            return self.options()
         else:
             raise HTTPMethodNotAllowed
 
