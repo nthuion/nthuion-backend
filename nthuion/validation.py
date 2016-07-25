@@ -15,4 +15,5 @@ class body_schema(Schema):
             except MultipleInvalid as e:
                 raise HTTPBadRequest(str(e))
             return meth(view, data)
+        wrapper.schema = schema.schema
         return wrapper

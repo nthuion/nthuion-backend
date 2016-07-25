@@ -1,6 +1,6 @@
 import abc
 
-from voluptuous import Schema, Any
+from nthuion.validation import body_schema, Any, Required
 from nthuion.models import Vote
 
 
@@ -32,10 +32,9 @@ class VotingMixin(abc.ABC):
         else:
             return {'value': vote.value}
 
-    post_schema = Schema({
-        'value': Any(1, -1)
+    @body_schema({
+        Required('value'): Any(1, -1)
     })
-
     def put(self):
         """
         vote up:
