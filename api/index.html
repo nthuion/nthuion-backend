@@ -31,7 +31,7 @@
 
   
     <link rel="top" title="NTHU ION API 0.0 documentation" href="../"/>
-        <link rel="next" title="Schema" href="../schema/"/>
+        <link rel="next" title="Authentication" href="auth/"/>
         <link rel="prev" title="Welcome to NTHU ION API’s documentation!" href="../"/> 
 
   
@@ -83,16 +83,11 @@
             
                 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#echo">Echo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#facebook-login">Facebook-login</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#logout">Logout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#questions">Questions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#question">Question</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#question-vote">Question-vote</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#question-comment">Question-comment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#solutions">Solutions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#me">Me</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#users">Users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auth/">Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="question/">Question</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solution/">Solution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/">User</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debug/">Debug</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../schema/">Schema</a></li>
@@ -130,7 +125,7 @@
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../_sources/api.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/api/index.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -142,339 +137,34 @@
             
   <div class="section" id="api-documentation">
 <h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="echo">
-<h2>Echo<a class="headerlink" href="#echo" title="Permalink to this headline">¶</a></h2>
-<p>returns the content, debug use</p>
-<dl class="get">
-<dt id="get--api-echo">
-<code class="descname">GET </code><code class="descname">/api/echo</code><a class="headerlink" href="#get--api-echo" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns the query string as JSON</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>all values are returned as arrays</p>
-<div class="highlight-text"><div class="highlight"><pre><span></span>/api/echo?a=b&amp;a=c&amp;c=d
-</pre></div>
-</div>
-<p>gives:</p>
-<div class="last highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">],</span> <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;d&quot;</span><span class="p">]}</span>
-</pre></div>
-</div>
-</div>
-</dd></dl>
-
-<dl class="post">
-<dt id="post--api-echo">
-<code class="descname">POST </code><code class="descname">/api/echo</code><a class="headerlink" href="#post--api-echo" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns JSON body POSTed</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> &#8211; on invalid json</li>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="auth/">Authentication</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auth/#facebook-login">Facebook-login</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auth/#logout">Logout</a></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="put">
-<dt id="put--api-echo">
-<code class="descname">PUT </code><code class="descname">/api/echo</code><a class="headerlink" href="#put--api-echo" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns JSON body PUT&#8217;d</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> &#8211; on invalid json</li>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="question/">Question</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="question/#questions">Questions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="question/#id1">Question</a></li>
+<li class="toctree-l2"><a class="reference internal" href="question/#question-vote">Question-vote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="question/#question-comment">Question-comment</a></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<div class="section" id="facebook-login">
-<h2>Facebook-login<a class="headerlink" href="#facebook-login" title="Permalink to this headline">¶</a></h2>
-<p>
-    Logging users in with facebook</p>
-<dl class="post">
-<dt id="post--api-login-facebook">
-<code class="descname">POST </code><code class="descname">/api/login/facebook</code><a class="headerlink" href="#post--api-login-facebook" title="Permalink to this definition">¶</a></dt>
-<dd><p>The body should look like this:</p>
-<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;token&quot;</span><span class="p">:</span> <span class="s2">&quot;token_acquired_from_facebook&quot;</span><span class="p">}</span>
-</pre></div>
-</div>
-<p>the response will look like this:</p>
-<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;token&quot;</span><span class="p">:</span> <span class="s2">&quot;2G5K7KBUeKpjSyz1PWmfV36hr83O0NoAIf7dqXz4DaDl&quot;</span><span class="p">}</span>
-</pre></div>
-</div>
-<p>Which is the token required for NTHU ION&#8217;s API</p>
-<p>You should then put the token in the header for other requests,
-for example:</p>
-<div class="highlight-http"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/api/private/content</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
-<span class="na">Authorization</span><span class="o">:</span> <span class="l">Token 2G5K7KBUeKpjSyz1PWmfV36hr83O0NoAIf7dqXz4DaDl</span>
-</pre></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> &#8211; on successful login</li>
-<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> &#8211; <ul>
-<li>malformed POST body</li>
-<li>rejected facebook token</li>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="solution/">Solution</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="solution/#solutions">Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user/">User</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user/#me">Me</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/#users">Users</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="debug/">Debug</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="debug/#echo">Echo</a></li>
 </ul>
 </li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<div class="section" id="logout">
-<h2>Logout<a class="headerlink" href="#logout" title="Permalink to this headline">¶</a></h2>
-<p>
-    Revokes the current token</p>
-<dl class="post">
-<dt id="post--api-logout">
-<code class="descname">POST </code><code class="descname">/api/logout</code><a class="headerlink" href="#post--api-logout" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="questions">
-<h2>Questions<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>
-<dl class="get">
-<dt id="get--api-questions">
-<code class="descname">GET </code><code class="descname">/api/questions</code><a class="headerlink" href="#get--api-questions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns list of questions</p>
-</dd></dl>
-
-<dl class="post">
-<dt id="post--api-questions">
-<code class="descname">POST </code><code class="descname">/api/questions</code><a class="headerlink" href="#post--api-questions" title="Permalink to this definition">¶</a></dt>
-<dd><p>requires permission: <code class="docutils literal"><span class="pre">create</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
-<li><strong>content</strong> &#8211; string, length ≤ 30000</li>
-<li><strong>is_anonymous</strong> &#8211; boolean</li>
-<li><strong>tags</strong> &#8211; list of [string, length ≤ 30]</li>
-<li><strong>title</strong> &#8211; string, length ≤ 80</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<div class="section" id="question">
-<h2>Question<a class="headerlink" href="#question" title="Permalink to this headline">¶</a></h2>
-<p>Question of the id</p>
-<dl class="get">
-<dt id="get--api-questions-id">
-<code class="descname">GET </code><code class="descname">/api/questions/{id}</code><a class="headerlink" href="#get--api-questions-id" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">Response JSON Object:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
-<li><strong>title</strong> &#8211; string</li>
-<li><strong>content</strong> &#8211; string</li>
-<li><strong>tags</strong> &#8211; array of strings</li>
-<li><strong>author</strong> &#8211; object, with id and name</li>
-<li><strong>votes</strong> &#8211; number</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="put">
-<dt id="put--api-questions-id">
-<code class="descname">PUT </code><code class="descname">/api/questions/{id}</code><a class="headerlink" href="#put--api-questions-id" title="Permalink to this definition">¶</a></dt>
-<dd><p>requires permission: <code class="docutils literal"><span class="pre">update</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
-<li><strong>content</strong> (<em>optional</em>) &#8211; string, length ≤ 30000</li>
-<li><strong>tags</strong> (<em>optional</em>) &#8211; list of [string, length ≤ 30]</li>
-<li><strong>title</strong> (<em>optional</em>) &#8211; string, length ≤ 80</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<div class="section" id="question-vote">
-<h2>Question-vote<a class="headerlink" href="#question-vote" title="Permalink to this headline">¶</a></h2>
-<p>Entity representing the user&#8217;s vote of the question</p>
-<dl class="get">
-<dt id="get--api-questions-id-vote">
-<code class="descname">GET </code><code class="descname">/api/questions/{id}/vote</code><a class="headerlink" href="#get--api-questions-id-vote" title="Permalink to this definition">¶</a></dt>
-<dd><p>requires permission: <code class="docutils literal"><span class="pre">vote</span></code></p>
-<p>Returns the current vote</p>
-<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
-</pre></div>
-</div>
-<p>value may be either <code class="docutils literal"><span class="pre">-1</span></code>, <code class="docutils literal"><span class="pre">0</span></code> or <code class="docutils literal"><span class="pre">1</span></code></p>
-</dd></dl>
-
-<dl class="put">
-<dt id="put--api-questions-id-vote">
-<code class="descname">PUT </code><code class="descname">/api/questions/{id}/vote</code><a class="headerlink" href="#put--api-questions-id-vote" title="Permalink to this definition">¶</a></dt>
-<dd><p>requires permission: <code class="docutils literal"><span class="pre">vote</span></code></p>
-<p>vote up:</p>
-<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
-</pre></div>
-</div>
-<p>vote down:</p>
-<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="mi">-1</span><span class="p">}</span>
-</pre></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
-<li><strong>value</strong> &#8211; <code class="docutils literal"><span class="pre">1</span></code> or <code class="docutils literal"><span class="pre">-1</span></code></li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="delete">
-<dt id="delete--api-questions-id-vote">
-<code class="descname">DELETE </code><code class="descname">/api/questions/{id}/vote</code><a class="headerlink" href="#delete--api-questions-id-vote" title="Permalink to this definition">¶</a></dt>
-<dd><p>requires permission: <code class="docutils literal"><span class="pre">vote</span></code></p>
-<p>unvote</p>
-<p>no body required</p>
-</dd></dl>
-
-</div>
-<div class="section" id="question-comment">
-<h2>Question-comment<a class="headerlink" href="#question-comment" title="Permalink to this headline">¶</a></h2>
-<dl class="get">
-<dt id="get--api-questions-id-comments">
-<code class="descname">GET </code><code class="descname">/api/questions/{id}/comments</code><a class="headerlink" href="#get--api-questions-id-comments" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns the list of comments of this question</p>
-<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-            <span class="nt">&quot;parent&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">100</span>
-            <span class="p">},</span>
-            <span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;comment author&quot;</span><span class="p">,</span>
-            <span class="nt">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;comment content&quot;</span>
-        <span class="p">}</span>
-    <span class="p">]</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="post">
-<dt id="post--api-questions-id-comments">
-<code class="descname">POST </code><code class="descname">/api/questions/{id}/comments</code><a class="headerlink" href="#post--api-questions-id-comments" title="Permalink to this definition">¶</a></dt>
-<dd><p>requires permission: <code class="docutils literal"><span class="pre">comment</span></code></p>
-<p>post a comment to the question</p>
-<p>the only required attribute is <code class="docutils literal"><span class="pre">content</span></code></p>
-<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="nt">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;lorem ipsum ...&quot;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
-<li><strong>content</strong> &#8211; string, length ≤ 240</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<div class="section" id="solutions">
-<h2>Solutions<a class="headerlink" href="#solutions" title="Permalink to this headline">¶</a></h2>
-<dl class="get">
-<dt id="get--api-solutions">
-<code class="descname">GET </code><code class="descname">/api/solutions</code><a class="headerlink" href="#get--api-solutions" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="post">
-<dt id="post--api-solutions">
-<code class="descname">POST </code><code class="descname">/api/solutions</code><a class="headerlink" href="#post--api-solutions" title="Permalink to this definition">¶</a></dt>
-<dd><p>XXX: The implementation is not complete yet</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
-<li><strong>content</strong> &#8211; string, length ≤ 30000</li>
-<li><strong>question_id</strong> (<em>optional</em>) &#8211; integer or <code class="docutils literal"><span class="pre">null</span></code>, default = <code class="docutils literal"><span class="pre">null</span></code></li>
-<li><strong>tags</strong> &#8211; list of [string, length ≤ 30]</li>
-<li><strong>title</strong> &#8211; string, length ≤ 80</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<div class="section" id="me">
-<h2>Me<a class="headerlink" href="#me" title="Permalink to this headline">¶</a></h2>
-<dl class="get">
-<dt id="get--api-users-me">
-<code class="descname">GET </code><code class="descname">/api/users/me</code><a class="headerlink" href="#get--api-users-me" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns the information about the current user incl. id, name and
-whether authenticated</p>
-<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">234546</span><span class="p">,</span>
-    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;my name&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;authenticated&quot;</span><span class="p">:</span> <span class="kc">true</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</dd></dl>
-
-</div>
-<div class="section" id="users">
-<h2>Users<a class="headerlink" href="#users" title="Permalink to this headline">¶</a></h2>
-<p>The user with the id</p>
-<dl class="get">
-<dt id="get--api-users-id">
-<code class="descname">GET </code><code class="descname">/api/users/{id}</code><a class="headerlink" href="#get--api-users-id" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns the information about the user incl. id, name</p>
-</dd></dl>
-
 </div>
 </div>
 
@@ -485,7 +175,7 @@ whether authenticated</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../schema/" class="btn btn-neutral float-right" title="Schema" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="auth/" class="btn btn-neutral float-right" title="Authentication" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../" class="btn btn-neutral" title="Welcome to NTHU ION API’s documentation!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
