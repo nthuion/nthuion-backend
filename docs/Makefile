@@ -226,4 +226,4 @@ dummy:
 
 .PHONY: deploy
 deploy: clean dirhtml
-	cd _build/dirhtml && git commit -am "doc-rebuild: $(shell date)" && git push origin gh-pages
+	cd _build/dirhtml && git add . && git commit -m "doc-rebuild: $(shell date)" && git push origin gh-pages
