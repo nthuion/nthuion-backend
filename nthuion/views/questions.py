@@ -1,11 +1,24 @@
 import transaction
-from voluptuous import Schema
 from contextlib import suppress
 
 from .base import View
 from .voting import VotingMixin
-from nthuion.utils import keyerror_is_bad_request, noresultfound_is_404
+from nthuion.validation import body_schema, Required, Optional, All, Length
+from nthuion.utils import noresultfound_is_404
 from nthuion.models import Question, Tag, Comment
+
+
+class QuestionValidation:
+
+    title = All(str, Length(max=Question.title.type.length))
+    content = All(str, Length(max=Question.content.type.length))
+    tags = [All(str, Length(max=Tag.name.type.length))]
+    is_anonymous = bool
+
+
+class CommentValidation:
+
+    content = All(str, Length(max=Comment.content.type.length))
 
 
 class QuestionList(View):
@@ -18,23 +31,18 @@ class QuestionList(View):
             'data': [question.as_dict(user) for question in query]
         }
 
-    def post(self):
-        """POST a new question, required fields are ``title``, ``tags``,
-        ``content``, ``is_anonymous``
-
-        :<json title:
-        :<json tags: array of strings
-        :<json content:
-        :<json is_anonymous: whether the question should be
-                             posted anonymously
-        """
-        body = self.request.json_body
+    @body_schema({
+        Required('title'): QuestionValidation.title,
+        Required('content'): QuestionValidation.content,
+        Required('tags'): QuestionValidation.tags,
+        Required('is_anonymous'): QuestionValidation.is_anonymous
+    })
+    def post(self, body):
+        title = body['title']
+        tags = body['tags']
+        content = body['content']
+        is_anonymous = body['is_anonymous']
         with transaction.manager:
-            with keyerror_is_bad_request():
-                title = body['title']
-                tags = body['tags']
-                content = body['content']
-                is_anonymous = body['is_anonymous']
             question = Question(
                 title=title,
                 content=content,
@@ -68,21 +76,14 @@ class QuestionView(QuestionContextMixin, View):
         """
         return self.context.as_dict(self.user)
 
-    put_schema = Schema({
-        'title': str,
-        'content': str,
-        'tags': [str]
+    @body_schema({
+        Optional('title'): QuestionValidation.title,
+        Optional('content'): QuestionValidation.content,
+        Optional('tags'): QuestionValidation.tags,
     })
-
-    def put(self):
-        """
-        optional fields: ``title``, ``content``, ``tags``
-        """
+    def put(self, body):
         # self.check_permission('w')
         obj = self.context
-        body = self.request.json_body
-
-        self.put_schema(body)
 
         with suppress(KeyError):
             obj.title = body['title']
@@ -126,9 +127,10 @@ class QuestionCommentView(QuestionContextMixin, View):
             'data': [comment.as_dict() for comment in self.context.comments]
         }
 
-    post_schema = Schema({'content': str})
-
-    def post(self):
+    @body_schema({
+        Required('content'): CommentValidation.content
+    })
+    def post(self, data):
         """post a comment to the question
 
         the only required attribute is ``content``
@@ -139,12 +141,10 @@ class QuestionCommentView(QuestionContextMixin, View):
                 "content": "lorem ipsum ..."
             }
         """
-        body = self.request.json_body
-        self.post_schema(body)
         self.db.add(
             Comment(
                 parent=self.context,
-                content=body['content'],
+                content=data['content'],
                 author=self.user
             )
         )

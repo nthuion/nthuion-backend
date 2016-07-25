@@ -142,6 +142,63 @@ class QuestionListTest(WebTest):
         self.assertEqual(0, question.votes)
 
 
+class ProblematicInputTest(WebTest):
+
+    def setUp(self):
+        super().setUp()
+        with transaction.manager:
+            user = User(name='spamposter')
+            self.session.add(user)
+            self.token = user.acquire_token()
+
+    def post_question(
+        self,
+        title='title',
+        content='content',
+        tags=['a', 'b'],
+        is_anonymous=True,
+        status=None
+    ):
+        self.app.post_json(
+            '/api/questions',
+            {
+                'title': title,
+                'content': content,
+                'tags': tags,
+                'is_anonymous': is_anonymous,
+            },
+            headers={
+                'Authorization': 'Token {}'.format(self.token)
+            },
+            status=status
+        )
+
+    def test_invalid_title(self):
+        limit = Question.title.type.length
+        self.post_question(title='q' * limit)
+        self.post_question(title='q' * (limit + 1), status=400)
+
+    def test_invalid_content(self):
+        limit = Question.content.type.length
+        self.post_question(content='c' * limit)
+        self.post_question(content='c' * limit + 'c', status=400)
+        self.post_question(content=None, status=400)
+
+    def test_invalid_tags(self):
+        self.post_question(tags=True, status=400)
+        self.post_question(tags=['a', 'b'])
+        self.post_question(tags=['a'])
+        self.post_question(tags=['t' * Tag.name.type.length + 't'], status=400)
+
+    def test_same_tags(self):
+        self.post_question(tags=['a', 'a', 'a'])
+
+    def test_invalid_anonymous(self):
+        self.post_question(is_anonymous=True)
+        self.post_question(is_anonymous=False)
+        self.post_question(is_anonymous='string', status=400)
+
+
 class QuestionTest(WebTest):
 
     def prepare_q(self):
