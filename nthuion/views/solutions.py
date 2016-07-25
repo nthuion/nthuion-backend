@@ -25,14 +25,14 @@ class SolutionListView(View):
         Optional('question_id', default=None): SolutionValidation.question_id,
         Required('tags'): SolutionValidation.tags
     })
-    def post(self):
+    def post(self, body):
         """XXX: The implementation is not complete yet"""
-        body = self.post_schema(self.request.json_body)
         solution = Solution(
             title=body['title'],
             content=body['content'],
             question_id=body['question_id'],
-            author=self.user
+            author=self.user,
+            tags=Tag.from_names(self.db, body['tags'])
         )
         self.db.add(solution)
         self.db.flush()

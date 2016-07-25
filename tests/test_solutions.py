@@ -61,7 +61,8 @@ class SolutionListTest(SolutionTest):
             {
                 'title': 'mytitle',
                 'content': 'mycontent',
-                'question_id': self.qid
+                'question_id': self.qid,
+                'tags': ['a', 'b', 'c']
             },
             headers=self.token_header
         )

@@ -35,7 +35,7 @@ class VotingMixin(abc.ABC):
     @body_schema({
         Required('value'): Any(1, -1)
     })
-    def put(self):
+    def put(self, body):
         """
         vote up:
 
@@ -49,11 +49,10 @@ class VotingMixin(abc.ABC):
 
             {"value": -1}
         """
-        self.post_schema(self.request.json_body)
         vote = self.query_vote().first()
         if vote is None:
             vote = Vote(entry_id=self.context.id, user_id=self.user.id)
-        vote.value = self.request.json_body['value']
+        vote.value = body['value']
         self.db.add(vote)
 
     def delete(self):
