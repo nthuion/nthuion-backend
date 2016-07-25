@@ -88,7 +88,7 @@ def _parse_right_any(obj):
 @parse_right.register(list)
 def _parse_right_list(obj):
     assert len(obj) == 1
-    return 'list of [{}]'.format(parse_right(obj[0]))
+    return 'array of [{}]'.format(parse_right(obj[0]))
 
 
 def schema_to_docstring(schema):
@@ -109,10 +109,13 @@ def schema_to_docstring(schema):
 class AutoAPIDirective(Directive):
 
     has_content = True
-    required_arguments = 0
+    required_arguments = 1
 
     def make_rst(self):
         for name, path, vcallable in r1():
+
+            if not path.startswith(self.arguments[0]):
+                continue
 
             yield name.capitalize()
             yield '-' * len(name)

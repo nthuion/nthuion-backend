@@ -1,0 +1,4 @@
+Debug
+=====
+
+.. autoapi:: /api/echo
