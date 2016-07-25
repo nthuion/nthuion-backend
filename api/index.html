@@ -259,8 +259,21 @@ for example:</p>
 <dl class="post">
 <dt id="post--api-questions">
 <code class="descname">POST </code><code class="descname">/api/questions</code><a class="headerlink" href="#post--api-questions" title="Permalink to this definition">¶</a></dt>
-<dd><p>POST a new question, required fields are <code class="docutils literal"><span class="pre">title</span></code>, <code class="docutils literal"><span class="pre">tags</span></code>,
-<code class="docutils literal"><span class="pre">content</span></code>, <code class="docutils literal"><span class="pre">is_anonymous</span></code></p>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>content</strong> &#8211; string, length ≤ 30000</li>
+<li><strong>is_anonymous</strong> &#8211; boolean</li>
+<li><strong>tags</strong> &#8211; list of [string, length ≤ 30]</li>
+<li><strong>title</strong> &#8211; string, length ≤ 80</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -270,25 +283,41 @@ for example:</p>
 <dl class="get">
 <dt id="get--api-questions-id">
 <code class="descname">GET </code><code class="descname">/api/questions/{id}</code><a class="headerlink" href="#get--api-questions-id" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns</p>
-<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;list&quot;</span><span class="p">,</span> <span class="s2">&quot;of&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">],</span>
-    <span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-    <span class="p">},</span>
-    <span class="nt">&quot;votes&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Response JSON Object:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>title</strong> &#8211; string</li>
+<li><strong>content</strong> &#8211; string</li>
+<li><strong>tags</strong> &#8211; array of strings</li>
+<li><strong>author</strong> &#8211; object, with id and name</li>
+<li><strong>votes</strong> &#8211; number</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="put">
 <dt id="put--api-questions-id">
 <code class="descname">PUT </code><code class="descname">/api/questions/{id}</code><a class="headerlink" href="#put--api-questions-id" title="Permalink to this definition">¶</a></dt>
-<dd><p>optional fields: <code class="docutils literal"><span class="pre">title</span></code>, <code class="docutils literal"><span class="pre">content</span></code>, <code class="docutils literal"><span class="pre">tags</span></code></p>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>content</strong> (<em>optional</em>) &#8211; string, length ≤ 30000</li>
+<li><strong>tags</strong> (<em>optional</em>) &#8211; list of [string, length ≤ 30]</li>
+<li><strong>title</strong> (<em>optional</em>) &#8211; string, length ≤ 80</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -316,6 +345,18 @@ for example:</p>
 <div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="mi">-1</span><span class="p">}</span>
 </pre></div>
 </div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>value</strong> &#8211; <code class="docutils literal"><span class="pre">1</span></code> or <code class="docutils literal"><span class="pre">-1</span></code></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="delete">
@@ -358,6 +399,18 @@ for example:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>content</strong> &#8211; string, length ≤ 240</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -371,7 +424,23 @@ for example:</p>
 <dl class="post">
 <dt id="post--api-solutions">
 <code class="descname">POST </code><code class="descname">/api/solutions</code><a class="headerlink" href="#post--api-solutions" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>XXX: The implementation is not complete yet</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>content</strong> &#8211; string, length ≤ 30000</li>
+<li><strong>question_id</strong> (<em>optional</em>) &#8211; integer or <code class="docutils literal"><span class="pre">null</span></code>, default = <code class="docutils literal"><span class="pre">null</span></code></li>
+<li><strong>tags</strong> &#8211; list of [string, length ≤ 30]</li>
+<li><strong>title</strong> &#8211; string, length ≤ 80</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 <div class="section" id="me">
