@@ -1,7 +1,8 @@
 from zope.interface import implementer
 from pyramid.interfaces import IAuthenticationPolicy
 from pyramid.security import Authenticated, Everyone
-from pyramid.httpexceptions import HTTPBadRequest
+from pyramid.httpexceptions import HTTPBadRequest, HTTPUnauthorized
+from sqlalchemy.orm.exc import NoResultFound
 from .models import User, Token
 
 
@@ -19,10 +20,15 @@ class TokenAuthenticationPolicy:
 
     def authenticated_userid(self, request):
         value = self.unauthenticated_userid(request)
-        return request.db.query(User)\
-            .filter(Token.value == value)\
-            .filter(Token.user_id == User.id)\
-            .one_or_none()  # None on not found
+        if value is None:
+            return None
+        try:
+            return request.db.query(User)\
+                .filter(Token.value == value)\
+                .filter(Token.user_id == User.id)\
+                .one()
+        except NoResultFound:
+            raise HTTPUnauthorized('Invalid token')
 
     def unauthenticated_userid(self, request):
         authorization = request.headers.get('Authorization')
