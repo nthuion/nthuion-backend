@@ -121,7 +121,7 @@ class Comment(Entry):
     __mapper_args__ = {
         'polymorphic_identity': 'comment',
         'inherit_condition': Entry.id == id,
-        # sesalso: http://stackoverflow.com/questions/14885042
+        # sesalso: http://stackoverflow.com/issues/14885042
     }
 
     def as_dict(self):
@@ -135,7 +135,7 @@ class Comment(Entry):
         }
 
 
-class Question(Article):
+class Issue(Article):
 
     __acl__ = [
         (roles.Allow, roles.Everyone, 'read'),
@@ -149,7 +149,7 @@ class Question(Article):
     is_anonymous = Column(Boolean, nullable=False)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'question'
+        'polymorphic_identity': 'issue'
     }
 
     def as_dict(self, viewer):
@@ -173,10 +173,10 @@ class Question(Article):
 class Solution(Article):
 
     id = Column(Integer, ForeignKey(Article.id), primary_key=True)
-    question_id = Column(Integer, ForeignKey(Question.id))
-    question = relationship(
-        Question,
-        foreign_keys=question_id,
+    issue_id = Column(Integer, ForeignKey(Issue.id))
+    issue = relationship(
+        Issue,
+        foreign_keys=issue_id,
         backref='solutions')
 
     __mapper_args__ = {
@@ -188,10 +188,10 @@ class Solution(Article):
             'title': self.title,
             'content': self.content,
             'author': self.author.as_dict(),
-            'question': {
-                'id': self.question.id,
-                'title': self.question.title
-            } if self.question is not None else None,
+            'issue': {
+                'id': self.issue.id,
+                'title': self.issue.title
+            } if self.issue is not None else None,
             'votes': self.votes
         }
 

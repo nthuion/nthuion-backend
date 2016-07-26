@@ -8,7 +8,7 @@ class SolutionValidation:
 
     title = All(str, Length(max=Solution.title.type.length))
     content = All(str, Length(max=Solution.content.type.length))
-    question_id = Any(int, None)
+    issue_id = Any(int, None)
     tags = [All(str, Length(max=Tag.name.type.length))]
 
 
@@ -22,7 +22,7 @@ class SolutionListView(View):
     @body_schema({
         Required('title'): SolutionValidation.title,
         Required('content'): SolutionValidation.content,
-        Optional('question_id', default=None): SolutionValidation.question_id,
+        Optional('issue_id', default=None): SolutionValidation.issue_id,
         Required('tags'): SolutionValidation.tags
     })
     def post(self, body):
@@ -30,7 +30,7 @@ class SolutionListView(View):
         solution = Solution(
             title=body['title'],
             content=body['content'],
-            question_id=body['question_id'],
+            issue_id=body['issue_id'],
             author=self.user,
             tags=Tag.from_names(self.db, body['tags'])
         )

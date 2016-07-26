@@ -1,15 +1,15 @@
 from unittest import skip
 import transaction
 from .base import WebTest
-from nthuion.models import Question, Solution, User, Tag
+from nthuion.models import Issue, Solution, User, Tag
 
 
 class SolutionTest(WebTest):
 
-    def create_question(self):
+    def create_issue(self):
         user = User(name='username')
         self.session.add(user)
-        question = Question(
+        issue = Issue(
             title='qtitle',
             content='qcontent',
             tags=Tag.from_names(self.session, ['tag1', 'tag2', 'tag3']),
@@ -18,16 +18,16 @@ class SolutionTest(WebTest):
         )
         self.token = user.acquire_token()
         self.token_header = {'Authorization': 'Token {}'.format(self.token)}
-        self.session.add(question)
+        self.session.add(issue)
         self.session.flush()
         self.uid = user.id
-        self.qid = question.id
+        self.qid = issue.id
         transaction.commit()
 
     def create_solution(self):
-        self.create_question()
+        self.create_issue()
         solution = Solution(
-            question_id=self.qid,
+            issue_id=self.qid,
             title='stitle',
             content='scontent',
             author_id=self.uid,
@@ -49,19 +49,19 @@ class SolutionListTest(SolutionTest):
         sol = res.json['data'][0]
         self.assertEqual('stitle', sol['title'])
         self.assertEqual('scontent', sol['content'])
-        self.assertEqual(self.qid, sol['question']['id'])
+        self.assertEqual(self.qid, sol['issue']['id'])
         self.assertEqual(self.uid, sol['author']['id'])
         self.assertEqual('username', sol['author']['name'])
         self.assertEqual(0, sol['votes'])
 
     def test_post(self):
-        self.create_question()
+        self.create_issue()
         self.app.post_json(
             '/api/solutions',
             {
                 'title': 'mytitle',
                 'content': 'mycontent',
-                'question_id': self.qid,
+                'issue_id': self.qid,
                 'tags': ['a', 'b', 'c']
             },
             headers=self.token_header
@@ -69,13 +69,13 @@ class SolutionListTest(SolutionTest):
 
     @skip('acl is not implemented')
     def test_post_anon(self):
-        self.create_question()
+        self.create_issue()
         self.app.post_json(
             '/api/solutions',
             {
                 'title': 'mytitle',
                 'content': 'mycontent',
-                'question_id': self.qid
+                'issue_id': self.qid
             },
             status=401
         )

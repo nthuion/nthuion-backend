@@ -1,6 +1,6 @@
 from pyramid.httpexceptions import HTTPError
 from nthuion.views import (
-    echo, auth, error_handler, questions, users, solutions
+    echo, auth, error_handler, issues, users, solutions
 )
 
 
@@ -23,22 +23,36 @@ def includeme(config):
     add('/api/echo', echo.EchoView, 'echo')
     add('/api/login/facebook', auth.FacebookLogin, 'facebook-login')
     add('/api/logout', auth.Logout, 'logout')
-    add('/api/questions', questions.QuestionList, 'questions')
-    add('/api/questions/{id}', questions.QuestionView, 'question')
+    add('/api/issues', issues.IssueList, 'issue-list')
+    add('/api/issues/{id}', issues.IssueView, 'issue-object')
     add(
-        '/api/questions/{id}/vote',
-        questions.QuestionVoteView,
-        'question-vote'
+        '/api/issues/{id}/vote',
+        issues.IssueVoteView,
+        'issue-vote'
     )
     add(
-        '/api/questions/{id}/comments',
-        questions.QuestionCommentView,
-        'question-comment'
+        '/api/issues/{id}/comments',
+        issues.IssueCommentView,
+        'issue-comment'
     )
     add(
         '/api/solutions',
         solutions.SolutionListView,
-        'solutions'
+        'solution-list'
     )
     add('/api/users/me', users.MeView, 'me')
-    add('/api/users/{id}', users.UserView, 'users')
+    add('/api/users/{id}', users.UserView, 'user')
+
+    # old /api/questions interface
+    add('/api/questions', issues.IssueList, 'question-list')
+    add('/api/questions/{id}', issues.IssueView, 'question-object')
+    add(
+        '/api/questions/{id}/vote',
+        issues.IssueVoteView,
+        'question-vote'
+    )
+    add(
+        '/api/questions/{id}/comments',
+        issues.IssueCommentView,
+        'question-comment'
+    )

@@ -1,7 +1,5 @@
-Question (deprecated)
-=====================
-
-Question is deprecated in favor of Issue.
+Issue
+=====
 
 Issue object:
 
@@ -25,4 +23,4 @@ Authenticated comment
 Authenticated vote
 ============= ==============
 
-.. autoapi:: /api/questions
+.. autoapi:: /api/issues
