@@ -1,0 +1,4 @@
+Solution
+========
+
+.. autoapi:: /api/solutions

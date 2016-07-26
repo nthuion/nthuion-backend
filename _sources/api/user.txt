@@ -1,0 +1,4 @@
+User
+====
+
+.. autoapi:: /api/users
