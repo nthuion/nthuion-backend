@@ -7,7 +7,7 @@ Solution object:
     * title -- string
     * content -- string
     * tags -- array of string
-    * author -- null / user object
+    * author -- user object
     * issue -- null / issue object (only ``id``, ``title``)
     * votes -- integer
     * ncomments -- integer
