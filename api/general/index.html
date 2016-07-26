@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Authentication &mdash; NTHU ION API 0.0 documentation</title>
+  <title>General &mdash; NTHU ION API 0.0 documentation</title>
   
 
   
@@ -32,8 +32,8 @@
   
     <link rel="top" title="NTHU ION API 0.0 documentation" href="../../"/>
         <link rel="up" title="API Documentation" href="../"/>
-        <link rel="next" title="Question" href="../question/"/>
-        <link rel="prev" title="General" href="../general/"/> 
+        <link rel="next" title="Authentication" href="../auth/"/>
+        <link rel="prev" title="API Documentation" href="../"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -84,12 +84,8 @@
             
                 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../">API Documentation</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../general/">General</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Authentication</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#facebook-login">Facebook-login</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#logout">Logout</a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../auth/">Authentication</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../question/">Question</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../solution/">Solution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user/">User</a></li>
@@ -129,11 +125,11 @@
       
           <li><a href="../">API Documentation</a> &raquo;</li>
       
-    <li>Authentication</li>
+    <li>General</li>
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../../_sources/api/auth.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/api/general.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -143,38 +139,22 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="authentication">
-<h1>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="facebook-login">
-<h2>Facebook-login<a class="headerlink" href="#facebook-login" title="Permalink to this headline">¶</a></h2>
-<p>
-    Logging users in with facebook</p>
-<dl class="post">
-<dt id="post--api-login-facebook">
-<code class="descname">POST </code><code class="descname">/api/login/facebook</code><a class="headerlink" href="#post--api-login-facebook" title="Permalink to this definition">¶</a></dt>
-<dd><p>The body should look like this:</p>
-<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;token&quot;</span><span class="p">:</span> <span class="s2">&quot;token_acquired_from_facebook&quot;</span><span class="p">}</span>
-</pre></div>
-</div>
-<p>the response will look like this:</p>
-<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;token&quot;</span><span class="p">:</span> <span class="s2">&quot;2G5K7KBUeKpjSyz1PWmfV36hr83O0NoAIf7dqXz4DaDl&quot;</span><span class="p">}</span>
-</pre></div>
-</div>
-<p>Which is the token required for NTHU ION&#8217;s API</p>
-<p>You should then put the token in the header for other requests,
-for example:</p>
-<div class="highlight-http"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/api/private/content</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
-<span class="na">Authorization</span><span class="o">:</span> <span class="l">Token 2G5K7KBUeKpjSyz1PWmfV36hr83O0NoAIf7dqXz4DaDl</span>
-</pre></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
+  <div class="section" id="general">
+<h1>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h1>
+<p>This document describes conventions used in the API</p>
+<dl class="any">
+<dt id="any--api-*">
+<code class="descname">ANY </code><code class="descname">/api/*</code><a class="headerlink" href="#any--api-*" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> &#8211; on successful login</li>
-<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> &#8211; malformed POST body</li>
-<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a> &#8211; rejected facebook token</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> &#8211; the request is malformed</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a> &#8211; the user is required to authenticate, or the token is invalid</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a> &#8211; the authenticated user is not allowed to access the resource</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> &#8211; there is a bug in the server, consider
+<a class="reference external" href="https://github.com/nthuion/nthuion-backend/issues">reporting it</a></li>
 </ul>
 </td>
 </tr>
@@ -182,17 +162,6 @@ for example:</p>
 </table>
 </dd></dl>
 
-</div>
-<div class="section" id="logout">
-<h2>Logout<a class="headerlink" href="#logout" title="Permalink to this headline">¶</a></h2>
-<p>
-    Revokes the current token</p>
-<dl class="post">
-<dt id="post--api-logout">
-<code class="descname">POST </code><code class="descname">/api/logout</code><a class="headerlink" href="#post--api-logout" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
 </div>
 
 
@@ -202,10 +171,10 @@ for example:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../question/" class="btn btn-neutral float-right" title="Question" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../auth/" class="btn btn-neutral float-right" title="Authentication" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../general/" class="btn btn-neutral" title="General" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../" class="btn btn-neutral" title="API Documentation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
