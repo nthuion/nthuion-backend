@@ -146,20 +146,22 @@
             
   <div class="section" id="user">
 <h1>User<a class="headerlink" href="#user" title="Permalink to this headline">¶</a></h1>
+<p>User object:</p>
+<blockquote>
+<div><ul class="simple">
+<li>id &#8211; integer</li>
+<li>name &#8211; string</li>
+<li>avatar_url &#8211; string</li>
+</ul>
+</div></blockquote>
 <div class="section" id="me">
 <h2>Me<a class="headerlink" href="#me" title="Permalink to this headline">¶</a></h2>
 <dl class="get">
 <dt id="get--api-users-me">
 <code class="descname">GET </code><code class="descname">/api/users/me</code><a class="headerlink" href="#get--api-users-me" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns the information about the current user incl. id, name and
-whether authenticated</p>
-<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">234546</span><span class="p">,</span>
-    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;my name&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;authenticated&quot;</span><span class="p">:</span> <span class="kc">true</span>
-<span class="p">}</span>
-</pre></div>
-</div>
+<dd><p>returns the currently logged in user object, with an additional
+attribute <code class="docutils literal"><span class="pre">authenticated</span></code></p>
+<p>if the user is not logged in, all attributes will be null</p>
 </dd></dl>
 
 </div>
