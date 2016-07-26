@@ -19,9 +19,26 @@ class View:
     get = post = put = delete = not_allowed
 
     def options(self):
-        # make life easier
-        # facebook graph api sets this header too
+        # allow the js client to be on a different origin
         self.request.response.headers['Access-Control-Allow-Origin'] = '*'
+        return {
+            'permissions': self.get_permissions()
+        }
+
+    def get_permissions(self):
+        # XXX: test this
+        try:
+            acls = self.context.__acl__
+        except AttributeError:
+            return []
+        else:
+            if callable(acls):
+                acls = acls()
+            return [
+                perm for perm
+                in set(acl[2] for acl in acls)
+                if self.request.has_permission(perm)
+            ]
 
     def __call__(self):
         method = self.request.method
