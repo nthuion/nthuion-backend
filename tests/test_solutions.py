@@ -67,7 +67,6 @@ class SolutionListTest(SolutionTest):
             headers=self.token_header
         )
 
-    @skip('acl is not implemented')
     def test_post_anon(self):
         self.create_issue()
         self.app.post_json(
