@@ -2,10 +2,10 @@ import transaction
 from contextlib import suppress
 
 from .base import View, require_permission
-from .voting import VotingMixin
+from .mixins import VotingMixin, CommentMixin
 from nthuion.validation import body_schema, Required, Optional, All, Length
 from nthuion.utils import noresultfound_is_404
-from nthuion.models import Issue, Tag, Comment
+from nthuion.models import Issue, Tag
 
 
 class IssueValidation:
@@ -14,11 +14,6 @@ class IssueValidation:
     content = All(str, Length(max=Issue.content.type.length))
     tags = [All(str, Length(max=Tag.name.type.length))]
     is_anonymous = bool
-
-
-class CommentValidation:
-
-    content = All(str, Length(max=Comment.content.type.length))
 
 
 class IssueList(View):
@@ -108,50 +103,5 @@ class IssueVoteView(IssueContextMixin, VotingMixin, View):
     """Entity representing the user's vote of the issue"""
 
 
-class IssueCommentView(IssueContextMixin, View):
-
-    def get(self):
-        """
-        returns the list of comments of this issue
-
-        .. sourcecode:: json
-
-            {
-                "data": [
-                    {
-                        "id": 10,
-                        "parent": {
-                            "id": 100
-                        },
-                        "author": "comment author",
-                        "content": "comment content"
-                    }
-                ]
-            }
-        """
-        return {
-            'data': [comment.as_dict() for comment in self.context.comments]
-        }
-
-    @require_permission('comment')
-    @body_schema({
-        Required('content'): CommentValidation.content
-    })
-    def post(self, data):
-        """post a comment to the issue
-
-        the only required attribute is ``content``
-
-        .. sourcecode:: json
-
-            {
-                "content": "lorem ipsum ..."
-            }
-        """
-        self.db.add(
-            Comment(
-                parent=self.context,
-                content=data['content'],
-                author=self.user
-            )
-        )
+class IssueCommentView(IssueContextMixin, CommentMixin, View):
+    pass
