@@ -182,6 +182,14 @@ class Issue(Article):
 
 class Solution(Article):
 
+    __acl__ = [
+        (roles.Allow, roles.Everyone, 'read'),
+        (roles.Allow, roles.Authenticated, 'create'),
+        (roles.Allow, roles.Owner, 'update'),
+        (roles.Allow, roles.Authenticated, 'comment'),
+        (roles.Allow, roles.Authenticated, 'vote'),
+    ]
+
     id = Column(Integer, ForeignKey(Article.id), primary_key=True)
     issue_id = Column(Integer, ForeignKey(Issue.id))
     issue = relationship(
