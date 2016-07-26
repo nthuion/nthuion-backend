@@ -73,6 +73,17 @@ class Article(Entry):
             .where(Vote.entry_id == cls.id)\
             .label('votes')
 
+    @hybrid.hybrid_property
+    def ncomments(self):
+        return self.object_session().query(Comment)\
+            .filter(Comment.parent_id == self.id).count()
+
+    @ncomments.expression
+    def ncomments(cls):
+        return select([func.count(Comment)])\
+            .where(Comment.parent_id == cls.id)\
+            .label('ncomments')
+
 
 class Tag(Base):
 
@@ -165,8 +176,7 @@ class Issue(Article):
             ),
             'is_anonymous': self.is_anonymous,
             'votes': self.votes,
-            'ncomments': self.object_session().query(
-                Comment).filter(Comment.parent_id == self.id).count(),
+            'ncomments': self.ncomments,
         }
 
 
@@ -185,14 +195,17 @@ class Solution(Article):
 
     def as_dict(self):
         return {
+            'id': self.id,
             'title': self.title,
             'content': self.content,
+            'tags': [tag.name for tag in self.tags],
             'author': self.author.as_dict(),
             'issue': {
                 'id': self.issue.id,
                 'title': self.issue.title
             } if self.issue is not None else None,
-            'votes': self.votes
+            'votes': self.votes,
+            'ncomments': self.ncomments,
         }
 
 
