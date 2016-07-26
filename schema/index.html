@@ -233,20 +233,20 @@
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-postgresql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">question</span> <span class="p">(</span>
+<div class="highlight-postgresql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">issue</span> <span class="p">(</span>
 	<span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
 	<span class="n">is_anonymous</span> <span class="nb">BOOLEAN</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
-	<span class="k">CONSTRAINT</span> <span class="n">pk_question</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">),</span> 
-	<span class="k">CONSTRAINT</span> <span class="n">fk_question_id_article</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">article</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+	<span class="k">CONSTRAINT</span> <span class="n">pk_issue</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">),</span> 
+	<span class="k">CONSTRAINT</span> <span class="n">fk_issue_id_article</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">article</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-postgresql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">solution</span> <span class="p">(</span>
 	<span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
-	<span class="n">question_id</span> <span class="nb">INTEGER</span><span class="p">,</span> 
+	<span class="n">issue_id</span> <span class="nb">INTEGER</span><span class="p">,</span> 
 	<span class="k">CONSTRAINT</span> <span class="n">pk_solution</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">),</span> 
 	<span class="k">CONSTRAINT</span> <span class="n">fk_solution_id_article</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">article</span> <span class="p">(</span><span class="n">id</span><span class="p">),</span> 
-	<span class="k">CONSTRAINT</span> <span class="n">fk_solution_question_id_question</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">question_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">question</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+	<span class="k">CONSTRAINT</span> <span class="n">fk_solution_issue_id_issue</span> <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">issue_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">issue</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
 </div>

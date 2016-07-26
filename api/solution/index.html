@@ -33,7 +33,7 @@
     <link rel="top" title="NTHU ION API 0.0 documentation" href="../../"/>
         <link rel="up" title="API Documentation" href="../"/>
         <link rel="next" title="User" href="../user/"/>
-        <link rel="prev" title="Question" href="../question/"/> 
+        <link rel="prev" title="Question (deprecated)" href="../question/"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -86,9 +86,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../">API Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../general/">General</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../auth/">Authentication</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../question/">Question</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../issue/">Issue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../question/">Question (deprecated)</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Solution</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#solutions">Solutions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#solution-list">Solution-list</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../user/">User</a></li>
@@ -144,8 +145,8 @@
             
   <div class="section" id="solution">
 <h1>Solution<a class="headerlink" href="#solution" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="solutions">
-<h2>Solutions<a class="headerlink" href="#solutions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="solution-list">
+<h2>Solution-list<a class="headerlink" href="#solution-list" title="Permalink to this headline">¶</a></h2>
 <dl class="get">
 <dt id="get--api-solutions">
 <code class="descname">GET </code><code class="descname">/api/solutions</code><a class="headerlink" href="#get--api-solutions" title="Permalink to this definition">¶</a></dt>
@@ -162,7 +163,7 @@
 <tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
 <tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
 <li><strong>content</strong> &#8211; string, length ≤ 30000</li>
-<li><strong>question_id</strong> (<em>optional</em>) &#8211; integer or <code class="docutils literal"><span class="pre">null</span></code>, default = <code class="docutils literal"><span class="pre">null</span></code></li>
+<li><strong>issue_id</strong> (<em>optional</em>) &#8211; integer or <code class="docutils literal"><span class="pre">null</span></code>, default = <code class="docutils literal"><span class="pre">null</span></code></li>
 <li><strong>tags</strong> &#8211; array of [string, length ≤ 30]</li>
 <li><strong>title</strong> &#8211; string, length ≤ 80</li>
 </ul>
@@ -185,7 +186,7 @@
         <a href="../user/" class="btn btn-neutral float-right" title="User" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../question/" class="btn btn-neutral" title="Question" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../question/" class="btn btn-neutral" title="Question (deprecated)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

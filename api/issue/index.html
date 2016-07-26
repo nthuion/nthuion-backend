@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Question (deprecated) &mdash; NTHU ION API 0.0 documentation</title>
+  <title>Issue &mdash; NTHU ION API 0.0 documentation</title>
   
 
   
@@ -32,8 +32,8 @@
   
     <link rel="top" title="NTHU ION API 0.0 documentation" href="../../"/>
         <link rel="up" title="API Documentation" href="../"/>
-        <link rel="next" title="Solution" href="../solution/"/>
-        <link rel="prev" title="Issue" href="../issue/"/> 
+        <link rel="next" title="Question (deprecated)" href="../question/"/>
+        <link rel="prev" title="Authentication" href="../auth/"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -86,14 +86,14 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../">API Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../general/">General</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../auth/">Authentication</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../issue/">Issue</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Question (deprecated)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#question-list">Question-list</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#question-object">Question-object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#question-vote">Question-vote</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#question-comment">Question-comment</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Issue</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#issue-list">Issue-list</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#issue-object">Issue-object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#issue-vote">Issue-vote</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#issue-comment">Issue-comment</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../question/">Question (deprecated)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../solution/">Solution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user/">User</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../debug/">Debug</a></li>
@@ -132,11 +132,11 @@
       
           <li><a href="../">API Documentation</a> &raquo;</li>
       
-    <li>Question (deprecated)</li>
+    <li>Issue</li>
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../../_sources/api/question.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/api/issue.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -146,9 +146,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="question-deprecated">
-<h1>Question (deprecated)<a class="headerlink" href="#question-deprecated" title="Permalink to this headline">¶</a></h1>
-<p>Question is deprecated in favor of Issue.</p>
+  <div class="section" id="issue">
+<h1>Issue<a class="headerlink" href="#issue" title="Permalink to this headline">¶</a></h1>
 <p>Issue object:</p>
 <blockquote>
 <div><ul class="simple">
@@ -186,17 +185,17 @@
 </tr>
 </tbody>
 </table>
-<div class="section" id="question-list">
-<h2>Question-list<a class="headerlink" href="#question-list" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="issue-list">
+<h2>Issue-list<a class="headerlink" href="#issue-list" title="Permalink to this headline">¶</a></h2>
 <dl class="get">
-<dt id="get--api-questions">
-<code class="descname">GET </code><code class="descname">/api/questions</code><a class="headerlink" href="#get--api-questions" title="Permalink to this definition">¶</a></dt>
+<dt id="get--api-issues">
+<code class="descname">GET </code><code class="descname">/api/issues</code><a class="headerlink" href="#get--api-issues" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns list of issues</p>
 </dd></dl>
 
 <dl class="post">
-<dt id="post--api-questions">
-<code class="descname">POST </code><code class="descname">/api/questions</code><a class="headerlink" href="#post--api-questions" title="Permalink to this definition">¶</a></dt>
+<dt id="post--api-issues">
+<code class="descname">POST </code><code class="descname">/api/issues</code><a class="headerlink" href="#post--api-issues" title="Permalink to this definition">¶</a></dt>
 <dd><p>requires permission: <code class="docutils literal"><span class="pre">create</span></code></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -216,12 +215,12 @@
 </dd></dl>
 
 </div>
-<div class="section" id="question-object">
-<h2>Question-object<a class="headerlink" href="#question-object" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="issue-object">
+<h2>Issue-object<a class="headerlink" href="#issue-object" title="Permalink to this headline">¶</a></h2>
 <p>Issue of the id</p>
 <dl class="get">
-<dt id="get--api-questions-id">
-<code class="descname">GET </code><code class="descname">/api/questions/{id}</code><a class="headerlink" href="#get--api-questions-id" title="Permalink to this definition">¶</a></dt>
+<dt id="get--api-issues-id">
+<code class="descname">GET </code><code class="descname">/api/issues/{id}</code><a class="headerlink" href="#get--api-issues-id" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -241,8 +240,8 @@
 </dd></dl>
 
 <dl class="put">
-<dt id="put--api-questions-id">
-<code class="descname">PUT </code><code class="descname">/api/questions/{id}</code><a class="headerlink" href="#put--api-questions-id" title="Permalink to this definition">¶</a></dt>
+<dt id="put--api-issues-id">
+<code class="descname">PUT </code><code class="descname">/api/issues/{id}</code><a class="headerlink" href="#put--api-issues-id" title="Permalink to this definition">¶</a></dt>
 <dd><p>requires permission: <code class="docutils literal"><span class="pre">update</span></code></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -261,12 +260,12 @@
 </dd></dl>
 
 </div>
-<div class="section" id="question-vote">
-<h2>Question-vote<a class="headerlink" href="#question-vote" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="issue-vote">
+<h2>Issue-vote<a class="headerlink" href="#issue-vote" title="Permalink to this headline">¶</a></h2>
 <p>Entity representing the user&#8217;s vote of the issue</p>
 <dl class="get">
-<dt id="get--api-questions-id-vote">
-<code class="descname">GET </code><code class="descname">/api/questions/{id}/vote</code><a class="headerlink" href="#get--api-questions-id-vote" title="Permalink to this definition">¶</a></dt>
+<dt id="get--api-issues-id-vote">
+<code class="descname">GET </code><code class="descname">/api/issues/{id}/vote</code><a class="headerlink" href="#get--api-issues-id-vote" title="Permalink to this definition">¶</a></dt>
 <dd><p>requires permission: <code class="docutils literal"><span class="pre">vote</span></code></p>
 <p>Returns the current vote</p>
 <div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
@@ -276,8 +275,8 @@
 </dd></dl>
 
 <dl class="put">
-<dt id="put--api-questions-id-vote">
-<code class="descname">PUT </code><code class="descname">/api/questions/{id}/vote</code><a class="headerlink" href="#put--api-questions-id-vote" title="Permalink to this definition">¶</a></dt>
+<dt id="put--api-issues-id-vote">
+<code class="descname">PUT </code><code class="descname">/api/issues/{id}/vote</code><a class="headerlink" href="#put--api-issues-id-vote" title="Permalink to this definition">¶</a></dt>
 <dd><p>requires permission: <code class="docutils literal"><span class="pre">vote</span></code></p>
 <p>vote up:</p>
 <div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
@@ -302,19 +301,19 @@
 </dd></dl>
 
 <dl class="delete">
-<dt id="delete--api-questions-id-vote">
-<code class="descname">DELETE </code><code class="descname">/api/questions/{id}/vote</code><a class="headerlink" href="#delete--api-questions-id-vote" title="Permalink to this definition">¶</a></dt>
+<dt id="delete--api-issues-id-vote">
+<code class="descname">DELETE </code><code class="descname">/api/issues/{id}/vote</code><a class="headerlink" href="#delete--api-issues-id-vote" title="Permalink to this definition">¶</a></dt>
 <dd><p>requires permission: <code class="docutils literal"><span class="pre">vote</span></code></p>
 <p>unvote</p>
 <p>no body required</p>
 </dd></dl>
 
 </div>
-<div class="section" id="question-comment">
-<h2>Question-comment<a class="headerlink" href="#question-comment" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="issue-comment">
+<h2>Issue-comment<a class="headerlink" href="#issue-comment" title="Permalink to this headline">¶</a></h2>
 <dl class="get">
-<dt id="get--api-questions-id-comments">
-<code class="descname">GET </code><code class="descname">/api/questions/{id}/comments</code><a class="headerlink" href="#get--api-questions-id-comments" title="Permalink to this definition">¶</a></dt>
+<dt id="get--api-issues-id-comments">
+<code class="descname">GET </code><code class="descname">/api/issues/{id}/comments</code><a class="headerlink" href="#get--api-issues-id-comments" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns the list of comments of this issue</p>
 <div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -333,8 +332,8 @@
 </dd></dl>
 
 <dl class="post">
-<dt id="post--api-questions-id-comments">
-<code class="descname">POST </code><code class="descname">/api/questions/{id}/comments</code><a class="headerlink" href="#post--api-questions-id-comments" title="Permalink to this definition">¶</a></dt>
+<dt id="post--api-issues-id-comments">
+<code class="descname">POST </code><code class="descname">/api/issues/{id}/comments</code><a class="headerlink" href="#post--api-issues-id-comments" title="Permalink to this definition">¶</a></dt>
 <dd><p>requires permission: <code class="docutils literal"><span class="pre">comment</span></code></p>
 <p>post a comment to the issue</p>
 <p>the only required attribute is <code class="docutils literal"><span class="pre">content</span></code></p>
@@ -367,10 +366,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../solution/" class="btn btn-neutral float-right" title="Solution" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../question/" class="btn btn-neutral float-right" title="Question (deprecated)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../issue/" class="btn btn-neutral" title="Issue" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../auth/" class="btn btn-neutral" title="Authentication" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

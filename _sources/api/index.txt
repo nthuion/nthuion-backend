@@ -6,6 +6,7 @@ API Documentation
 
     general
     auth
+    issue
     question
     solution
     user
