@@ -35,11 +35,24 @@ def includeme(config):
         issues.IssueCommentView,
         'issue-comment'
     )
+
     add(
         '/api/solutions',
         solutions.SolutionListView,
         'solution-list'
     )
+    add('/api/solutions/{id}', solutions.SolutionView, 'solution-object')
+    add(
+        '/api/solutions/{id}/vote',
+        solutions.SolutionVoteView,
+        'solution-vote'
+    )
+    add(
+        '/api/solutions/{id}/comments',
+        solutions.SolutionCommentView,
+        'solution-comment'
+    )
+
     add('/api/users/me', users.MeView, 'me')
     add('/api/users/{id}', users.UserView, 'user')
 
