@@ -10,7 +10,7 @@ from sqlalchemy import (
     PrimaryKeyConstraint,
     CheckConstraint
 )
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func, select
 from sqlalchemy.ext import hybrid
@@ -94,16 +94,23 @@ class Tag(Base):
 
     @classmethod
     def get_or_create(cls, session, name):
+        assert len(name) <= cls.name.type.length
+        res = session.query(cls).filter(cls.name == name).first()
+        if res is not None:
+            return res
+        self = cls(name=name)
+        session.add(self)
         try:
+            session.flush()
+        except IntegrityError:
             return session.query(cls).filter(cls.name == name).one()
-        except NoResultFound:
-            self = cls(name=name)
-            session.add(self)
+        else:
             return self
 
     @classmethod
     def from_names(cls, session, names):
         assert isinstance(names, (list, tuple))
+        session.flush()
         return [cls.get_or_create(session, name) for name in set(names)]
 
     def __repr__(self):
