@@ -1,6 +1,6 @@
 import requests
 import transaction
-from pyramid.httpexceptions import HTTPBadRequest
+from pyramid.httpexceptions import HTTPUnauthorized
 from sqlalchemy.exc import IntegrityError
 from nthuion.views.base import View
 from nthuion.models.auth import User, FacebookUser, Email, Token
@@ -22,7 +22,7 @@ class FacebookLogin(View):
             }
         )
         if response.status_code == 400:
-            raise HTTPBadRequest('Login failed: token rejected by facebook')
+            raise HTTPUnauthorized('Login failed: token rejected by facebook')
         json = response.json()
         return json['id'], json['name'], json.get('email')
 
@@ -59,8 +59,8 @@ class FacebookLogin(View):
             Authorization: Token 2G5K7KBUeKpjSyz1PWmfV36hr83O0NoAIf7dqXz4DaDl
 
         :statuscode 200: on successful login
-        :statuscode 400: - malformed POST body
-                         - rejected facebook token
+        :statuscode 400: malformed POST body
+        :statuscode 401: rejected facebook token
         """
         with keyerror_is_bad_request():
             facebook_token = self.request.json_body['token']

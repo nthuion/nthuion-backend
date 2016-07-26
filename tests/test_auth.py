@@ -77,7 +77,7 @@ class FacebookLoginTest(WebTest):
             res = self.app.post_json(
                 '/api/login/facebook',
                 {'token': 'exxe'},
-                status=400
+                status=401
             )
         self.assertEqual(
             'Login failed: token rejected by facebook',

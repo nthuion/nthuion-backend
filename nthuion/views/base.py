@@ -1,5 +1,9 @@
 from functools import wraps
-from pyramid.httpexceptions import HTTPMethodNotAllowed, HTTPUnauthorized
+from pyramid.httpexceptions import (
+    HTTPMethodNotAllowed,
+    HTTPForbidden,
+    HTTPUnauthorized
+)
 
 
 def not_allowed(self):
@@ -45,7 +49,7 @@ class View:
     def check_permission(self, perm):
         has_perm = self.request.has_permission(perm)
         if not has_perm:
-            raise HTTPUnauthorized('no permission for {}'.format(perm))
+            raise HTTPForbidden('no permission for {}'.format(perm))
 
 
 class require_permission:
@@ -59,8 +63,11 @@ class require_permission:
         @wraps(function)
         def wrapper(self, *args, **kwargs):
             if not self.request.has_permission(permission):
-                raise HTTPUnauthorized(
-                    'no permission for {}'.format(permission))
+                if self.user is None:
+                    raise HTTPUnauthorized('authentication required')
+                else:
+                    raise HTTPForbidden(
+                        'no permission for {}'.format(permission))
             return function(self, *args, **kwargs)
 
         wrapper.requires_permission = permission
