@@ -25,7 +25,8 @@ class UserTest(WebTest):
             {
                 'authenticated': False,
                 'name': None,
-                'id': None
+                'id': None,
+                'avatar_url': None
             },
             res.json
         )

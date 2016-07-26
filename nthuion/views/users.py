@@ -25,22 +25,17 @@ class MeView(UserView):
 
     def get(self):
         """
-        returns the information about the current user incl. id, name and
-        whether authenticated
+        returns the currently logged in user object, with an additional
+        attribute ``authenticated``
 
-        .. sourcecode:: json
-
-            {
-                "id": 234546,
-                "name": "my name",
-                "authenticated": true
-            }
+        if the user is not logged in, all attributes will be null
         """
         user = self.context
         if user is None:
             return {
                 'id': None,
                 'name': None,
+                'avatar_url': None,
                 'authenticated': False,
             }
         else:
