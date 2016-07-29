@@ -1,4 +1,3 @@
-import transaction
 from contextlib import suppress
 
 from .base import View, require_permission
@@ -38,6 +37,9 @@ class IssueList(View):
         Required('is_anonymous'): IssueValidation.is_anonymous
     })
     def post(self, body):
+        """
+        create a issue, returns the created issue object on success
+        """
         title = body['title']
         tags = body['tags']
         content = body['content']
@@ -85,6 +87,11 @@ class IssueView(IssueContextMixin, View):
         Optional('is_anonymous'): IssueValidation.is_anonymous,
     })
     def put(self, body):
+        """
+        update the issue
+
+        returns the updated issue object on success
+        """
         obj = self.context
 
         with suppress(KeyError):

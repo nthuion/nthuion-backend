@@ -49,6 +49,8 @@ class SolutionListView(View):
         create a solution
 
         :statuscode 422: ``issue_id`` does not refer to a valid issue
+
+        returns created solution object on success
         """
         solution = Solution(
             title=body['title'],
@@ -90,8 +92,9 @@ class SolutionView(SolutionContextMixin, View):
         update the solution
 
         :statuscode 422: ``issue_id`` does not refer to a valid issue
+
+        returns updated solution object on success
         """
-        # self.check_permission('w')
         obj = self.context
 
         with suppress(KeyError):
