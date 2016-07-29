@@ -198,6 +198,7 @@
 <dt id="post--api-questions">
 <code class="descname">POST </code><code class="descname">/api/questions</code><a class="headerlink" href="#post--api-questions" title="Permalink to this definition">¶</a></dt>
 <dd><p>requires permission: <code class="docutils literal"><span class="pre">create</span></code></p>
+<p>create a issue, returns the created issue object on success</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -244,6 +245,8 @@
 <dt id="put--api-questions-id">
 <code class="descname">PUT </code><code class="descname">/api/questions/{id}</code><a class="headerlink" href="#put--api-questions-id" title="Permalink to this definition">¶</a></dt>
 <dd><p>requires permission: <code class="docutils literal"><span class="pre">update</span></code></p>
+<p>update the issue</p>
+<p>returns the updated issue object on success</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -251,6 +254,7 @@
 <tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
 <tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
 <li><strong>content</strong> (<em>optional</em>) &#8211; string, length ≤ 30000</li>
+<li><strong>is_anonymous</strong> (<em>optional</em>) &#8211; boolean</li>
 <li><strong>tags</strong> (<em>optional</em>) &#8211; array of [string, length ≤ 30]</li>
 <li><strong>title</strong> (<em>optional</em>) &#8211; string, length ≤ 80</li>
 </ul>
@@ -291,8 +295,14 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name" colspan="2">Response JSON Object:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first simple">
+<li><strong>votes</strong> &#8211; on a success vote, the updated vote count is returned</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
 <li><strong>value</strong> &#8211; <code class="docutils literal"><span class="pre">1</span></code> or <code class="docutils literal"><span class="pre">-1</span></code></li>
 </ul>
 </td>
@@ -307,6 +317,18 @@
 <dd><p>requires permission: <code class="docutils literal"><span class="pre">vote</span></code></p>
 <p>unvote</p>
 <p>no body required</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Response JSON Object:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>votes</strong> &#8211; on a success unvote, the updated vote count is returned</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
