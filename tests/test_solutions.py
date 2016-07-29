@@ -1,7 +1,8 @@
-from unittest import skip
 import transaction
 from .base import WebTest
 from nthuion.models import Issue, Solution, User, Tag
+
+from hypothesis import given, strategies as st
 
 
 class SolutionTest(WebTest):
@@ -31,6 +32,7 @@ class SolutionTest(WebTest):
             title='stitle',
             content='scontent',
             author_id=self.uid,
+            tags=Tag.from_names(self.session, ['a', 'b', 'c'])
         )
         self.session.add(solution)
         self.session.flush()
@@ -56,7 +58,7 @@ class SolutionListTest(SolutionTest):
 
     def test_post(self):
         self.create_issue()
-        self.app.post_json(
+        res = self.app.post_json(
             '/api/solutions',
             {
                 'title': 'mytitle',
@@ -66,6 +68,12 @@ class SolutionListTest(SolutionTest):
             },
             headers=self.token_header
         )
+        assert 'id' in res.json
+        assert res.json['id'] is not None
+        assert 'mytitle' == res.json['title']
+        assert 'mycontent' == res.json['content']
+        assert self.qid == res.json['issue']['id']
+        assert set('abc') == set(res.json['tags'])
 
     def test_post_anon(self):
         self.create_issue()
@@ -78,3 +86,45 @@ class SolutionListTest(SolutionTest):
             },
             status=401
         )
+
+
+class SolutionSingleTest(SolutionTest):
+
+    def test_get(self):
+        self.create_solution()
+        res = self.app.get(
+            '/api/solutions/{}'.format(self.sid)
+        )
+        jobj = res.json
+        assert self.sid == jobj['id']
+        assert 'stitle' == jobj['title']
+        assert 'scontent' == jobj['content']
+        assert set('abc') == set(jobj['tags'])
+
+    @given(
+        st.booleans(),
+        st.lists(st.text(max_size=25)),
+        st.text(max_size=80),
+        st.text(max_size=30000, average_size=100),
+    )
+    def test_put(self, has_issue, tags, title, content):
+        self.create_solution()
+        issue_id = self.qid if has_issue else None
+        res = self.app.put_json(
+            '/api/solutions/{}'.format(self.sid),
+            {
+                'issue_id': issue_id,
+                'tags': tags,
+                'title': title,
+                'content': content
+            },
+            headers=self.token_header
+        )
+        jobj = res.json
+        assert 'id' in jobj
+        assert (issue_id is None) == (jobj['issue'] is None)
+        if issue_id is not None:
+            assert issue_id == jobj['issue']['id']
+        assert set(tags) == set(jobj['tags'])
+        assert title == jobj['title']
+        assert content == jobj['content']

@@ -208,7 +208,7 @@ class Solution(Article):
         'polymorphic_identity': 'solution'
     }
 
-    def as_dict(self):
+    def as_dict(self, user):
         return {
             'id': self.id,
             'title': self.title,

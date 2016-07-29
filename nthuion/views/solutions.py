@@ -34,7 +34,7 @@ class SolutionListView(View):
 
     def get(self):
         return {
-            'data': [sol.as_dict() for sol in self.db.query(Solution)]
+            'data': [sol.as_dict(self.user) for sol in self.db.query(Solution)]
         }
 
     @require_permission('create')
@@ -59,7 +59,7 @@ class SolutionListView(View):
         )
         self.db.add(solution)
         self.db.flush()
-        return solution.as_dict()
+        return solution.as_dict(self.user)
 
 
 class SolutionContextMixin:
@@ -106,6 +106,7 @@ class SolutionView(SolutionContextMixin, View):
             pass
         else:
             obj.tags = Tag.from_names(self.db, tags)
+        self.db.flush()
         return obj.as_dict(self.user)
 
 
