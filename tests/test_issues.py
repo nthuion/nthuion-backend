@@ -327,46 +327,58 @@ class IssueVoteTest(OneIssueTest):
             resp.json
         )
 
-    def voteUp(self):
-        return self.app.put_json(
+    def voteUp(self, after):
+        res = self.app.put_json(
             '/api/issues/{}/vote'.format(self.qid),
             {'value': 1},
             headers=self.token_header
         )
+        self.assertEqual(
+            after,
+            res.json['votes'],
+        )
 
-    def voteDown(self):
-        return self.app.put_json(
+    def voteDown(self, after):
+        res = self.app.put_json(
             '/api/issues/{}/vote'.format(self.qid),
             {'value': -1},
             headers=self.token_header
         )
+        self.assertEqual(
+            after,
+            res.json['votes'],
+        )
 
-    def unvote(self):
-        return self.app.delete(
+    def unvote(self, after):
+        res = self.app.delete(
             '/api/issues/{}/vote'.format(self.qid),
             headers=self.token_header
+        )
+        self.assertEqual(
+            after,
+            res.json['votes'],
         )
 
     def test_vote_zero(self):
         self.assertVoteValue(0)
 
     def test_vote_up(self):
-        self.voteUp()
+        self.voteUp(1)
         self.assertVoteValue(1)
 
     def test_vote_down(self):
-        self.voteDown()
+        self.voteDown(-1)
         self.assertVoteValue(-1)
 
     def test_vote_multiple(self):
         self.assertVoteValue(0)
-        self.voteDown()
+        self.voteDown(-1)
         self.assertVoteValue(-1)
-        self.unvote()
+        self.unvote(0)
         self.assertVoteValue(0)
-        self.voteUp()
+        self.voteUp(1)
         self.assertVoteValue(1)
-        self.voteDown()
+        self.voteDown(-1)
         self.assertVoteValue(-1)
 
 

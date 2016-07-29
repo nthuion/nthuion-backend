@@ -54,12 +54,16 @@ class VotingMixin(abc.ABC):
         .. sourcecode:: json
 
             {"value": -1}
+
+        :resjson votes: on a success vote, the updated vote count is returned
         """
         vote = self.query_vote().first()
         if vote is None:
             vote = Vote(entry_id=self.context.id, user_id=self.user.id)
         vote.value = body['value']
         self.db.add(vote)
+        self.db.flush()
+        return {'votes': self.context.votes}
 
     @require_permission('vote')
     def delete(self):
@@ -67,8 +71,12 @@ class VotingMixin(abc.ABC):
         unvote
 
         no body required
+
+        :resjson votes: on a success unvote, the updated vote count is returned
         """
         self.query_vote().delete()
+        self.db.flush()
+        return {'votes': self.context.votes}
 
 
 class CommentValidation:
