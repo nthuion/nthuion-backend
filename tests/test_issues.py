@@ -2,6 +2,8 @@ from .base import WebTest, BaseTest
 from nthuion.models import Tag, Issue, User, Comment
 import transaction
 
+from hypothesis import given, strategies as st
+
 
 class RelationTest(BaseTest):
 
@@ -255,30 +257,37 @@ class IssueTest(WebTest):
         )
 
 
-class OneIssueTest(WebTest):
+class OneUserTest(WebTest):
+
+    def setUp(self):
+        super().setUp()
+        with transaction.manager:
+            user = User(name='lorem')
+            self.session.add(user)
+            self.token = user.acquire_token()
+            self.token_header = {
+                'Authorization': 'Token {}'.format(self.token)
+            }
+        self.uid, = self.session.query(User.id).first()
+
+
+class OneIssueTest(OneUserTest):
 
     ANON = False
 
     def setUp(self):
         super().setUp()
         with transaction.manager:
-            user = User(name='lorem')
             issue = Issue(
                 title='ipsum',
-                author=user,
+                author_id=self.uid,
                 content='dolor sit amet',
                 tags=Tag.from_names(
                     self.session, ['consectetur', 'adipiscing', 'elit']),
                 is_anonymous=self.ANON
             )
-            self.session.add(user)
-            self.token = user.acquire_token()
-            self.token_header = {
-                'Authorization': 'Token {}'.format(self.token)
-            }
             self.session.add(issue)
         self.qid, = self.session.query(Issue.id).first()
-        self.uid, = self.session.query(User.id).first()
 
 
 class IssueAnonTest(OneIssueTest):
@@ -430,3 +439,59 @@ class IssueCommentTest(OneIssueTest):
             'id',
             res.json['data'][0]
         )
+
+
+def issue_parameters():
+    return given(
+        st.text(max_size=30000, average_size=100),
+        st.booleans(),
+        st.lists(st.text(max_size=25), average_size=4),
+        st.text(max_size=80)
+    )
+
+
+class PostReturnValueTest(OneUserTest):
+
+    @issue_parameters()
+    def test_post_issues_returnes_object_with_id(
+        self, content, anon, tags, title
+    ):
+        res = self.app.post_json(
+            '/api/issues',
+            dict(
+                content=content,
+                is_anonymous=anon,
+                tags=tags,
+                title=title
+            ),
+            headers=self.token_header
+        )
+        self.assertIn('id', res.json)
+        self.assertIsNotNone(res.json['id'])
+        self.assertEqual(content, res.json['content'])
+        self.assertEqual(set(tags), set(res.json['tags']))
+        self.assertEqual(title, res.json['title'])
+
+
+class PutReturnValueTest(OneIssueTest):
+
+    @issue_parameters()
+    def test_put_issue_returns_object_with_id(
+        self, content, anon, tags, title
+    ):
+        res = self.app.put_json(
+            '/api/issues/{}'.format(self.qid),
+            {
+                'content': content,
+                'is_anonymous': anon,
+                'tags': tags,
+                'title': title
+            },
+            headers=self.token_header
+        )
+        self.assertIn('id', res.json)
+        self.assertIsNotNone(res.json['id'])
+        self.assertEqual(content, res.json['content'])
+        self.assertEqual(anon, res.json['is_anonymous'])
+        self.assertEqual(set(tags), set(res.json['tags']))
+        self.assertEqual(title, res.json['title'])

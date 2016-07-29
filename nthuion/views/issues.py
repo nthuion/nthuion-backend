@@ -42,15 +42,16 @@ class IssueList(View):
         tags = body['tags']
         content = body['content']
         is_anonymous = body['is_anonymous']
-        with transaction.manager:
-            issue = Issue(
-                title=title,
-                content=content,
-                author=self.user,
-                tags=Tag.from_names(self.db, tags),
-                is_anonymous=is_anonymous
-            )
-            self.db.add(issue)
+        issue = Issue(
+            title=title,
+            content=content,
+            author=self.user,
+            tags=Tag.from_names(self.db, tags),
+            is_anonymous=is_anonymous
+        )
+        self.db.add(issue)
+        self.db.flush()
+        return issue.as_dict(self.user)
 
 
 class IssueContextMixin:
@@ -81,15 +82,17 @@ class IssueView(IssueContextMixin, View):
         Optional('title'): IssueValidation.title,
         Optional('content'): IssueValidation.content,
         Optional('tags'): IssueValidation.tags,
+        Optional('is_anonymous'): IssueValidation.is_anonymous,
     })
     def put(self, body):
-        # self.check_permission('w')
         obj = self.context
 
         with suppress(KeyError):
             obj.title = body['title']
         with suppress(KeyError):
             obj.content = body['content']
+        with suppress(KeyError):
+            obj.is_anonymous = body['is_anonymous']
         try:
             tags = body['tags']
         except KeyError:
