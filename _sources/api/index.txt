@@ -9,5 +9,6 @@ API Documentation
     issue
     question
     solution
+    comment
     user
     debug
