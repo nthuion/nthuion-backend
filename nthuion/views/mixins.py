@@ -122,10 +122,11 @@ class CommentMixin(FactoryRequired):
                 "content": "lorem ipsum ..."
             }
         """
-        self.db.add(
-            Comment(
-                parent=self.context,
-                content=data['content'],
-                author=self.user
-            )
+        comment = Comment(
+            parent=self.context,
+            content=data['content'],
+            author=self.user
         )
+        self.db.add(comment)
+        self.db.flush()
+        return comment.as_dict()

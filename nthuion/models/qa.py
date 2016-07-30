@@ -44,20 +44,6 @@ class Entry(Base):
         else:
             return []
 
-
-class Article(Entry):
-
-    id = Column(Integer, ForeignKey(Entry.id), primary_key=True)
-
-    title = Column(String(80), nullable=False)
-
-    content = Column(Text(30000), nullable=False)
-
-    tags = relationship(
-        'Tag',
-        secondary=lambda: ArticleTag.__table__
-    )
-
     @hybrid.hybrid_property
     def votes(self):
         session = self.object_session()
@@ -83,6 +69,20 @@ class Article(Entry):
         return select([func.count(Comment)])\
             .where(Comment.parent_id == cls.id)\
             .label('ncomments')
+
+
+class Article(Entry):
+
+    id = Column(Integer, ForeignKey(Entry.id), primary_key=True)
+
+    title = Column(String(80), nullable=False)
+
+    content = Column(Text(30000), nullable=False)
+
+    tags = relationship(
+        'Tag',
+        secondary=lambda: ArticleTag.__table__
+    )
 
 
 class Tag(Base):
@@ -129,6 +129,13 @@ class ArticleTag(Base):
 
 class Comment(Entry):
 
+    __acl__ = [
+        (roles.Allow, roles.Everyone, 'read'),
+        (roles.Allow, roles.Owner, 'update'),
+        (roles.Allow, roles.Authenticated, 'comment'),
+        (roles.Allow, roles.Authenticated, 'vote'),
+    ]
+
     id = Column(Integer, ForeignKey(Entry.id), primary_key=True)
 
     parent_id = Column(Integer, ForeignKey(Entry.id), nullable=False)
@@ -146,10 +153,12 @@ class Comment(Entry):
         return {
             'id': self.id,
             'parent': {
-                'id': self.parent_id
+                'id': self.parent_id,
+                'type': self.parent.type
             },
             'content': self.content,
-            'author': self.author.as_dict()
+            'author': self.author.as_dict(),
+            'votes': self.votes
         }
 
 
