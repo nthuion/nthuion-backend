@@ -482,3 +482,6 @@ class PutReturnValueTest(OneIssueTest):
         self.assertEqual(anon, res.json['is_anonymous'])
         self.assertEqual(set(tags), set(res.json['tags']))
         self.assertEqual(title, res.json['title'])
+
+
+# XXX test ctime, mtime

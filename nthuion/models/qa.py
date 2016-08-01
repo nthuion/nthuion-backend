@@ -28,6 +28,7 @@ class Entry(Base):
     id = Column(Integer, primary_key=True)
 
     ctime = Column(DateTime, default=datetime.datetime.now, nullable=False)
+    mtime = Column(DateTime, default=None)
 
     author_id = Column(Integer, ForeignKey(User.id), nullable=False)
     author = relationship(User)
@@ -158,7 +159,9 @@ class Comment(Entry):
             },
             'content': self.content,
             'author': self.author.as_dict(),
-            'votes': self.votes
+            'votes': self.votes,
+            'ctime': self.ctime.isoformat(),
+            'mtime': None if self.mtime is None else self.mtime.isoformat(),
         }
 
 
@@ -193,6 +196,8 @@ class Issue(Article):
             'is_anonymous': self.is_anonymous,
             'votes': self.votes,
             'ncomments': self.ncomments,
+            'ctime': self.ctime.isoformat(),
+            'mtime': None if self.mtime is None else self.mtime.isoformat(),
         }
 
 
@@ -230,6 +235,8 @@ class Solution(Article):
             } if self.issue is not None else None,
             'votes': self.votes,
             'ncomments': self.ncomments,
+            'ctime': self.ctime.isoformat(),
+            'mtime': None if self.mtime is None else self.mtime.isoformat(),
         }
 
 

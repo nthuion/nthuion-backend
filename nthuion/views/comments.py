@@ -1,3 +1,5 @@
+import datetime
+
 from .base import View, require_permission
 from .mixins import VotingMixin, CommentMixin, CommentValidation
 from nthuion.validation import body_schema, Optional
@@ -33,7 +35,8 @@ class CommentView(CommentContextMixin, View):
         """
         if 'content' in data:
             self.context.content = data['content']
-            self.db.add(self.context)
+            self.context.mtime = datetime.datetime.now()
+            self.db.flush()
         return self.context.as_dict()
 
 

@@ -74,6 +74,10 @@ class CommentViewTest(BaseCommentTest):
         assert cid == data['id']
         assert 'comment content' == data['content']
         assert self.u2 == data['author']['id']
+        assert 'ctime' in data
+        assert data['ctime'] is not None
+        assert 'mtime' in data
+        assert data['mtime'] is None
 
     def test_get_comment_on_issue_comment(self):
         sid = self.create_solution(self.u2)
@@ -122,6 +126,11 @@ class CommentViewTest(BaseCommentTest):
         assert 'updated content' == res.json['content']
         assert 'updated content' == \
             self.session.query(Comment).get(cid).content
+
+        assert 'ctime' in res.json
+        assert res.json['ctime'] is not None
+        assert 'mtime' in res.json
+        assert res.json['mtime'] is not None
 
         self.app.put_json(
             '/api/comments/{}'.format(cid),

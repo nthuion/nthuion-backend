@@ -1,4 +1,5 @@
 from contextlib import suppress
+import datetime
 
 from .base import View, require_permission
 from .mixins import VotingMixin, CommentMixin
@@ -106,6 +107,8 @@ class IssueView(IssueContextMixin, View):
             pass
         else:
             obj.tags = Tag.from_names(self.db, tags)
+        obj.mtime = datetime.datetime.now()
+        self.db.flush()
         return obj.as_dict(self.user)
 
 

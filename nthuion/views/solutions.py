@@ -1,3 +1,5 @@
+import datetime
+
 from contextlib import suppress
 from pyramid.httpexceptions import HTTPUnprocessableEntity
 from nthuion.validation import\
@@ -109,6 +111,7 @@ class SolutionView(SolutionContextMixin, View):
             pass
         else:
             obj.tags = Tag.from_names(self.db, tags)
+        obj.mtime = datetime.datetime.now()
         self.db.flush()
         return obj.as_dict(self.user)
 

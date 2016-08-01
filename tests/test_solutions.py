@@ -128,3 +128,6 @@ class SolutionSingleTest(SolutionTest):
         assert set(tags) == set(jobj['tags'])
         assert title == jobj['title']
         assert content == jobj['content']
+
+
+# XXX test ctime, mtime
