@@ -162,6 +162,7 @@
 <div class="highlight-postgresql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">entry</span> <span class="p">(</span>
 	<span class="n">id</span> <span class="nb">SERIAL</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
 	<span class="n">ctime</span> <span class="nb">TIMESTAMP</span> <span class="nb">WITHOUT TIME ZONE</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+	<span class="n">mtime</span> <span class="nb">TIMESTAMP</span> <span class="nb">WITHOUT TIME ZONE</span><span class="p">,</span> 
 	<span class="n">author_id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
 	<span class="k">type</span> <span class="nb">VARCHAR</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
 	<span class="k">CONSTRAINT</span> <span class="n">pk_entry</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">),</span> 
