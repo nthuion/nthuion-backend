@@ -44,11 +44,9 @@ class CommentCommentView(CommentContextMixin, CommentMixin, View):
     """
     comments on a specific comment
     """
-    pass
 
 
 class CommentVoteView(CommentContextMixin, VotingMixin, View):
     """
     vote for a comment
     """
-    pass

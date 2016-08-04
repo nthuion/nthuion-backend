@@ -80,6 +80,7 @@ class SolutionView(SolutionContextMixin, View):
     """Solution of the id"""
 
     def get(self):
+        """returns the solution object"""
         return self.context.as_dict(self.user)
 
     @require_permission('update')
@@ -121,4 +122,4 @@ class SolutionVoteView(SolutionContextMixin, VotingMixin, View):
 
 
 class SolutionCommentView(SolutionContextMixin, CommentMixin, View):
-    pass
+    """Comment for the solution"""

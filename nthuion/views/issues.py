@@ -72,11 +72,7 @@ class IssueView(IssueContextMixin, View):
 
     def get(self):
         """
-        :>json title: string
-        :>json content: string
-        :>json tags: array of strings
-        :>json author: object, with id and name
-        :>json votes: number
+        returns the issue object
         """
         return self.context.as_dict(self.user)
 
@@ -117,4 +113,4 @@ class IssueVoteView(IssueContextMixin, VotingMixin, View):
 
 
 class IssueCommentView(IssueContextMixin, CommentMixin, View):
-    pass
+    """Comments for the issue"""

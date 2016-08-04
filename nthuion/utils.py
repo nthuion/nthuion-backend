@@ -11,10 +11,6 @@ def keyerror_is_bad_request():
         raise HTTPBadRequest('missing required key {}'.format(exc))
 
 
-def keys_from_dict(data, *keys):
-    {key: data[key] for key in keys}
-
-
 @contextmanager
 def noresultfound_is_404():
     try:
