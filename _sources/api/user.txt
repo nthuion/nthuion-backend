@@ -7,4 +7,10 @@ User object:
     * name -- string
     * avatar_url -- string
 
+============= ==============
+Role          Permission
+============= ==============
+Owner         update
+============= ==============
+
 .. autoapi:: /api/users

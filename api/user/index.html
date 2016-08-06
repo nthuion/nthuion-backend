@@ -155,6 +155,22 @@
 <li>avatar_url &#8211; string</li>
 </ul>
 </div></blockquote>
+<table border="1" class="docutils">
+<colgroup>
+<col width="48%" />
+<col width="52%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Role</th>
+<th class="head">Permission</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Owner</td>
+<td>update</td>
+</tr>
+</tbody>
+</table>
 <div class="section" id="me">
 <h2>Me<a class="headerlink" href="#me" title="Permalink to this headline">¶</a></h2>
 <dl class="get">
@@ -165,6 +181,25 @@ attribute <code class="docutils literal"><span class="pre">authenticated</span><
 <p>if the user is not logged in, all attributes will be null</p>
 </dd></dl>
 
+<dl class="put">
+<dt id="put--api-users-me">
+<code class="descname">PUT </code><code class="descname">/api/users/me</code><a class="headerlink" href="#put--api-users-me" title="Permalink to this definition">¶</a></dt>
+<dd><p>requires permission: <code class="docutils literal"><span class="pre">update</span></code></p>
+<p>update userdata, returns updated user object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>optional</em>) &#8211; string, length ≤ 100</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 <div class="section" id="id1">
 <h2>User<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
@@ -172,7 +207,26 @@ attribute <code class="docutils literal"><span class="pre">authenticated</span><
 <dl class="get">
 <dt id="get--api-users-id">
 <code class="descname">GET </code><code class="descname">/api/users/{id}</code><a class="headerlink" href="#get--api-users-id" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns the information about the user incl. id, name</p>
+<dd><p>returns the user object</p>
+</dd></dl>
+
+<dl class="put">
+<dt id="put--api-users-id">
+<code class="descname">PUT </code><code class="descname">/api/users/{id}</code><a class="headerlink" href="#put--api-users-id" title="Permalink to this definition">¶</a></dt>
+<dd><p>requires permission: <code class="docutils literal"><span class="pre">update</span></code></p>
+<p>update userdata, returns updated user object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>optional</em>) &#8211; string, length ≤ 100</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
