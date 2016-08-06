@@ -170,7 +170,7 @@ class Comment(Entry):
         # sesalso: http://stackoverflow.com/issues/14885042
     }
 
-    def as_dict(self):
+    def as_dict(self, user):
         return {
             'id': self.id,
             'parent': {
@@ -182,6 +182,7 @@ class Comment(Entry):
             'votes': self.votes,
             'ctime': self.ctime.isoformat(),
             'mtime': None if self.mtime is None else self.mtime.isoformat(),
+            'user_vote': self.get_user_vote_value(user),
         }
 
 
@@ -218,6 +219,7 @@ class Issue(Article):
             'ncomments': self.ncomments,
             'ctime': self.ctime.isoformat(),
             'mtime': None if self.mtime is None else self.mtime.isoformat(),
+            'user_vote': self.get_user_vote_value(viewer),
         }
 
 
@@ -257,6 +259,7 @@ class Solution(Article):
             'ncomments': self.ncomments,
             'ctime': self.ctime.isoformat(),
             'mtime': None if self.mtime is None else self.mtime.isoformat(),
+            'user_vote': self.get_user_vote_value(user),
         }
 
 

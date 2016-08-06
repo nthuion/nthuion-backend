@@ -23,7 +23,7 @@ class CommentView(CommentContextMixin, View):
         """
         returns the comment object
         """
-        return self.context.as_dict()
+        return self.context.as_dict(self.user)
 
     @require_permission('update')
     @body_schema({
@@ -37,7 +37,7 @@ class CommentView(CommentContextMixin, View):
             self.context.content = data['content']
             self.context.mtime = datetime.datetime.now()
             self.db.flush()
-        return self.context.as_dict()
+        return self.context.as_dict(self.user)
 
 
 class CommentCommentView(CommentContextMixin, CommentMixin, View):

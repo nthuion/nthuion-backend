@@ -100,7 +100,7 @@ class CommentMixin(FactoryRequired):
             .filter(Comment.parent_id == self.context.id)\
             .order_by(Comment.ctime)
         return {
-            'data': [comment.as_dict() for comment in query]
+            'data': [comment.as_dict(self.user) for comment in query]
         }
 
     @require_permission('comment')
@@ -123,4 +123,4 @@ class CommentMixin(FactoryRequired):
         )
         self.db.add(comment)
         self.db.flush()
-        return comment.as_dict()
+        return comment.as_dict(self.user)

@@ -299,6 +299,7 @@ class IssueAnonTest(OneIssueTest):
             headers=self.token_header
         )
         self.assertIsNotNone(res.json['author'])
+        self.assertEqual(0, res.json['user_vote'])
 
     def test_one_put(self):
         res = self.app.put_json(

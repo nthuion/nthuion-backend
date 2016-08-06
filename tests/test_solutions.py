@@ -75,6 +75,7 @@ class SolutionListTest(SolutionTest):
         assert 'mycontent' == res.json['content']
         assert self.qid == res.json['issue']['id']
         assert set('abc') == set(res.json['tags'])
+        assert 0 == res.json['user_vote']
 
     def test_post_anon(self):
         self.create_issue()

@@ -79,6 +79,7 @@ class CommentViewTest(BaseCommentTest):
         assert data['ctime'] is not None
         assert 'mtime' in data
         assert data['mtime'] is None
+        assert data['user_vote'] == 0
 
     def test_get_comment_on_issue_comment(self):
         sid = self.create_solution(self.u2)
