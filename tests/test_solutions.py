@@ -132,9 +132,10 @@ class SolutionSingleTest(SolutionTest):
         assert content == jobj['content']
 
 
-class SolutionCommentOrderingTest(SolutionTest):
+class SolutionCommentOrderingLimitOffsetTest(SolutionTest):
 
-    def test_comments_is_ordered_by_time(self):
+    def setUp(self):
+        super().setUp()
         self.create_solution()
         for i in range(10):
             with transaction.manager:
@@ -148,6 +149,8 @@ class SolutionCommentOrderingTest(SolutionTest):
         with transaction.manager:
             self.session.query(Comment).filter(Comment.content == '9')\
                 .one().ctime -= datetime.timedelta(days=1)
+
+    def test_ordering(self):
         jobj = self.app.get(
             '/api/solutions/{}/comments'.format(self.sid)
         ).json
@@ -155,6 +158,32 @@ class SolutionCommentOrderingTest(SolutionTest):
         assert '9' == jobj['data'][0]['content']
         for i, comment in enumerate(jobj['data'][1:]):
             assert str(i) == comment['content']
+
+    def test_limit(self):
+        jobj = self.app.get(
+            '/api/solutions/{}/comments?limit=1'.format(self.sid)
+        ).json
+
+        assert 1 == len(jobj['data'])
+        assert '9' == jobj['data'][0]['content']
+
+    def test_offset(self):
+        jobj = self.app.get(
+            '/api/solutions/{}/comments?offset=2'.format(self.sid)
+        ).json
+
+        assert 8 == len(jobj['data'])
+        for i, comment in enumerate(jobj['data'], start=1):  # skip 9, 0
+            assert str(i) == comment['content']
+
+    def test_limit_and_offset(self):
+        jobj = self.app.get(
+            '/api/solutions/{}/comments?limit=3&offset=8'.format(self.sid)
+        ).json
+
+        assert 2 == len(jobj['data'])
+        assert '7' == jobj['data'][0]['content']
+        assert '8' == jobj['data'][1]['content']
 
 
 # XXX test ctime, mtime

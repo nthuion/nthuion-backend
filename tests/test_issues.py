@@ -486,9 +486,10 @@ class PutReturnValueTest(OneIssueTest):
         self.assertEqual(title, res.json['title'])
 
 
-class SolutionCommentOrderingTest(OneIssueTest):
+class IssueCommentQueryTest(OneIssueTest):
 
-    def test_comments_is_ordered_by_time(self):
+    def setUp(self):
+        super().setUp()
         for i in range(10):
             with transaction.manager:
                 self.app.post_json(
@@ -501,6 +502,8 @@ class SolutionCommentOrderingTest(OneIssueTest):
         with transaction.manager:
             self.session.query(Comment).filter(Comment.content == '9')\
                 .one().ctime -= datetime.timedelta(days=1)
+
+    def test_ordering(self):
         jobj = self.app.get(
             '/api/issues/{}/comments'.format(self.qid)
         ).json
@@ -508,6 +511,32 @@ class SolutionCommentOrderingTest(OneIssueTest):
         assert '9' == jobj['data'][0]['content']
         for i, comment in enumerate(jobj['data'][1:]):
             assert str(i) == comment['content']
+
+    def test_limit(self):
+        jobj = self.app.get(
+            '/api/issues/{}/comments?limit=1'.format(self.qid)
+        ).json
+
+        assert 1 == len(jobj['data'])
+        assert '9' == jobj['data'][0]['content']
+
+    def test_offset(self):
+        jobj = self.app.get(
+            '/api/issues/{}/comments?offset=2'.format(self.qid)
+        ).json
+
+        assert 8 == len(jobj['data'])
+        for i, comment in enumerate(jobj['data'], start=1):  # skip 9, 0
+            assert str(i) == comment['content']
+
+    def test_limit_and_offset(self):
+        jobj = self.app.get(
+            '/api/issues/{}/comments?limit=3&offset=8'.format(self.qid)
+        ).json
+
+        assert 2 == len(jobj['data'])
+        assert '7' == jobj['data'][0]['content']
+        assert '8' == jobj['data'][1]['content']
 
 
 # XXX test ctime, mtime

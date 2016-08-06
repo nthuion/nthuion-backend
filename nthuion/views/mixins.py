@@ -1,7 +1,9 @@
 import abc
 
 from nthuion.views.base import require_permission
-from nthuion.validation import body_schema, Any, Required, All, Length
+from nthuion.validation import (
+    body_schema, Any, Required, All, Length, Range, qs_schema, Optional, Coerce
+)
 from nthuion.models import Vote, Comment
 
 
@@ -77,7 +79,12 @@ class CommentValidation:
 
 class CommentMixin(FactoryRequired):
 
-    def get(self):
+    @qs_schema({
+        Optional('offset', default=0): All(Coerce(int), Range(min=0)),
+        Optional('limit', default=100): All(
+            Coerce(int), Range(min=0, max=1000)),
+    })
+    def get(self, qs):
         """
         returns the list of comments of the object
 
@@ -98,7 +105,9 @@ class CommentMixin(FactoryRequired):
         """
         query = self.db.query(Comment)\
             .filter(Comment.parent_id == self.context.id)\
-            .order_by(Comment.ctime)
+            .order_by(Comment.ctime)\
+            .offset(qs['offset'])\
+            .limit(qs['limit'])
         return {
             'data': [comment.as_dict(self.user) for comment in query]
         }

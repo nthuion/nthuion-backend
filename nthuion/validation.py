@@ -1,7 +1,21 @@
 import functools
 from pyramid.httpexceptions import HTTPBadRequest
 from voluptuous import *
-# from voluptuous.humanize import humanize_error
+
+
+class qs_schema(Schema):
+
+    def __call__(schema, meth):
+        @functools.wraps(meth)
+        def wrapper(view):
+            try:
+                data = super(
+                    qs_schema, schema).__call__(view.request.params.mixed())
+            except MultipleInvalid as e:
+                raise HTTPBadRequest(str(e))
+            return meth(view, data)
+        wrapper.qs_schema = schema.schema
+        return wrapper
 
 
 class body_schema(Schema):

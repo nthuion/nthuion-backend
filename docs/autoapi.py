@@ -20,7 +20,9 @@ from sphinxcontrib import httpdomain
 from sphinxcontrib.autohttp.common import http_directive
 
 from functools import singledispatch
-from voluptuous import Required, Optional, All, Any, Length, UNDEFINED
+from voluptuous import (
+    Required, Optional, All, Any, Length, Range, Coerce, UNDEFINED
+)
 
 from nthuion.introspect import r1
 from nthuion.views.base import not_allowed
@@ -46,6 +48,11 @@ def parse_right(obj):
     raise NotImplementedError(obj)
 
 
+@parse_right.register(Coerce)
+def _parse_right_coerce(obj):
+    return parse_right(obj.type)
+
+
 @parse_right.register(type)
 def _parse_right_type(obj):
     return {
@@ -67,7 +74,17 @@ def _parse_right_length(obj):
     elif obj.max is None:
         return '{} ≤ length'.format(obj.min)
     else:
-        return '{} ≤ length ≤ {}'.format(obj)
+        return '{} ≤ length ≤ {}'.format(obj.min, obj.max)
+
+
+@parse_right.register(Range)
+def _parse_right_range(obj):
+    if obj.min is None:
+        return 'x ≤ {}'.format(obj.max)
+    elif obj.max is None:
+        return '{} ≤ x'.format(obj.min)
+    else:
+        return '{} ≤ x ≤ {}'.format(obj.min, obj.max)
 
 
 @parse_right.register(int)
@@ -91,7 +108,7 @@ def _parse_right_list(obj):
     return 'array of [{}]'.format(parse_right(obj[0]))
 
 
-def schema_to_docstring(schema):
+def schema_to_docstring(schema, directive='reqjson'):
     for l, r in sorted(schema.items()):
         key, required, default = parse_left(l)
         desc = parse_right(r)
@@ -102,8 +119,8 @@ def schema_to_docstring(schema):
                 {None: 'null'}.get(default(), repr(default()))
             )
         required_desc = '' if required else 'optional '
-        yield ':reqjson {}{}: {}{}'.format(
-            required_desc, key, desc, default_desc)
+        yield ':{} {}{}: {}{}'.format(
+            directive, required_desc, key, desc, default_desc)
 
 
 class AutoAPIDirective(Directive):
@@ -137,6 +154,11 @@ class AutoAPIDirective(Directive):
                 if schema is not None:
                     docstring += ['']
                     docstring += list(schema_to_docstring(schema))
+
+                qs_schema = getattr(implementation, 'qs_schema', None)
+                if qs_schema is not None:
+                    docstring += ['']
+                    docstring += list(schema_to_docstring(qs_schema, 'query'))
 
                 reqp = getattr(implementation, 'requires_permission', None)
                 if reqp is not None:

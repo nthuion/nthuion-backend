@@ -258,15 +258,16 @@ class CommentVoteTest(BaseCommentTest):
         self.assertVoteValue(-1)
 
 
-class CommentCommentOrderingTest(BaseCommentTest):
+class CommentCommentQueryTest(BaseCommentTest):
 
-    def test_comments_is_ordered_by_time(self):
+    def setUp(self):
+        super().setUp()
         sid = self.create_solution(self.u3)
-        cid = self.create_comment(self.u1, sid, 'cc1')
+        self.cid = self.create_comment(self.u1, sid, 'cc1')
         for i in range(10):
             with transaction.manager:
                 self.app.post_json(
-                    '/api/comments/{}/comments'.format(cid),
+                    '/api/comments/{}/comments'.format(self.cid),
                     {
                         'content': str(i)
                     },
@@ -275,10 +276,38 @@ class CommentCommentOrderingTest(BaseCommentTest):
         with transaction.manager:
             self.session.query(Comment).filter(Comment.content == '9')\
                 .one().ctime -= datetime.timedelta(days=1)
+
+    def test_ordering(self):
         jobj = self.app.get(
-            '/api/comments/{}/comments'.format(cid)
+            '/api/comments/{}/comments'.format(self.cid)
         ).json
         assert 10 == len(jobj['data'])
         assert '9' == jobj['data'][0]['content']
         for i, comment in enumerate(jobj['data'][1:]):
             assert str(i) == comment['content']
+
+    def test_limit(self):
+        jobj = self.app.get(
+            '/api/comments/{}/comments?limit=1'.format(self.cid)
+        ).json
+
+        assert 1 == len(jobj['data'])
+        assert '9' == jobj['data'][0]['content']
+
+    def test_offset(self):
+        jobj = self.app.get(
+            '/api/comments/{}/comments?offset=2'.format(self.cid)
+        ).json
+
+        assert 8 == len(jobj['data'])
+        for i, comment in enumerate(jobj['data'], start=1):  # skip 9, 0
+            assert str(i) == comment['content']
+
+    def test_limit_and_offset(self):
+        jobj = self.app.get(
+            '/api/comments/{}/comments?limit=3&offset=8'.format(self.cid)
+        ).json
+
+        assert 2 == len(jobj['data'])
+        assert '7' == jobj['data'][0]['content']
+        assert '8' == jobj['data'][1]['content']
