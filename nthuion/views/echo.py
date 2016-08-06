@@ -10,8 +10,6 @@ class EchoView(View):
 
         .. note::
 
-            all values are returned as arrays
-
             .. code-block:: text
 
                 /api/echo?a=b&a=c&c=d
@@ -20,9 +18,9 @@ class EchoView(View):
 
             .. code-block:: json
 
-                {"a": ["b", "c"], "c": ["d"]}
+                {"a": ["b", "c"], "c": "d"}
         """
-        return self.request.params.dict_of_lists()
+        return self.request.params.mixed()
 
     def post(self):
         """

@@ -3,7 +3,7 @@ from .base import WebTest
 
 class TestEcho(WebTest):
 
-    payload = {'nthu': 'ion', 'afg': 984}
+    payload = {'nthu': 'ion', 'afg': 984, 'array': ['a', 'b', 'c']}
 
     def test_get(self):
         res = self.app.get(
@@ -11,9 +11,8 @@ class TestEcho(WebTest):
             params=self.payload,
             status=200)
 
-        # query string does not have
         self.assertEqual(
-            {'nthu': ['ion'], 'afg': ['984']}, res.json)
+            {'nthu': 'ion', 'afg': '984', 'array': ['a', 'b', 'c']}, res.json)
 
     def test_post(self):
         res = self.app.post_json(
