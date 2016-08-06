@@ -3,7 +3,10 @@ import datetime
 
 from .base import View, require_permission
 from .mixins import VotingMixin, CommentMixin
-from nthuion.validation import body_schema, Required, Optional, All, Length
+from nthuion.validation import (
+    body_schema, Required, Optional, All, Length,
+    qs_schema, Coerce, Range
+)
 from nthuion.utils import noresultfound_is_404
 from nthuion.models import Issue, Tag
 
@@ -22,9 +25,16 @@ class IssueList(View):
     def factory(request):
         return Issue
 
-    def get(self):
+    @qs_schema({
+        Optional('offset', default=0): All(Coerce(int), Range(min=0)),
+        Optional('limit', default=100): All(
+            Coerce(int), Range(min=0, max=1000)),
+    })
+    def get(self, qs):
         """Returns list of issues"""
-        query = self.db.query(Issue)
+        query = self.db.query(Issue)\
+            .offset(qs['offset'])\
+            .limit(qs['limit'])
         user = self.user
         return {
             'data': [issue.as_dict(user) for issue in query]

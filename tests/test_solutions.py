@@ -89,6 +89,34 @@ class SolutionListTest(SolutionTest):
             status=401
         )
 
+    def test_solution_pagination(self):
+        for i in range(10):
+            self.create_solution()
+
+        jobj = self.app.get(
+            '/api/solutions',
+            {'limit': 4}
+        ).json
+        assert 4 == len(jobj['data'])
+
+        jobj = self.app.get(
+            '/api/solutions',
+            {'offset': 7}
+        ).json
+        assert 3 == len(jobj['data'])
+
+        jobj = self.app.get(
+            '/api/solutions',
+            {'offset': 6, 'limit': 5}
+        ).json
+        assert 4 == len(jobj['data'])
+
+        jobj = self.app.get(
+            '/api/solutions',
+            {'offset': 6, 'limit': 2}
+        ).json
+        assert 2 == len(jobj['data'])
+
 
 class SolutionSingleTest(SolutionTest):
 

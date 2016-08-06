@@ -145,6 +145,44 @@ class IssueListTest(WebTest):
         )
         self.assertEqual(0, issue.votes)
 
+    def test_issue_limit_offset(self):
+        with transaction.manager:
+            u = User(name='user123')
+            self.session.add(u)
+            for i in range(10):
+                self.session.add(
+                    Issue(
+                        author=u,
+                        is_anonymous=True,
+                        content='a',
+                        title='title'
+                    )
+                )
+
+        jobj = self.app.get(
+            '/api/issues',
+            {'limit': 4}
+        ).json
+        assert 4 == len(jobj['data'])
+
+        jobj = self.app.get(
+            '/api/issues',
+            {'offset': 7}
+        ).json
+        assert 3 == len(jobj['data'])
+
+        jobj = self.app.get(
+            '/api/issues',
+            {'offset': 6, 'limit': 5}
+        ).json
+        assert 4 == len(jobj['data'])
+
+        jobj = self.app.get(
+            '/api/issues',
+            {'offset': 6, 'limit': 2}
+        ).json
+        assert 2 == len(jobj['data'])
+
 
 class ProblematicInputTest(WebTest):
 

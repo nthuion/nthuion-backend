@@ -3,7 +3,7 @@ import datetime
 from contextlib import suppress
 from pyramid.httpexceptions import HTTPUnprocessableEntity
 from nthuion.validation import\
-    body_schema, Required, Optional, Any, All, Length
+    body_schema, Required, Optional, Any, All, Length, qs_schema, Coerce, Range
 from .base import View, require_permission
 from .mixins import VotingMixin, CommentMixin
 from nthuion.utils import noresultfound_is_404
@@ -34,9 +34,17 @@ class SolutionListView(View):
     def factory(request):
         return Solution
 
-    def get(self):
+    @qs_schema({
+        Optional('offset', default=0): All(Coerce(int), Range(min=0)),
+        Optional('limit', default=100): All(
+            Coerce(int), Range(min=0, max=1000)),
+    })
+    def get(self, qs):
+        query = self.db.query(Solution)\
+            .offset(qs['offset'])\
+            .limit(qs['limit'])
         return {
-            'data': [sol.as_dict(self.user) for sol in self.db.query(Solution)]
+            'data': [sol.as_dict(self.user) for sol in query]
         }
 
     @require_permission('create')
