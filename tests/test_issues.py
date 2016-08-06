@@ -373,6 +373,14 @@ class IssueVoteTest(OneIssueTest):
             after,
             res.json['votes'],
         )
+        resp = self.app.get(
+            '/api/issues/{}'.format(self.qid),
+            headers=self.token_header
+        )
+        self.assertEqual(
+            1,
+            resp.json['user_vote']
+        )
 
     def voteDown(self, after):
         res = self.app.put_json(
@@ -384,6 +392,14 @@ class IssueVoteTest(OneIssueTest):
             after,
             res.json['votes'],
         )
+        resp = self.app.get(
+            '/api/issues/{}'.format(self.qid),
+            headers=self.token_header
+        )
+        self.assertEqual(
+            -1,
+            resp.json['user_vote']
+        )
 
     def unvote(self, after):
         res = self.app.delete(
@@ -393,6 +409,14 @@ class IssueVoteTest(OneIssueTest):
         self.assertEqual(
             after,
             res.json['votes'],
+        )
+        resp = self.app.get(
+            '/api/issues/{}'.format(self.qid),
+            headers=self.token_header
+        )
+        self.assertEqual(
+            0,
+            resp.json['user_vote']
         )
 
     def test_vote_zero(self):
