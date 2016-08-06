@@ -7,7 +7,6 @@ API Documentation
     general
     auth
     issue
-    question
     solution
     comment
     user
