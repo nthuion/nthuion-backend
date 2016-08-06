@@ -1,6 +1,7 @@
 import transaction
+import datetime
 from .base import WebTest
-from nthuion.models import Issue, Solution, User, Tag
+from nthuion.models import Issue, Solution, User, Tag, Comment
 
 from hypothesis import given, strategies as st
 
@@ -128,6 +129,31 @@ class SolutionSingleTest(SolutionTest):
         assert set(tags) == set(jobj['tags'])
         assert title == jobj['title']
         assert content == jobj['content']
+
+
+class SolutionCommentOrderingTest(SolutionTest):
+
+    def test_comments_is_ordered_by_time(self):
+        self.create_solution()
+        for i in range(10):
+            with transaction.manager:
+                self.app.post_json(
+                    '/api/solutions/{}/comments'.format(self.sid),
+                    {
+                        'content': str(i)
+                    },
+                    headers=self.token_header
+                )
+        with transaction.manager:
+            self.session.query(Comment).filter(Comment.content == '9')\
+                .one().ctime -= datetime.timedelta(days=1)
+        jobj = self.app.get(
+            '/api/solutions/{}/comments'.format(self.sid)
+        ).json
+        assert 10 == len(jobj['data'])
+        assert '9' == jobj['data'][0]['content']
+        for i, comment in enumerate(jobj['data'][1:]):
+            assert str(i) == comment['content']
 
 
 # XXX test ctime, mtime

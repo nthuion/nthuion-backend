@@ -2,6 +2,7 @@ from .base import WebTest, BaseTest
 from .common import OneUserTest
 from nthuion.models import Tag, Issue, User, Comment
 import transaction
+import datetime
 
 from hypothesis import given, strategies as st
 
@@ -482,6 +483,30 @@ class PutReturnValueTest(OneIssueTest):
         self.assertEqual(anon, res.json['is_anonymous'])
         self.assertEqual(set(tags), set(res.json['tags']))
         self.assertEqual(title, res.json['title'])
+
+
+class SolutionCommentOrderingTest(OneIssueTest):
+
+    def test_comments_is_ordered_by_time(self):
+        for i in range(10):
+            with transaction.manager:
+                self.app.post_json(
+                    '/api/issues/{}/comments'.format(self.qid),
+                    {
+                        'content': str(i)
+                    },
+                    headers=self.token_header
+                )
+        with transaction.manager:
+            self.session.query(Comment).filter(Comment.content == '9')\
+                .one().ctime -= datetime.timedelta(days=1)
+        jobj = self.app.get(
+            '/api/issues/{}/comments'.format(self.qid)
+        ).json
+        assert 10 == len(jobj['data'])
+        assert '9' == jobj['data'][0]['content']
+        for i, comment in enumerate(jobj['data'][1:]):
+            assert str(i) == comment['content']
 
 
 # XXX test ctime, mtime

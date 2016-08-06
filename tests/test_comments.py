@@ -1,3 +1,4 @@
+import datetime
 import transaction
 from nthuion.models import Comment, Issue, Solution, Tag
 from .common import ManyUserTest
@@ -254,3 +255,29 @@ class CommentVoteTest(BaseCommentTest):
         self.assertVoteValue(1)
         self.voteDown(-1)
         self.assertVoteValue(-1)
+
+
+class CommentCommentOrderingTest(BaseCommentTest):
+
+    def test_comments_is_ordered_by_time(self):
+        sid = self.create_solution(self.u3)
+        cid = self.create_comment(self.u1, sid, 'cc1')
+        for i in range(10):
+            with transaction.manager:
+                self.app.post_json(
+                    '/api/comments/{}/comments'.format(cid),
+                    {
+                        'content': str(i)
+                    },
+                    headers=self.make_token_header(self.tok3)
+                )
+        with transaction.manager:
+            self.session.query(Comment).filter(Comment.content == '9')\
+                .one().ctime -= datetime.timedelta(days=1)
+        jobj = self.app.get(
+            '/api/comments/{}/comments'.format(cid)
+        ).json
+        assert 10 == len(jobj['data'])
+        assert '9' == jobj['data'][0]['content']
+        for i, comment in enumerate(jobj['data'][1:]):
+            assert str(i) == comment['content']

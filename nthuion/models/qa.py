@@ -140,7 +140,7 @@ class Comment(Entry):
     id = Column(Integer, ForeignKey(Entry.id), primary_key=True)
 
     parent_id = Column(Integer, ForeignKey(Entry.id), nullable=False)
-    parent = relationship(Entry, foreign_keys=parent_id, backref='comments')
+    parent = relationship(Entry, foreign_keys=parent_id)
 
     content = Column(Text(240), nullable=False)
 

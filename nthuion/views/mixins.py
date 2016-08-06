@@ -105,8 +105,11 @@ class CommentMixin(FactoryRequired):
                 ]
             }
         """
+        query = self.db.query(Comment)\
+            .filter(Comment.parent_id == self.context.id)\
+            .order_by(Comment.ctime)
         return {
-            'data': [comment.as_dict() for comment in self.context.comments]
+            'data': [comment.as_dict() for comment in query]
         }
 
     @require_permission('comment')
