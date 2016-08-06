@@ -45,6 +45,26 @@ class Entry(Base):
         else:
             return []
 
+    def query_vote(self, user):
+        """returns the query of current vote of the user.
+        user must not be None"""
+        return self.object_session().query(Vote)\
+            .filter(Vote.entry_id == self.id)\
+            .filter(Vote.user_id == user.id)
+
+    def get_user_vote_value(self, user):
+        """returns the vote of the user.
+        returns -1, 0 or 1
+        if user is None, returns 0
+        """
+        if user is None:
+            return 0
+        vote = self.query_vote(user).first()
+        if vote is None:
+            return 0
+        else:
+            return vote.value
+
     @hybrid.hybrid_property
     def votes(self):
         session = self.object_session()

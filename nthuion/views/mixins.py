@@ -15,11 +15,6 @@ class FactoryRequired(abc.ABC):
 
 class VotingMixin(abc.ABC):
 
-    def query_vote(self):
-        return self.db.query(Vote)\
-            .filter(Vote.entry_id == self.context.id)\
-            .filter(Vote.user_id == self.user.id)
-
     @require_permission('vote')
     def get(self):
         """
@@ -31,11 +26,7 @@ class VotingMixin(abc.ABC):
 
         value may be either ``-1``, ``0`` or ``1``
         """
-        vote = self.query_vote().first()
-        if vote is None:
-            return {'value': 0}
-        else:
-            return {'value': vote.value}
+        return {'value': self.context.get_user_vote_value(self.user)}
 
     @require_permission('vote')
     @body_schema({
@@ -57,7 +48,7 @@ class VotingMixin(abc.ABC):
 
         :resjson votes: on a success vote, the updated vote count is returned
         """
-        vote = self.query_vote().first()
+        vote = self.context.query_vote(self.user).first()
         if vote is None:
             vote = Vote(entry_id=self.context.id, user_id=self.user.id)
         vote.value = body['value']
@@ -74,7 +65,7 @@ class VotingMixin(abc.ABC):
 
         :resjson votes: on a success unvote, the updated vote count is returned
         """
-        self.query_vote().delete()
+        self.context.query_vote(self.user).delete()
         self.db.flush()
         return {'votes': self.context.votes}
 
