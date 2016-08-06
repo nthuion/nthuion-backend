@@ -12,6 +12,7 @@ Issue object:
     * ncomments -- integer
     * ctime -- string: iso8601 datetime
     * mtime -- string: iso8601 datetime or null if not modified since creation
+    * user_vote -- ``0``, ``1`` or ``-1``: the current vote of the requesting user
 
 ============= ==============
 Role          Permission
