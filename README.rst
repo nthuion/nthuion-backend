@@ -3,6 +3,9 @@ nthuion-backend
 
 Backend of NTHU ION
 
+.. image:: https://travis-ci.org/nthuion/nthuion-backend.svg?branch=master
+    :target: https://travis-ci.org/nthuion/nthuion-backend
+
 Resources
 ---------
 
