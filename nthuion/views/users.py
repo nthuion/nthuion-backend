@@ -1,6 +1,12 @@
 from nthuion.models import User
 from nthuion.utils import noresultfound_is_404
-from .base import View
+from nthuion.validation import body_schema, Optional, All, Length
+from .base import View, require_permission
+
+
+class UserValidation:
+
+    name = All(str, Length(max=User.name.type.length))
 
 
 class UserView(View):
@@ -13,7 +19,19 @@ class UserView(View):
             return request.db.query(User).filter(User.id == id).one()
 
     def get(self):
-        """returns the information about the user incl. id, name"""
+        """returns the user object"""
+        return self.context.as_dict()
+
+    @require_permission('update')
+    @body_schema({
+        Optional('name'): UserValidation.name
+    })
+    def put(self, data):
+        """update userdata, returns updated user object"""
+        try:
+            self.context.name = data['name']
+        except KeyError:
+            pass
         return self.context.as_dict()
 
 
@@ -43,3 +61,15 @@ class MeView(UserView):
                 **user.as_dict(),
                 'authenticated': True,
             }
+
+    @require_permission('update')
+    @body_schema({
+        Optional('name'): UserValidation.name
+    })
+    def put(self, data):
+        """update userdata, returns updated user object"""
+        try:
+            self.context.name = data['name']
+        except KeyError:
+            pass
+        return self.context.as_dict()

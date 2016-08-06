@@ -5,6 +5,7 @@ from sqlalchemy import Column, String, Integer, ForeignKey, Boolean
 from sqlalchemy.orm import relationship, backref
 
 from nthuion.models.meta import Base
+from nthuion import roles
 
 
 sysrand = random.SystemRandom()
@@ -17,6 +18,11 @@ class User(Base):
     id = Column(Integer, primary_key=True)
 
     name = Column(String(100), nullable=False)
+
+    __acl__ = [
+        (roles.Allow, roles.Everyone, 'read'),
+        (roles.Allow, roles.Owner, 'update')
+    ]
 
     def acquire_token(self):
         tok = Token(self)
@@ -34,6 +40,12 @@ class User(Base):
             'name': self.name,
             'avatar_url': avatar_url
         }
+
+    def get_user_roles(self, user):
+        if self.id == user.id:
+            return [roles.Owner]
+        else:
+            return []
 
     def __repr__(self):
         return '<User {} {!r}>'.format(self.id, self.name)

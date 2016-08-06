@@ -80,3 +80,81 @@ class UserTest(WebTest):
             '/api/users/404',
             status=404
         )
+
+    def test_user_put_me_no_edit(self):
+        self.prepare_fb()
+        with transaction.manager:
+            token = self.session.query(User).first().acquire_token()
+        user = self.session.query(User).first()
+        res = self.app.put_json(
+            '/api/users/me',
+            {},
+            headers={
+                'Authorization': 'Token {}'.format(token)
+            }
+        )
+        self.assertEqual(user.name, res.json['name'])
+        self.assertEqual(user.id, res.json['id'])
+        self.assertEqual(
+            'https://graph.facebook.com/LoremFacebookIpsum/picture',
+            res.json['avatar_url']
+        )
+
+    def test_user_put_id_no_edit(self):
+        self.prepare_fb()
+        with transaction.manager:
+            token = self.session.query(User).first().acquire_token()
+        user = self.session.query(User).first()
+        res = self.app.put_json(
+            '/api/users/{}'.format(self.session.query(User).first().id),
+            {},
+            headers={
+                'Authorization': 'Token {}'.format(token)
+            }
+        )
+        self.assertEqual(user.name, res.json['name'])
+        self.assertEqual(user.id, res.json['id'])
+        self.assertEqual(
+            'https://graph.facebook.com/LoremFacebookIpsum/picture',
+            res.json['avatar_url']
+        )
+
+    def test_user_put_me_update_username(self):
+        self.prepare_fb()
+        with transaction.manager:
+            token = self.session.query(User).first().acquire_token()
+        id_ = self.session.query(User).first().id
+        res = self.app.put_json(
+            '/api/users/me',
+            {'name': 'zzoozzoz'},
+            headers={
+                'Authorization': 'Token {}'.format(token)
+            }
+        )
+        self.assertEqual('zzoozzoz', res.json['name'])
+        self.assertEqual(id_, res.json['id'])
+        self.assertEqual(
+            'https://graph.facebook.com/LoremFacebookIpsum/picture',
+            res.json['avatar_url']
+        )
+        self.assertEqual('zzoozzoz', self.session.query(User).first().name)
+
+    def test_user_put_id_update_username(self):
+        self.prepare_fb()
+        with transaction.manager:
+            token = self.session.query(User).first().acquire_token()
+        id_ = self.session.query(User).first().id
+        res = self.app.put_json(
+            '/api/users/{}'.format(self.session.query(User).first().id),
+            {'name': 'qaqaqaq'},
+            headers={
+                'Authorization': 'Token {}'.format(token)
+            }
+        )
+        self.assertEqual('qaqaqaq', res.json['name'])
+        self.assertEqual(id_, res.json['id'])
+        self.assertEqual(
+            'https://graph.facebook.com/LoremFacebookIpsum/picture',
+            res.json['avatar_url']
+        )
+        self.assertEqual('qaqaqaq', self.session.query(User).first().name)
