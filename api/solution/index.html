@@ -162,6 +162,8 @@
 <li>ctime &#8211; string: iso8601 datetime</li>
 <li>mtime &#8211; string: iso8601 datetime or null if not modified since creation</li>
 <li>user_vote &#8211; <code class="docutils literal"><span class="pre">0</span></code>, <code class="docutils literal"><span class="pre">1</span></code> or <code class="docutils literal"><span class="pre">-1</span></code>: the current vote of the requesting user</li>
+<li>views &#8211; integer: number of views</li>
+<li>popularity &#8211; float</li>
 </ul>
 </div></blockquote>
 <table border="1" class="docutils">
@@ -202,6 +204,7 @@
 <tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
 <li><strong>limit</strong> (<em>optional</em>) &#8211; integer, 0 ≤ x ≤ 1000, default = <code class="docutils literal"><span class="pre">100</span></code></li>
 <li><strong>offset</strong> (<em>optional</em>) &#8211; integer, 0 ≤ x, default = <code class="docutils literal"><span class="pre">0</span></code></li>
+<li><strong>ordering</strong> (<em>optional</em>) &#8211; <code class="docutils literal"><span class="pre">'popularity'</span></code> or <code class="docutils literal"><span class="pre">'latest'</span></code>, default = <code class="docutils literal"><span class="pre">'popularity'</span></code></li>
 </ul>
 </td>
 </tr>
@@ -361,7 +364,8 @@
 <dl class="get">
 <dt id="get--api-solutions-id-comments">
 <code class="descname">GET </code><code class="descname">/api/solutions/{id}/comments</code><a class="headerlink" href="#get--api-solutions-id-comments" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns the list of comments of the object</p>
+<dd><p>returns the list of comments of the object.</p>
+<p>they are ordered by <code class="docutils literal"><span class="pre">ctime</span></code>, oldest first.</p>
 <div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
