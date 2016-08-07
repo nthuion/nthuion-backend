@@ -47,9 +47,11 @@ class WebTest(unittest.TestCase):
     def setUpClass(cls):
         cls.redis_unixsocket = '/tmp/test-redis-{}.sock'.format(
             get_process_thread_identifier())
-        cls.proc = subprocess.Popen(
-            ['redis-server', '--wait']
-        )
+        cls.proc = subprocess.Popen([
+            'redis-server',
+            '--unixsocket', cls.redis_unixsocket,
+            '--port', '0',
+        ])
 
     @classmethod
     def tearDownClass(cls):
