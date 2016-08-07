@@ -12,13 +12,13 @@ class TrafficStore(redis.StrictRedis):
     def __init__(self, unix_socket_path):
         super().__init__(unix_socket_path=unix_socket_path, db=UNIQUE_VIEWS)
 
-    def article_viewed_by_user(self, *, article, user):
+    def article_viewed_by_user(self, article, user):
         self.sadd(article.id, 'user:{}'.format(user.id))
 
-    def article_viewed_by_ip(self, *, article, ip):
+    def article_viewed_by_ip(self, article, ip):
         self.sadd(article.id, 'ip:{}'.format(ip))
 
-    def flush(self, session):
+    def flush_traffic(self, session):
         for key in self.scan_iter():
             with transaction.manager:
                 with self.pipeline() as p:
