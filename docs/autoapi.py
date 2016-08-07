@@ -88,7 +88,9 @@ def _parse_right_range(obj):
 
 
 @parse_right.register(int)
-def _parse_right_int(obj):
+@parse_right.register(str)
+def _parse_right_int_or_str(obj):
+    # XXX sometimes we want strings quoted, sometimes not
     return '``{}``'.format(obj)
 
 
