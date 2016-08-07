@@ -5,7 +5,7 @@ from .base import View, require_permission
 from .mixins import VotingMixin, CommentMixin
 from nthuion.validation import (
     body_schema, Required, Optional, All, Length,
-    qs_schema, Coerce, Range
+    qs_schema, Coerce, Range, Any
 )
 from nthuion.utils import noresultfound_is_404
 from nthuion.models import Issue, Tag
@@ -29,11 +29,17 @@ class IssueList(View):
         Optional('offset', default=0): All(Coerce(int), Range(min=0)),
         Optional('limit', default=100): All(
             Coerce(int), Range(min=0, max=1000)),
+        Optional('ordering', default='popularity'):
+            Any('popularity', 'latest'),
     })
     def get(self, qs):
         """Returns list of issues"""
-        query = self.db.query(Issue)\
-            .offset(qs['offset'])\
+        query = self.db.query(Issue)
+        if qs['ordering'] == 'popularity':
+            query = query.order_by(-Issue.popularity)
+        else:  # == latest
+            query = query.order_by(-Issue.ctime)
+        query = query.offset(qs['offset'])\
             .limit(qs['limit'])
         user = self.user
         return {

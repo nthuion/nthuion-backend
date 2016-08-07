@@ -234,7 +234,7 @@ class ViewsPopularityTest(SolutionTest):
             t2 = u2.acquire_token()
 
         def token_visit(tok):
-            self.app.get(
+            return self.app.get(
                 '/api/solutions/{}'.format(self.sid),
                 headers={'Authorization': 'Token {}'.format(tok)}
             )
@@ -256,6 +256,10 @@ class ViewsPopularityTest(SolutionTest):
         self.ts.flush_traffic(self.session)
         assert 5 == self.session.query(Solution).first().views
         assert 5 == self.session.query(Solution).first().popularity
+
+        # make sure the change is visible to the end user
+        assert 5 == token_visit(t1).json['views']
+        assert 5 == token_visit(t1).json['popularity']
 
 
 # XXX test ctime, mtime

@@ -38,10 +38,16 @@ class SolutionListView(View):
         Optional('offset', default=0): All(Coerce(int), Range(min=0)),
         Optional('limit', default=100): All(
             Coerce(int), Range(min=0, max=1000)),
+        Optional('ordering', default='popularity'):
+            Any('popularity', 'latest'),
     })
     def get(self, qs):
-        query = self.db.query(Solution)\
-            .offset(qs['offset'])\
+        query = self.db.query(Solution)
+        if qs['ordering'] == 'popularity':
+            query = query.order_by(-Solution.popularity)
+        else:  # == latest
+            query = query.order_by(-Solution.ctime)
+        query = query.offset(qs['offset'])\
             .limit(qs['limit'])
         return {
             'data': [sol.as_dict(self.user) for sol in query]
