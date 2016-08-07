@@ -12,6 +12,13 @@ Resources
 * `API Documentation <https://nthuion.github.io/nthuion-backend/>`_
 * `Frontend Repo <https://github.com/nthuion/nthuion-frontend>`_
 
+Prerequisites
+-------------
+
+* Python 3.5
+* Redis
+* PostgreSQL (deployment)
+
 Environment setup
 -----------------
 
@@ -27,6 +34,11 @@ Initialize database
 .. code-block:: bash
 
     initialize_nthuion_db development.ini
+
+Run redis server
+----------------
+
+    redis-server redis.conf
 
 Run the development server
 --------------------------

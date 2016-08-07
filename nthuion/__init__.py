@@ -20,6 +20,7 @@ def get_config(global_config, **settings):
     )
     config.include('.models')
     config.include('.routes')
+    config.include('.traffic')
     config.add_renderer(None, renderers.JSON())
     return config
 

@@ -2,13 +2,14 @@ from sqlalchemy import (
     Column,
     String,
     Integer,
+    Float,
     DateTime,
     Text,
     Boolean,
     ForeignKey,
     SmallInteger,
     PrimaryKeyConstraint,
-    CheckConstraint
+    CheckConstraint,
 )
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import relationship
@@ -95,10 +96,10 @@ class Entry(Base):
 class Article(Entry):
 
     id = Column(Integer, ForeignKey(Entry.id), primary_key=True)
-
     title = Column(String(80), nullable=False)
-
     content = Column(Text(30000), nullable=False)
+    views = Column(Integer, nullable=False, default=0)
+    popularity = Column(Float, nullable=False, default=0)
 
     tags = relationship(
         'Tag',
@@ -220,6 +221,8 @@ class Issue(Article):
             'ctime': self.ctime.isoformat(),
             'mtime': None if self.mtime is None else self.mtime.isoformat(),
             'user_vote': self.get_user_vote_value(viewer),
+            'views': self.views,
+            'popularity': self.popularity,
         }
 
 
@@ -260,6 +263,8 @@ class Solution(Article):
             'ctime': self.ctime.isoformat(),
             'mtime': None if self.mtime is None else self.mtime.isoformat(),
             'user_vote': self.get_user_vote_value(user),
+            'views': self.views,
+            'popularity': self.popularity,
         }
 
 

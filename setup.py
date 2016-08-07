@@ -10,6 +10,7 @@ requires = [
     'pyramid',
     'pyramid_debugtoolbar',
     'pyramid_tm',
+    'redis',
     'requests',
     'SQLAlchemy',
     'transaction',
