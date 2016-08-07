@@ -33,7 +33,9 @@ Run the development server
 
 .. code-block:: bash
 
-    pserve development.ini
+    uwsgi --ini-paste development.ini
+
+The server will be running on port 6543
 
 Run tests
 ---------
