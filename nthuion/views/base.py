@@ -68,6 +68,19 @@ class View:
         if not has_perm:
             raise HTTPForbidden('no permission for {}'.format(perm))
 
+    def add_view_count(self, dest=None):
+        if dest is None:
+            dest = self.context
+            assert dest is not None
+        if self.user is None:
+            self.request.ts.article_viewed_by_ip(
+                self.context,
+                self.request.client_addr)
+        else:
+            self.request.ts.article_viewed_by_user(
+                self.context,
+                self.user)
+
 
 class require_permission:
 

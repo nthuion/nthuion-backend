@@ -84,6 +84,7 @@ class IssueView(IssueContextMixin, View):
         """
         returns the issue object
         """
+        self.add_view_count()
         return self.context.as_dict(self.user)
 
     @require_permission('update')

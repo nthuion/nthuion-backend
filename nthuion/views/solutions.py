@@ -89,6 +89,7 @@ class SolutionView(SolutionContextMixin, View):
 
     def get(self):
         """returns the solution object"""
+        self.add_view_count()
         return self.context.as_dict(self.user)
 
     @require_permission('update')

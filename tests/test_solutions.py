@@ -76,6 +76,8 @@ class SolutionListTest(SolutionTest):
         assert self.qid == res.json['issue']['id']
         assert set('abc') == set(res.json['tags'])
         assert 0 == res.json['user_vote']
+        assert 'views' in res.json
+        assert 'popularity' in res.json
 
     def test_post_anon(self):
         self.create_issue()
@@ -212,6 +214,48 @@ class SolutionCommentOrderingLimitOffsetTest(SolutionTest):
         assert 2 == len(jobj['data'])
         assert '7' == jobj['data'][0]['content']
         assert '8' == jobj['data'][1]['content']
+
+
+class ViewsPopularityTest(SolutionTest):
+
+    def test_views_popularity_get_updated(self):
+        self.create_solution()
+        self.app.get(
+            '/api/solutions/{}'.format(self.sid)  # ip is None
+        )
+
+        with transaction.manager:
+            u1 = User(name='ggg')
+            self.session.add(u1)
+            t1 = u1.acquire_token()
+            t1b = u1.acquire_token()
+            u2 = User(name='xxx')
+            self.session.add(u2)
+            t2 = u2.acquire_token()
+
+        def token_visit(tok):
+            self.app.get(
+                '/api/solutions/{}'.format(self.sid),
+                headers={'Authorization': 'Token {}'.format(tok)}
+            )
+
+        token_visit(t1)
+        token_visit(t1b)
+        token_visit(t2)
+
+        self.ts.flush_traffic(self.session)
+
+        assert 3 == self.session.query(Solution).first().views
+        assert 3 == self.session.query(Solution).first().popularity
+
+        token_visit(t1)
+        token_visit(t2)
+        token_visit(t2)
+        token_visit(t1)
+
+        self.ts.flush_traffic(self.session)
+        assert 5 == self.session.query(Solution).first().views
+        assert 5 == self.session.query(Solution).first().popularity
 
 
 # XXX test ctime, mtime

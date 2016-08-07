@@ -96,6 +96,8 @@ class IssueListTest(WebTest):
         self.assertEqual('a', qjson['content'])
         self.assertEqual('title', qjson['title'])
         self.assertEqual(0, qjson['votes'])
+        self.assertIn('views', qjson)
+        self.assertIn('popularity', qjson)
 
         res = self.app.get(
             '/api/issues',
@@ -599,6 +601,47 @@ class IssueCommentQueryTest(OneIssueTest):
         assert 2 == len(jobj['data'])
         assert '7' == jobj['data'][0]['content']
         assert '8' == jobj['data'][1]['content']
+
+
+class ViewsPopularityTest(OneIssueTest):
+
+    def test_views_popularity_get_updated(self):
+        self.app.get(
+            '/api/issues/{}'.format(self.qid)  # ip is None
+        )
+
+        with transaction.manager:
+            u1 = User(name='ggg')
+            self.session.add(u1)
+            t1 = u1.acquire_token()
+            t1b = u1.acquire_token()
+            u2 = User(name='xxx')
+            self.session.add(u2)
+            t2 = u2.acquire_token()
+
+        def token_visit(tok):
+            self.app.get(
+                '/api/issues/{}'.format(self.qid),
+                headers={'Authorization': 'Token {}'.format(tok)}
+            )
+
+        token_visit(t1)
+        token_visit(t1b)
+        token_visit(t2)
+
+        self.ts.flush_traffic(self.session)
+
+        assert 3 == self.session.query(Issue).first().views
+        assert 3 == self.session.query(Issue).first().popularity
+
+        token_visit(t1)
+        token_visit(t2)
+        token_visit(t2)
+        token_visit(t1)
+
+        self.ts.flush_traffic(self.session)
+        assert 5 == self.session.query(Issue).first().views
+        assert 5 == self.session.query(Issue).first().popularity
 
 
 # XXX test ctime, mtime
