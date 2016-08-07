@@ -1,19 +1,16 @@
-import enum
 import redis
 import transaction
 
 from nthuion.models import Article
 
 
-@enum.unique
-class DBIndex(enum.IntEnum):
-    views = 1
+UNIQUE_VIEWS = 1
 
 
 class TrafficStore(redis.StrictRedis):
 
     def __init__(self, unix_socket_path):
-        super().__init__(unix_socket_path=unix_socket_path, db=DBIndex.views)
+        super().__init__(unix_socket_path=unix_socket_path, db=UNIQUE_VIEWS)
 
     def article_viewed_by_user(self, *, article, user):
         self.sadd(article.id, 'user:{}'.format(user.id))
@@ -40,8 +37,10 @@ def includeme(config):
 
     unixsocket = settings['redis.unixsocket']
 
+    traffic_store = TrafficStore(unixsocket)
+
     config.add_request_method(
-        lambda r: TrafficStore(unixsocket),
+        lambda r: traffic_store,
         'ts',
         reify=True
     )

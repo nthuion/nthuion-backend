@@ -7,6 +7,7 @@ from pyramid import testing
 from webtest import TestApp as _TestApp
 
 from nthuion import main
+from nthuion.traffic import TrafficStore
 from nthuion.request import DummyRequest
 from nthuion.models import get_engine, get_session_factory, get_tm_session
 from nthuion.models.meta import Base
@@ -68,4 +69,9 @@ class WebTest(unittest.TestCase):
         self.session = get_tm_session(session_factory, transaction.manager)
         Base.metadata.create_all(self.engine)
 
+        self.ts = TrafficStore(self.redis_unixsocket)
+
         self.app = _TestApp(app)
+
+    def tearDown(self):
+        self.ts.flushdb()
