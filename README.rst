@@ -38,6 +38,8 @@ Initialize database
 Run redis server
 ----------------
 
+.. code-block:: bash
+
     redis-server redis.conf
 
 Run the development server
