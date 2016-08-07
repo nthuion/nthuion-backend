@@ -86,7 +86,9 @@ class CommentMixin(FactoryRequired):
     })
     def get(self, qs):
         """
-        returns the list of comments of the object
+        returns the list of comments of the object.
+
+        they are ordered by ``ctime``, oldest first.
 
         .. sourcecode:: json
 

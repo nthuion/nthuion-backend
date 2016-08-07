@@ -262,4 +262,47 @@ class ViewsPopularityTest(SolutionTest):
         assert 5 == token_visit(t1).json['popularity']
 
 
+class SolutionOrderingTest(WebTest):
+
+    def setUp(self):
+        super().setUp()
+        with transaction.manager:
+            user = User(name='x')
+            self.session.add(user)
+            now = datetime.datetime.now()
+            self.session.add(
+                Solution(
+                    author=user,
+                    title='old',
+                    content='popular',
+                    popularity=1,
+                    ctime=now
+                )
+            )
+            self.session.add(
+                Solution(
+                    author=user, title='new', content='not-popular',
+                    ctime=now + datetime.timedelta(days=1)
+                )
+            )
+
+    def test_latest_first(self):
+        res = self.app.get(
+            '/api/solutions',
+            {'ordering': 'latest'}
+        )
+        first, second = res.json['data']
+        assert ('new', 'old') == (first['title'], second['title'])
+
+    def test_popular_first(self):
+        res = self.app.get(
+            '/api/solutions',
+            {'ordering': 'popularity'}
+        )
+        first, second = res.json['data']
+        assert 'popular' == first['content']
+        assert 'not-popular' == second['content']
+        assert first['popularity'] > second['popularity']
+
+
 # XXX test ctime, mtime

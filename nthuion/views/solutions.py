@@ -44,9 +44,9 @@ class SolutionListView(View):
     def get(self, qs):
         query = self.db.query(Solution)
         if qs['ordering'] == 'popularity':
-            query = query.order_by(-Solution.popularity)
+            query = query.order_by(Solution.popularity.desc())
         else:  # == latest
-            query = query.order_by(-Solution.ctime)
+            query = query.order_by(Solution.ctime.desc())
         query = query.offset(qs['offset'])\
             .limit(qs['limit'])
         return {

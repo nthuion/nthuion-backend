@@ -36,9 +36,9 @@ class IssueList(View):
         """Returns list of issues"""
         query = self.db.query(Issue)
         if qs['ordering'] == 'popularity':
-            query = query.order_by(-Issue.popularity)
+            query = query.order_by(Issue.popularity.desc())
         else:  # == latest
-            query = query.order_by(-Issue.ctime)
+            query = query.order_by(Issue.ctime.desc())
         query = query.offset(qs['offset'])\
             .limit(qs['limit'])
         user = self.user
