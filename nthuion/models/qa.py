@@ -7,7 +7,6 @@ from sqlalchemy import (
     Text,
     Boolean,
     ForeignKey,
-    SmallInteger,
     PrimaryKeyConstraint,
     CheckConstraint,
 )
@@ -274,7 +273,7 @@ class Vote(Base):
     entry_id = Column(Integer, ForeignKey(Entry.id), index=True)
 
     value = Column(
-        SmallInteger,
+        Integer,
         CheckConstraint('value == 1 OR value == -1', name='vote_is_one'),
     )
 
