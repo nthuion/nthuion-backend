@@ -135,9 +135,22 @@ class SolutionSingleTest(SolutionTest):
 
     @given(
         st.booleans(),
-        st.lists(st.text(max_size=25)),
-        st.text(max_size=80),
-        st.text(max_size=30000, average_size=100),
+        st.lists(
+            st.text(
+                st.characters(
+                    blacklist_characters='\x00',
+                    blacklist_categories=('Cs',)),
+                max_size=25)),
+        st.text(
+            st.characters(
+                blacklist_characters='\x00',
+                blacklist_categories=('Cs',)),
+            max_size=80),
+        st.text(
+            st.characters(
+                blacklist_characters='\x00',
+                blacklist_categories=('Cs',)),
+            max_size=30000, average_size=100),
     )
     def test_put(self, has_issue, tags, title, content):
         self.create_solution()
