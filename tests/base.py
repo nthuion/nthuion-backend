@@ -79,3 +79,5 @@ class WebTest(unittest.TestCase):
 
     def tearDown(self):
         self.ts.flushdb()
+        transaction.abort()
+        Base.metadata.drop_all(self.engine)
