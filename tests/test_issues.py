@@ -223,7 +223,7 @@ class ProblematicInputTest(WebTest):
         self.post_issue(title='q' * (limit + 1), status=400)
 
     def test_invalid_content(self):
-        limit = Issue.content.type.length
+        limit = 30000
         self.post_issue(content='c' * limit)
         self.post_issue(content='c' * limit + 'c', status=400)
         self.post_issue(content=None, status=400)

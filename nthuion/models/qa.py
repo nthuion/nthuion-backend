@@ -5,6 +5,7 @@ from sqlalchemy import (
     Float,
     DateTime,
     Text,
+    SmallInteger,
     Boolean,
     ForeignKey,
     PrimaryKeyConstraint,
@@ -273,8 +274,8 @@ class Vote(Base):
     entry_id = Column(Integer, ForeignKey(Entry.id), index=True)
 
     value = Column(
-        Integer,
-        CheckConstraint('value == 1 OR value == -1', name='vote_is_one'),
+        SmallInteger,
+        CheckConstraint('value = 1 OR value = -1', name='vote_is_one'),
     )
 
     __table_args__ = (
