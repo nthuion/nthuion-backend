@@ -496,10 +496,25 @@ class IssueCommentTest(OneIssueTest):
 
 def issue_parameters():
     return given(
-        st.text(max_size=30000, average_size=100),
+        st.text(
+            st.characters(
+                blacklist_characters='\x00',
+                blacklist_categories=('Cs',)),
+            max_size=30000,
+            average_size=100),
         st.booleans(),
-        st.lists(st.text(max_size=25), average_size=4),
-        st.text(max_size=80)
+        st.lists(
+            st.text(
+                st.characters(
+                    blacklist_characters='\x00',
+                    blacklist_categories=('Cs',)),
+                max_size=25),
+            average_size=4),
+        st.text(
+            st.characters(
+                blacklist_characters='\x00',
+                blacklist_categories=('Cs',)),
+            max_size=80)
     )
 
 
