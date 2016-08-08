@@ -97,7 +97,7 @@ class Article(Entry):
 
     id = Column(Integer, ForeignKey(Entry.id), primary_key=True)
     title = Column(String(80), nullable=False)
-    content = Column(Text(30000), nullable=False)
+    content = Column(Text, nullable=False)
     views = Column(Integer, nullable=False, default=0)
     popularity = Column(Float, nullable=False, default=0)
 
@@ -163,7 +163,7 @@ class Comment(Entry):
     parent_id = Column(Integer, ForeignKey(Entry.id), nullable=False)
     parent = relationship(Entry, foreign_keys=parent_id)
 
-    content = Column(Text(240), nullable=False)
+    content = Column(Text, nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity': 'comment',

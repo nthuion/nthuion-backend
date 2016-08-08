@@ -74,7 +74,7 @@ class VotingMixin(abc.ABC):
 
 class CommentValidation:
 
-    content = All(str, Length(max=Comment.content.type.length))
+    content = All(str, Length(max=2000))
 
 
 class CommentMixin(FactoryRequired):

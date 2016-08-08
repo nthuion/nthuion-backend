@@ -13,7 +13,7 @@ from nthuion.models import Solution, Tag, Issue
 class SolutionValidation:
 
     title = All(str, Length(max=Solution.title.type.length))
-    content = All(str, Length(max=Solution.content.type.length))
+    content = All(str, Length(max=30000))
     issue_id = Any(int, None)
     tags = [All(str, Length(max=Tag.name.type.length))]
 

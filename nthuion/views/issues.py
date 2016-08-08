@@ -14,7 +14,7 @@ from nthuion.models import Issue, Tag
 class IssueValidation:
 
     title = All(str, Length(max=Issue.title.type.length))
-    content = All(str, Length(max=Issue.content.type.length))
+    content = All(str, Length(max=30000))
     tags = [All(str, Length(max=Tag.name.type.length))]
     is_anonymous = bool
 
