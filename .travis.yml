@@ -21,3 +21,6 @@ before_script:
 env:
     - ""
     - SQLALCHEMY_TEST_DB="postgresql://postgres@localhost/travis_ci_test"
+
+addons:
+    postgresql: "9.5"

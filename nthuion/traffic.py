@@ -25,11 +25,12 @@ class TrafficStore(redis.StrictRedis):
                     p.scard(key)
                     p.delete(key)
                     count, deleted = p.execute()
-                query = session.query(Article).filter(Article.id == int(key))
-                query.update({
-                    Article.views: Article.views + count,
-                    Article.popularity: Article.popularity + count,
-                })
+                    query = session.query(Article)\
+                        .filter(Article.id == int(key))
+                    query.update({
+                        Article.views: Article.views + count,
+                        Article.popularity: Article.popularity + count,
+                    })
 
 
 def includeme(config):

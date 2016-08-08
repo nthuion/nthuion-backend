@@ -8,6 +8,7 @@ with open(os.path.join(here, 'README.rst')) as f:
 
 requires = [
     'pyramid',
+    'psycopg2',
     'pyramid_debugtoolbar',
     'pyramid_tm',
     'redis',
