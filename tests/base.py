@@ -17,6 +17,10 @@ def get_process_thread_identifier():
     return '{}-{}'.format(os.getpid(), threading.get_ident())
 
 
+def get_sqlalchemy_database():
+    return os.environ.get('SQLALCHEMY_TEST_DB', 'sqlite:///:memory:')
+
+
 def dummy_request(dbsession):
     return DummyRequest(dbsession=dbsession)
 
@@ -24,7 +28,7 @@ def dummy_request(dbsession):
 class BaseTest(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp(settings={
-            'sqlalchemy.url': 'sqlite:///:memory:',
+            'sqlalchemy.url': get_sqlalchemy_database(),
         })
         self.config.include('nthuion.models')
         settings = self.config.get_settings()
@@ -61,7 +65,7 @@ class WebTest(unittest.TestCase):
 
     def setUp(self):
         app = main({}, **{
-            'sqlalchemy.url': 'sqlite:///:memory:',
+            'sqlalchemy.url': get_sqlalchemy_database(),
             'redis.unixsocket': self.redis_unixsocket,
         })
         session_factory = app.registry['dbsession_factory']

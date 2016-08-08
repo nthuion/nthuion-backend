@@ -11,3 +11,13 @@ install:
 
 script:
     - py.test
+
+services:
+    - postgresql
+
+before_script:
+    - psql -c 'create database travis_ci_test;' -U postgres
+
+env:
+    - ""
+    - SQLALCHEMY_TEST_DB="postgresql://postgres@localhost/travis_ci_test"
