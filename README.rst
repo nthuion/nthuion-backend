@@ -17,7 +17,7 @@ Prerequisites
 
 * Python 3.5
 * Redis
-* PostgreSQL (deployment)
+* PostgreSQL
 
 Environment setup
 -----------------

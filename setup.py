@@ -7,23 +7,24 @@ with open(os.path.join(here, 'README.rst')) as f:
     README = f.read()
 
 requires = [
-    'pyramid',
     'psycopg2',
+    'pyramid',
     'pyramid_debugtoolbar',
     'pyramid_tm',
     'redis',
     'requests',
     'SQLAlchemy',
     'transaction',
+    'uwsgi',
     'voluptuous',
     'zope.sqlalchemy',
 ]
 
 tests_require = [
-    'WebTest >= 1.3.1',  # py3 compat
+    'hypothesis',
     'pytest',  # includes virtualenv
     'pytest-cov',
-    'hypothesis'
+    'WebTest >= 1.3.1',  # py3 compat
 ]
 
 docs_require = [
