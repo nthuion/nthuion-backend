@@ -61,5 +61,7 @@ setup(
     main = nthuion:main
     [console_scripts]
     initialize_nthuion_db = nthuion.scripts.initializedb:main
+    popularity-decay = nthuion.scripts.popularity_decay:main
+    flush-traffic = nthuion.scripts.flush_traffic:main
     """,
 )
