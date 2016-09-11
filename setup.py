@@ -7,6 +7,7 @@ with open(os.path.join(here, 'README.rst')) as f:
     README = f.read()
 
 requires = [
+    'itsdangerous',
     'psycopg2',
     'pyramid',
     'pyramid_debugtoolbar',
