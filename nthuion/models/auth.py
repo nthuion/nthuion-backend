@@ -91,7 +91,7 @@ class Email(Base):
     verified = Column(Boolean, default=False, nullable=False)
 
     def __repr__(self):
-        return '<Email {!r}>'.format(self.value)
+        return '<Email {!r}>'.format(self.address)
 
 
 class FacebookUser(Base):

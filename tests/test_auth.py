@@ -5,7 +5,6 @@ from nthuion.models.auth import Token, FacebookUser, Email, User
 
 
 class AuthTest(BaseTest):
-
     def test_acquire_token(self):
         from nthuion.models.auth import User, Token
         self.assertEqual(0, self.session.query(Token).count())
@@ -20,7 +19,6 @@ class AuthTest(BaseTest):
 
 
 class FakeResponse:
-
     def __init__(self, status_code, data):
         self.status_code = status_code
         self.data = data
@@ -31,8 +29,7 @@ class FakeResponse:
 
 def valid_user_response(*args, **kwargs):
     return FakeResponse(
-        200,
-        {
+        200, {
             'id': '34502913498532310',
             'name': '340gieoj3',
             'email': 'test@example.com'
@@ -41,22 +38,14 @@ def valid_user_response(*args, **kwargs):
 
 
 def bad_request_response(*args, **kwargs):
-    return FakeResponse(
-        400,
-        {
-            'error': 'gg'
-        }
-    )
+    return FakeResponse(400, {'error': 'gg'})
 
 
 class FacebookLoginTest(WebTest):
-
     def test_facebook_login(self):
         with mock.patch('requests.get', valid_user_response):
             res = self.app.post_json(
-                '/api/login/facebook',
-                {'token': 'exxe'},
-                status=200
+                '/api/login/facebook', {'token': 'exxe'}, status=200
             )
         email = self.session.query(Email).one()
         facebook_user = self.session.query(FacebookUser).one()
@@ -75,18 +64,42 @@ class FacebookLoginTest(WebTest):
     def test_facebook_bad_login(self):
         with mock.patch('requests.get', bad_request_response):
             res = self.app.post_json(
-                '/api/login/facebook',
-                {'token': 'exxe'},
-                status=401
+                '/api/login/facebook', {'token': 'exxe'}, status=401
             )
         self.assertEqual(
             'Login failed: token rejected by facebook',
             res.json['error']['message']
         )
 
+    def test_facebook_same_email(self):
+        """
+        If 2 users are registered with the same facebook email,
+        the later one does not own the email address automatically
+        """
+        self.test_facebook_login()
+
+        def valid_user_response2(*args, **kwargs):
+            return FakeResponse(
+                200, {
+                    'id': '23r23few',
+                    'name': 'duplicate',
+                    'email': 'test@example.com'
+                }
+            )
+
+        with mock.patch('requests.get', valid_user_response2):
+            self.app.post_json(
+                '/api/login/facebook', {'token': 'exxe'}, status=200
+            )
+
+        self.assertEqual(2, self.session.query(User).count())
+
+        self.assertEqual(
+            2, self.session.query(Email).count()
+        )
+
 
 class LogoutTest(WebTest):
-
     def test_logout_revokes_token(self):
         user = User(name='gg')
         self.session.add(user)
