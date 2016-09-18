@@ -7,6 +7,11 @@ User object:
     * name -- string
     * avatar_url -- string
 
+Email object:
+
+    * address -- string
+    * verified -- boolean
+
 ============= ==============
 Role          Permission
 ============= ==============

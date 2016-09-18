@@ -92,6 +92,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">User</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#me">Me</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id1">User</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#user-emails">User-emails</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../debug/">Debug</a></li>
@@ -152,6 +153,13 @@
 <li>id &#8211; integer</li>
 <li>name &#8211; string</li>
 <li>avatar_url &#8211; string</li>
+</ul>
+</div></blockquote>
+<p>Email object:</p>
+<blockquote>
+<div><ul class="simple">
+<li>address &#8211; string</li>
+<li>verified &#8211; boolean</li>
 </ul>
 </div></blockquote>
 <table border="1" class="docutils">
@@ -221,6 +229,38 @@ attribute <code class="docutils literal"><span class="pre">authenticated</span><
 <tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
 <tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
 <li><strong>name</strong> (<em>optional</em>) &#8211; string, length ≤ 100</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="user-emails">
+<h2>User-emails<a class="headerlink" href="#user-emails" title="Permalink to this headline">¶</a></h2>
+<dl class="get">
+<dt id="get--api-users-me-emails">
+<code class="descname">GET </code><code class="descname">/api/users/me/emails</code><a class="headerlink" href="#get--api-users-me-emails" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the list of email objects</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span>{
+    &quot;data&quot;: [email objects...]
+}
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="post">
+<dt id="post--api-users-me-emails">
+<code class="descname">POST </code><code class="descname">/api/users/me/emails</code><a class="headerlink" href="#post--api-users-me-emails" title="Permalink to this definition">¶</a></dt>
+<dd><p>requests the server to add a email to the current user</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>address</strong> &#8211; string, 3 ≤ length ≤ 254</li>
 </ul>
 </td>
 </tr>
