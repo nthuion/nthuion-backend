@@ -98,6 +98,12 @@ class Email(Base):
 
     verified = Column(Boolean, default=False, nullable=False)
 
+    def as_dict(self):
+        return {
+            'address': self.address,
+            'verified': self.verified
+        }
+
     def __repr__(self):
         return '<Email {!r}>'.format(self.address)
 

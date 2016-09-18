@@ -5,3 +5,4 @@ __all__ = ('Allow', 'Deny', 'Everyone', 'Authenticated', 'Owner')
 
 
 Owner = 'object.Owner'
+Nthu = 'object.NthuMember'

@@ -3,7 +3,7 @@ from pyramid.interfaces import IAuthenticationPolicy
 from pyramid.httpexceptions import HTTPBadRequest, HTTPUnauthorized
 from sqlalchemy.orm.exc import NoResultFound
 from .models import User, Token
-from .roles import Authenticated, Everyone
+from .roles import Authenticated, Everyone, Nthu
 
 
 @implementer(IAuthenticationPolicy)
@@ -16,7 +16,7 @@ class TokenAuthenticationPolicy:
 
     def remember(self, request, userid, **kw):
         pass
-        # the login functions do it well
+        # the login functions does it well
 
     def authenticated_userid(self, request):
         value = self.unauthenticated_userid(request)
@@ -51,7 +51,10 @@ class TokenAuthenticationPolicy:
         if user is None:
             return [Everyone]
         else:
+            principals = [Everyone, Authenticated]
+            if user.is_nthu_verified():
+                principals.append(Nthu)
             ctx = request.context
             if not isinstance(ctx, type) and hasattr(ctx, 'get_user_roles'):
                 return ctx.get_user_roles(user) + [Everyone, Authenticated]
-            return [Everyone, Authenticated]
+            return principals

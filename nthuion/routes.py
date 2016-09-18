@@ -61,6 +61,16 @@ def includeme(config):
 
     add('/api/users/me', users.MeView, 'me')
     add('/api/users/{id}', users.UserView, 'user')
+    add(
+        '/api/users/me/emails',
+        users.EmailView,
+        'user-emails'
+    )
+    add(
+        '/api/email/verify/{token}',
+        users.EmailVerificationView,
+        'email-verification'
+    )
 
     # old /api/questions interface
     add('/api/questions', issues.IssueList, 'question-list')
