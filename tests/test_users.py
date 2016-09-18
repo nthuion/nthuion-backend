@@ -1,6 +1,6 @@
 import transaction
-from .base import WebTest
-from nthuion.models import User, FacebookUser
+from .base import WebTest, BaseTest
+from nthuion.models import User, FacebookUser, Email
 
 
 class UserTest(WebTest):
@@ -158,3 +158,52 @@ class UserTest(WebTest):
             res.json['avatar_url']
         )
         self.assertEqual('qaqaqaq', self.session.query(User).first().name)
+
+
+class EmailVerificationTest(BaseTest):
+
+    def setUp(self):
+        super().setUp()
+
+        user = User(name='afg')
+        with transaction.manager:
+            self.session.add(user)
+
+    def get_user(self):
+        return self.session.query(User).one()
+
+    def add_email(self, address, verified):
+        with transaction.manager:
+            self.session.add(
+                Email(user=self.get_user(), address=address, verified=verified)
+            )
+
+    def test_has_not_verified_not_nthu_email(self):
+        self.add_email('afg@nthuion.backend', False)
+        self.assertFalse(self.get_user().is_nthu_verified())
+
+    def test_has_verified_not_nthu_email(self):
+        self.add_email('afg@nthuion.backend', True)
+        self.assertFalse(self.get_user().is_nthu_verified())
+
+    def test_has_many_not_nthu_email(self):
+        self.add_email('afg@nthuion.backend', True)
+        self.add_email('afg@nthuion.frontend', True)
+        self.add_email('afg@nthu.fake.edu.tw', True)
+        self.add_email('nthu.edu.tw@gmail.com', True)
+        self.assertFalse(self.get_user().is_nthu_verified())
+
+    def test_has_not_verified_nthu_email(self):
+        self.add_email('afg@nthu.edu.tw', False)
+        self.assertFalse(self.get_user().is_nthu_verified())
+
+    def test_has_verified_nthu_email(self):
+        self.add_email('afg@nthu.edu.tw', True)
+        self.assertTrue(self.get_user().is_nthu_verified())
+
+    def test_has_one_verified_nthu_email(self):
+        self.add_email('afg@nthu.edu.tww', True)
+        self.add_email('afg2@nthu.edu.tw', False)
+        self.add_email('afg@nthu.edu.tw', True)
+        self.add_email('afg@nthu.edu.twz', True)
+        self.assertTrue(self.get_user().is_nthu_verified())

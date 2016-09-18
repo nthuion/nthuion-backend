@@ -47,6 +47,14 @@ class User(Base):
         else:
             return []
 
+    def is_nthu_verified(self):
+        return self.object_session()\
+            .query(Email.id)\
+            .filter(Email.user == self)\
+            .filter(Email.verified)\
+            .filter(Email.address.endswith('nthu.edu.tw'))\
+            .scalar() is not None
+
     def __repr__(self):
         return '<User {} {!r}>'.format(self.id, self.name)
 
