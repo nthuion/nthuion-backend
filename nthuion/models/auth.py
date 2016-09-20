@@ -1,7 +1,8 @@
 import random
 import string
 
-from sqlalchemy import Column, String, Integer, ForeignKey, Boolean
+from sqlalchemy import \
+    Column, String, Integer, ForeignKey, Boolean, UniqueConstraint
 from sqlalchemy.orm import relationship, backref
 
 from nthuion.models.meta import Base
@@ -97,6 +98,11 @@ class Email(Base):
     user = relationship(User, backref='emails')
 
     verified = Column(Boolean, default=False, nullable=False)
+    # currently not verified email must not be stored
+
+    __table_args__ = (
+        UniqueConstraint(address, user_id),
+    )
 
     def as_dict(self):
         return {

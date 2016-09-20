@@ -6,6 +6,7 @@ assert sys.version_info >= (3,)  # noqa
 from pyramid.config import Configurator
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid import renderers
+from itsdangerous import URLSafeTimedSerializer
 
 from .request import Request
 from .authentication_policy import TokenAuthenticationPolicy
@@ -22,6 +23,12 @@ def get_config(global_config, **settings):
     config.include('.routes')
     config.include('.traffic')
     config.add_renderer(None, renderers.JSON())
+    signer = URLSafeTimedSerializer('secret-key XXX')
+    config.add_request_method(
+        lambda r: signer,
+        'signer',
+        reify=True
+    )
     return config
 
 

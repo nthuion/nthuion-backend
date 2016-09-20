@@ -3,6 +3,7 @@ from pyramid.httpexceptions import HTTPUnprocessableEntity, HTTPForbidden
 import transaction
 import itsdangerous
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import IntegrityError
 
 from nthuion.models import User, Email
 from nthuion.utils import noresultfound_is_404
@@ -144,7 +145,7 @@ class EmailView(View):
         }
 
 
-class EmailVerificationView:
+class EmailVerificationView(View):
 
     def get(self):
         token = self.request.matchdict['token']
@@ -166,13 +167,18 @@ class EmailVerificationView:
             raise HTTPForbidden('Invalid verification token')
 
         try:
-            user = self.session.query(User).filter(User.id == user_id).one()
+            user = self.db.query(User).filter(User.id == user_id).one()
         except NoResultFound:
             raise HTTPUnprocessableEntity('The user no longer exists')
 
-        with transaction.manager:
-            self.session.add(
-                Email(address=email, verified=True, user=user))
+        self.db.add(Email(address=email, verified=True, user=user))
+        try:
+            transaction.commit()
+        except IntegrityError:
+            transaction.abort()
+            return {
+                'message': '{} is already verified'.format(email)
+            }
         return {
             'message': 'successfully verified email: {}'.format(
                 email
